@@ -17,6 +17,10 @@ def build_offline_site():
     chapters = sorted(data.get("Chapter", []), key=lambda x: x.get("order", 0))
     modules = sorted(data.get("Module", []), key=lambda x: (x.get("level_number", 0), x.get("order", 0)))
 
+    # Save CNAME
+    with open("offline_site/CNAME", "w", encoding="utf-8") as f:
+        f.write("bbs.archxry.space\n")
+
     # Save data.js
     with open("offline_site/data.js", "w", encoding="utf-8") as f:
         f.write("window.BBS_DATA = " + json.dumps({
