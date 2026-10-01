@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Generate a high-aesthetic, ultra-responsive, dynamic web application
+Generate a clean, highly legible, ultra-responsive web application
 for Blueprint Business Service (Levels 0-5).
 Features:
-- Day (Light) and Night (Dark) themes with smooth 1-click toggle button & persistence
-- Obsidian glassmorphic dark design + Crisp modern light design
+- Clean, user-friendly Inter typography for notes, courses, and scripts
+- Day (Light) and Night (Dark) themes with smooth toggle & persistence
+- Standard, clean markdown reading layout (no unnecessary script buttons)
 - Accordion navigation with Expand/Collapse All and Active-scroll
 - Smart filters: All, Ready to Study, Completed, Bookmarked
 - Level & Overall progress trackers with animated completion bars
-- Interactive script copy cards and rich callout styling for lesson notes
 - Distraction-free Focus mode, Theater mode, and custom video controls
 - 100% offline pure JS confetti celebration & toast notifications
 - Interactive quizzes with instant explanation reveals
@@ -50,7 +50,7 @@ def build_offline_site():
   <script src="hls.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --accent-brand: #ff5a00;
@@ -91,7 +91,6 @@ def build_offline_site():
       --topbar-bg: rgba(6, 9, 17, 0.85);
       --sidebar-header-bg: rgba(12, 18, 32, 0.95);
       --level-tabs-bg: rgba(6, 9, 17, 0.85);
-      --script-box-bg: rgba(9, 13, 22, 0.7);
       --quiz-card-bg: rgba(6, 9, 17, 0.65);
       --table-th-bg: rgba(6, 9, 17, 0.85);
       --code-bg: rgba(6, 9, 17, 0.95);
@@ -118,7 +117,6 @@ def build_offline_site():
       --topbar-bg: rgba(255, 255, 255, 0.9);
       --sidebar-header-bg: rgba(255, 255, 255, 0.96);
       --level-tabs-bg: rgba(241, 245, 249, 0.9);
-      --script-box-bg: rgba(255, 247, 237, 0.9);
       --quiz-card-bg: #f8fafc;
       --table-th-bg: #f1f5f9;
       --code-bg: #e2e8f0;
@@ -127,7 +125,7 @@ def build_offline_site():
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg-base);
       color: var(--text-primary);
       height: 100%;
@@ -561,7 +559,7 @@ def build_offline_site():
 
     /* Content Layout Container */
     .content-container {
-      max-width: 980px;
+      max-width: 960px;
       margin: 0 auto;
       width: 100%;
       padding: 24px 28px 80px 28px;
@@ -678,80 +676,80 @@ def build_offline_site():
       padding-bottom: 14px;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .notes-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+    .notes-title { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
 
-    /* Markdown Body */
-    .markdown-body { line-height: 1.8; font-size: 0.95rem; color: var(--text-secondary); word-break: break-word; }
-    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { color: var(--text-primary); margin: 28px 0 12px 0; font-weight: 800; letter-spacing: -0.015em; }
-    .markdown-body h2 { font-size: 1.35rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; }
-    .markdown-body h3 { font-size: 1.12rem; color: var(--text-primary); }
+    /* Markdown Body with Clean, User-Friendly Typography */
+    .markdown-body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      word-break: break-word;
+    }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-primary);
+      font-weight: 700;
+      margin: 26px 0 12px 0;
+      line-height: 1.35;
+    }
+    .markdown-body h1 { font-size: 1.45rem; }
+    .markdown-body h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; }
+    .markdown-body h3 { font-size: 1.1rem; }
     .markdown-body p { margin-bottom: 16px; }
+    .markdown-body strong { color: var(--text-primary); font-weight: 600; }
     .markdown-body ul, .markdown-body ol { margin-left: 22px; margin-bottom: 20px; }
     .markdown-body li { margin-bottom: 6px; }
     
-    /* Script & Callout Cards */
+    /* Clean Blockquote / Callout Styling */
     .markdown-body blockquote {
-      border-left: 4px solid var(--accent-brand);
-      padding: 16px 20px;
-      margin: 20px 0;
-      color: var(--text-primary);
-      background: linear-gradient(135deg, rgba(255,90,0,0.1) 0%, rgba(255,90,0,0.02) 100%);
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      position: relative;
-      border-top: 1px solid rgba(255,90,0,0.15);
-      border-right: 1px solid rgba(255,90,0,0.15);
-      border-bottom: 1px solid rgba(255,90,0,0.15);
-    }
-    .script-box-container {
-      position: relative;
-      background: var(--script-box-bg);
-      border: 1px solid rgba(255, 90, 0, 0.28);
-      border-radius: var(--radius-md);
-      padding: 16px;
+      border-left: 3px solid var(--accent-brand);
+      padding: 12px 18px;
       margin: 18px 0;
-    }
-    .script-box-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 1px dashed var(--border-subtle);
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #ff5a00;
-    }
-    .btn-copy-snippet {
-      background: rgba(140, 140, 140, 0.12);
-      border: 1px solid var(--border-subtle);
       color: var(--text-primary);
-      padding: 3px 8px;
-      border-radius: var(--radius-sm);
-      font-size: 0.7rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.15s;
+      background: rgba(255, 90, 0, 0.05);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
-    .btn-copy-snippet:hover { background: var(--accent-brand); color: white; border-color: var(--accent-brand); }
+    html.light .markdown-body blockquote {
+      background: rgba(255, 90, 0, 0.06);
+    }
 
-    .markdown-body table { width: 100%; display: block; overflow-x: auto; border-collapse: collapse; margin: 22px 0; }
-    .markdown-body th, .markdown-body td { border: 1px solid var(--border-subtle); padding: 10px 14px; text-align: left; }
-    .markdown-body th { background: var(--table-th-bg); color: var(--text-primary); font-weight: 700; }
+    .markdown-body table {
+      width: 100%;
+      display: block;
+      overflow-x: auto;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.94rem;
+    }
+    .markdown-body th, .markdown-body td {
+      border: 1px solid var(--border-subtle);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .markdown-body th {
+      background: var(--table-th-bg);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
     .markdown-body code {
       font-family: 'JetBrains Mono', monospace;
       background: var(--code-bg);
       padding: 2px 6px;
       border-radius: 4px;
-      font-size: 0.84em;
+      font-size: 0.86em;
       color: #e11d48;
       border: 1px solid var(--border-subtle);
     }
     html.dark .markdown-body code { color: #fb7185; }
-    .markdown-body pre { background: #060911; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin: 18px 0; overflow-x: auto; }
+    .markdown-body pre {
+      background: #060911;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 18px 0;
+      overflow-x: auto;
+    }
     .markdown-body pre code { background: transparent; padding: 0; border: none; color: #f8fafc; }
 
     /* Quiz Section */
@@ -771,7 +769,7 @@ def build_offline_site():
       padding-bottom: 14px;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .quiz-headline { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+    .quiz-headline { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); }
     .quiz-score-badge { font-size: 0.75rem; font-weight: 700; color: #ff5a00; background: rgba(255,90,0,0.14); padding: 3px 9px; border-radius: 999px; }
 
     .quiz-item-card { background: var(--quiz-card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 16px; }
@@ -784,7 +782,7 @@ def build_offline_site():
       background: var(--bg-surface);
       color: var(--text-secondary);
       cursor: pointer;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 500;
       text-align: left;
       transition: all 0.15s ease;
@@ -818,7 +816,7 @@ def build_offline_site():
       background: rgba(140, 140, 140, 0.08);
       border-left: 3px solid var(--accent-brand);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      font-size: 0.84rem;
+      font-size: 0.88rem;
       color: var(--text-primary);
       display: none;
       line-height: 1.5;
@@ -852,7 +850,7 @@ def build_offline_site():
     }
     .nav-btn-card:hover { border-color: var(--accent-brand); background: var(--bg-card-hover); color: var(--text-primary); transform: translateY(-1px); }
     .nav-btn-label { font-size: 0.68rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-    .nav-btn-title { font-size: 0.86rem; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-btn-title { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* Keyboard Shortcuts Footer */
     .shortcuts-footer {
@@ -1111,22 +1109,7 @@ def build_offline_site():
 
     function renderMarkdown(md) {
       if (window.marked) {
-        let html = marked.parse(md || '');
-        // Enhance markdown dialogues and sales scripts with copy cards
-        html = html.replace(/<blockquote>([\s\S]*?)<\/blockquote>/gi, function(match, inner) {
-          const rawText = inner.replace(/<[^>]*>/g, '').trim();
-          const cleanText = escapeQuotes(rawText);
-          return `
-            <div class="script-box-container">
-              <div class="script-box-header">
-                <span>💬 Script / Framework</span>
-                <button class="btn-copy-snippet" onclick="copySnippet('${cleanText}')">📋 Copy Script</button>
-              </div>
-              <blockquote>${inner}</blockquote>
-            </div>
-          `;
-        });
-        return html;
+        return marked.parse(md || '');
       }
       return (md || '').replace(/\\n/g, '<br/>');
     }
@@ -1581,7 +1564,7 @@ def build_offline_site():
               <div class="notes-title">
                 <span>📚 Study Notes & Frameworks</span>
               </div>
-              <button class="btn btn-secondary" style="font-size: 0.74rem; padding: 5px 10px;" onclick="copyAllNotes()">📋 Copy All Notes</button>
+              <button class="btn btn-secondary" style="font-size: 0.74rem; padding: 5px 10px;" onclick="copyAllNotes()">📋 Copy Notes</button>
             </div>
             <div class="markdown-body" id="notes-content">
               ${renderMarkdown(mod.notes)}
@@ -1731,13 +1714,6 @@ def build_offline_site():
       });
     }
 
-    function copySnippet(text) {
-      const unescaped = text.replace(/\\'/g, "'").replace(/&quot;/g, '"');
-      navigator.clipboard.writeText(unescaped).then(() => {
-        showToast('Script snippet copied!', '📋');
-      });
-    }
-
     function escapeQuotes(str) {
       return (str || '')
         .replace(/\\/g, '\\\\')
@@ -1874,7 +1850,7 @@ def build_offline_site():
     with open("offline_site/index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("Updated BBS web app with Day/Night themes and button!")
+    print("Updated BBS web app with clean Inter typography and clean markdown styling!")
 
 if __name__ == "__main__":
     build_offline_site()
