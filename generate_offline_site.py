@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 """
-Generate a fully responsive, dynamic, mobile-adaptable and desktop-suitable web application
+Generate a high-aesthetic, ultra-responsive, dynamic web application
 for Blueprint Business Service (Levels 0-5).
-Includes content readiness badges, upcoming release cards, and auto-jump to active lessons.
+Features:
+- Obsidian glassmorphic dark design system with vibrant glowing accents
+- Accordion navigation with Expand/Collapse All and Active-scroll
+- Smart filters: All, Ready to Study, Completed, Bookmarked
+- Level & Overall progress trackers with animated completion bars
+- Interactive script copy cards and rich callout styling for lesson notes
+- Distraction-free Focus mode, Theater mode, and custom video controls
+- 100% offline pure JS confetti celebration & toast notifications
+- Interactive quizzes with instant explanation reveals
+- Quick keyboard navigation ([, ], Space, F, M, B, /, ?)
 """
 import json
 import os
@@ -30,39 +39,50 @@ def build_offline_site():
             "modules": modules
         }, ensure_ascii=False) + ";\n")
 
-    html_content = """<!DOCTYPE html>
+    html_content = r"""<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>BBS · Blueprint Business Service</title>
+  <title>BBS Studio · Blueprint Business Service</title>
   <script src="marked.min.js"></script>
   <script src="hls.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-base: #090d16;
-      --bg-surface: #0f172a;
-      --bg-card: #162036;
-      --bg-card-hover: #1c2a47;
+      --bg-base: #060911;
+      --bg-surface: #0c1220;
+      --bg-card: #131c31;
+      --bg-card-hover: #192642;
+      --bg-card-active: #1d2d4f;
       --bg-elevated: #1e293b;
       --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(255, 90, 0, 0.5);
+      --border-medium: rgba(255, 255, 255, 0.14);
+      --border-focus: rgba(255, 90, 0, 0.55);
+      
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --text-tertiary: #64748b;
+      --text-muted: #475569;
+      
       --accent-brand: #ff5a00;
-      --accent-brand-hover: #ff6f22;
-      --accent-brand-glow: rgba(255, 90, 0, 0.25);
+      --accent-brand-hover: #ff7324;
+      --accent-brand-glow: rgba(255, 90, 0, 0.32);
       --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.28);
+      --accent-cyan: #06b6d4;
       --accent-rose: #f43f5e;
       --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      --sidebar-width: 370px;
+      --radius-xl: 18px;
+      --sidebar-width: 380px;
+      --topbar-height: 60px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -76,11 +96,11 @@ def build_offline_site():
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Custom Scrollbars */
+    /* Scrollbars */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
 
     /* App Shell */
     #app-shell {
@@ -92,7 +112,7 @@ def build_offline_site():
       position: relative;
     }
 
-    /* Sidebar / Mobile Drawer */
+    /* Sidebar / Drawer */
     #sidebar {
       width: var(--sidebar-width);
       background: var(--bg-surface);
@@ -102,22 +122,25 @@ def build_offline_site():
       flex-shrink: 0;
       height: 100%;
       z-index: 50;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #sidebar.focus-hidden {
+      width: 0;
+      transform: translateX(-100%);
+      overflow: hidden;
+      border-right: none;
     }
 
     /* Mobile Backdrop Overlay */
     #mobile-backdrop {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
       z-index: 40;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.25s ease;
     }
     #mobile-backdrop.active { display: block; opacity: 1; }
 
@@ -128,26 +151,40 @@ def build_offline_site():
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(12, 18, 32, 0.95);
+      backdrop-filter: blur(12px);
       flex-shrink: 0;
     }
     .brand-group { display: flex; align-items: center; gap: 10px; }
     .brand-logo {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: var(--radius-md);
-      background: linear-gradient(135deg, #ff5a00, #ff8c42);
+      background: linear-gradient(135deg, #ff5a00 0%, #ff8533 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: white;
-      box-shadow: 0 4px 12px var(--accent-brand-glow);
+      box-shadow: 0 4px 16px var(--accent-brand-glow);
     }
-    .brand-info h2 { font-size: 0.92rem; font-weight: 700; color: #fff; }
-    .brand-info p { font-size: 0.7rem; color: var(--text-tertiary); }
+    .brand-info h2 { font-size: 0.94rem; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+    .brand-info p { font-size: 0.68rem; color: var(--text-tertiary); font-weight: 500; }
     
+    .overall-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(255, 90, 0, 0.1);
+      border: 1px solid rgba(255, 90, 0, 0.25);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #ff9457;
+    }
+
     .btn-close-sidebar {
       display: none;
       background: rgba(255,255,255,0.06);
@@ -165,48 +202,63 @@ def build_offline_site():
     /* Level Tabs Bar */
     .level-tabs-container {
       overflow-x: auto;
-      background: rgba(9, 13, 22, 0.75);
+      background: rgba(6, 9, 17, 0.85);
       border-bottom: 1px solid var(--border-subtle);
       flex-shrink: 0;
       -webkit-overflow-scrolling: touch;
     }
     .level-tabs {
       display: flex;
-      padding: 8px 12px;
-      gap: 6px;
+      padding: 8px 10px;
+      gap: 5px;
       width: max-content;
     }
     .level-tab {
-      padding: 6px 12px;
+      padding: 6px 11px;
       border-radius: var(--radius-md);
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-secondary);
       cursor: pointer;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 600;
       white-space: nowrap;
       transition: all 0.18s ease;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
-    .level-tab:hover { background: rgba(255,255,255,0.04); color: #fff; }
+    .level-tab:hover { background: rgba(255,255,255,0.05); color: #fff; }
     .level-tab.active {
-      background: linear-gradient(135deg, rgba(255,90,0,0.18), rgba(255,90,0,0.06));
-      color: #ff9d66;
-      border-color: rgba(255,90,0,0.35);
-      box-shadow: 0 2px 10px rgba(255,90,0,0.12);
+      background: linear-gradient(135deg, rgba(255,90,0,0.22), rgba(255,90,0,0.08));
+      color: #ffa372;
+      border-color: rgba(255,90,0,0.4);
+      box-shadow: 0 2px 12px rgba(255,90,0,0.15);
+      font-weight: 700;
+    }
+    .level-tab-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+    .level-tab.active .level-tab-dot {
+      background: var(--accent-brand);
+      box-shadow: 0 0 6px var(--accent-brand);
+    }
+    .level-tab.all-done .level-tab-dot {
+      background: var(--accent-emerald);
+      box-shadow: 0 0 6px var(--accent-emerald);
     }
 
     /* Search & Filter Section */
     .search-section { padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
     .search-input-wrap { position: relative; display: flex; align-items: center; margin-bottom: 8px; }
-    .search-icon { position: absolute; left: 10px; width: 14px; height: 14px; color: var(--text-tertiary); }
+    .search-icon { position: absolute; left: 10px; width: 14px; height: 14px; color: var(--text-tertiary); pointer-events: none; }
     .search-input {
       width: 100%;
-      padding: 8px 10px 8px 32px;
-      background: rgba(9, 13, 22, 0.8);
+      padding: 8px 30px 8px 32px;
+      background: rgba(6, 9, 17, 0.85);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       color: #fff;
@@ -214,50 +266,80 @@ def build_offline_site():
       outline: none;
       transition: all 0.2s;
     }
-    .search-input:focus { border-color: var(--accent-brand); background: rgba(15, 23, 42, 0.9); }
+    .search-input:focus { border-color: var(--accent-brand); background: rgba(19, 28, 49, 0.95); box-shadow: 0 0 0 3px rgba(255,90,0,0.15); }
+    .search-clear-btn {
+      position: absolute;
+      right: 8px;
+      background: transparent;
+      border: none;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: none;
+      padding: 2px 4px;
+    }
+    .search-clear-btn:hover { color: #fff; }
     
-    .filter-pills { display: flex; gap: 6px; }
+    .filter-pills { display: flex; gap: 5px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
     .filter-pill {
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: var(--radius-sm);
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       font-weight: 600;
       border: 1px solid var(--border-subtle);
       background: rgba(255,255,255,0.03);
       color: var(--text-tertiary);
       cursor: pointer;
       transition: all 0.15s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-    .filter-pill:hover, .filter-pill.active {
-      background: rgba(255,90,0,0.15);
-      border-color: rgba(255,90,0,0.4);
+    .filter-pill:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+    .filter-pill.active {
+      background: rgba(255,90,0,0.16);
+      border-color: rgba(255,90,0,0.45);
       color: #ff9d66;
+      font-weight: 700;
     }
 
-    /* Level Progress Banner */
+    /* Level Progress & Accordion Tools */
     .level-meta-bar {
       padding: 8px 14px;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255,255,255,0.015);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       flex-shrink: 0;
     }
-    .level-title-display { font-weight: 700; color: #fff; }
+    .level-title-display { font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; }
+    .meta-right-tools { display: flex; align-items: center; gap: 8px; }
     .level-prog-wrap { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-secondary); }
-    .prog-bar-mini { width: 50px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; }
-    .prog-bar-fill { height: 100%; background: var(--accent-emerald); transition: width 0.3s ease; }
+    .prog-bar-mini { width: 44px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; }
+    .prog-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.35s ease; }
+    .btn-accordion-toggle {
+      background: transparent;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 0.68rem;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: var(--radius-sm);
+      transition: color 0.15s;
+    }
+    .btn-accordion-toggle:hover { color: #fff; text-decoration: underline; }
 
     /* Navigation List */
     .nav-list { flex: 1; overflow-y: auto; padding: 10px; -webkit-overflow-scrolling: touch; }
     
-    .course-group { margin-bottom: 12px; }
+    .course-group { margin-bottom: 14px; }
     .course-header {
       font-size: 0.72rem;
       text-transform: uppercase;
-      color: var(--accent-brand);
+      color: #ff8e4d;
       font-weight: 800;
       letter-spacing: 0.06em;
       padding: 6px 8px;
@@ -265,33 +347,41 @@ def build_offline_site():
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s;
     }
+    .course-header:hover { background: rgba(255,255,255,0.03); }
+    .course-header-left { display: flex; align-items: center; gap: 6px; }
+    .course-chevron { font-size: 0.62rem; color: var(--text-tertiary); transition: transform 0.2s ease; }
+    .course-group.collapsed .course-chevron { transform: rotate(-90deg); }
+    .course-group.collapsed .course-body { display: none; }
     .course-release-tag { font-size: 0.65rem; color: var(--text-tertiary); font-weight: 600; text-transform: none; }
 
     .chapter-group { margin-bottom: 6px; }
     .chapter-header {
       font-size: 0.8rem;
       font-weight: 700;
-      color: #e2e8f0;
-      padding: 8px 10px;
+      color: #cbd5e1;
+      padding: 7px 10px;
       border-radius: var(--radius-md);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
       transition: background 0.15s;
-      min-height: 40px;
+      min-height: 38px;
     }
-    .chapter-header:hover { background: rgba(255,255,255,0.04); }
-    .chapter-title-text { display: flex; align-items: center; gap: 6px; }
-    .chapter-chevron { font-size: 0.65rem; color: var(--text-tertiary); transition: transform 0.2s ease; }
+    .chapter-header:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .chapter-title-text { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+    .chapter-chevron { font-size: 0.62rem; color: var(--text-tertiary); transition: transform 0.2s ease; }
     .chapter-group.collapsed .chapter-chevron { transform: rotate(-90deg); }
     .chapter-group.collapsed .chapter-lessons { display: none; }
-    .chapter-count { font-size: 0.68rem; color: var(--text-tertiary); font-weight: 500; }
+    .chapter-count { font-size: 0.68rem; color: var(--text-tertiary); font-weight: 500; font-family: 'JetBrains Mono', monospace; }
 
-    .chapter-lessons { padding-left: 4px; margin-top: 2px; }
+    .chapter-lessons { padding-left: 6px; margin-top: 2px; }
     .lesson-item {
-      padding: 9px 10px;
+      padding: 8px 10px;
       border-radius: var(--radius-md);
       cursor: pointer;
       display: flex;
@@ -300,18 +390,20 @@ def build_offline_site():
       margin-bottom: 2px;
       font-size: 0.82rem;
       color: var(--text-secondary);
-      transition: all 0.15s ease;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       border-left: 3px solid transparent;
-      min-height: 42px;
+      min-height: 40px;
     }
     .lesson-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
     .lesson-item.active {
-      background: var(--bg-card);
+      background: var(--bg-card-active);
       color: #fff;
       font-weight: 600;
       border-left-color: var(--accent-brand);
+      box-shadow: inset 0 0 16px rgba(255,90,0,0.08);
     }
-    .lesson-item.upcoming { opacity: 0.65; }
+    .lesson-item.upcoming { opacity: 0.62; }
+    .lesson-item.upcoming:hover { opacity: 0.9; }
     .lesson-left { display: flex; align-items: center; gap: 8px; overflow: hidden; }
     .lesson-icon { font-size: 0.8rem; flex-shrink: 0; }
     .lesson-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -322,19 +414,21 @@ def build_offline_site():
       height: 6px;
       border-radius: 50%;
       background: var(--accent-emerald);
+      box-shadow: 0 0 6px var(--accent-emerald-glow);
       flex-shrink: 0;
     }
+    .lesson-right-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
     .lesson-badge-pill {
-      font-size: 0.65rem;
+      font-size: 0.63rem;
       padding: 1px 5px;
       border-radius: 3px;
       font-weight: 700;
-      margin-left: 6px;
       white-space: nowrap;
     }
     .pill-video { background: rgba(255,90,0,0.15); color: #ff8a4c; }
-    .pill-notes { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .pill-notes { background: rgba(6, 182, 212, 0.15); color: #38bdf8; }
     .pill-upcoming { background: rgba(255,255,255,0.06); color: var(--text-tertiary); }
+    .lesson-bookmark-icon { font-size: 0.72rem; color: #fbbf24; }
 
     /* Main Content Area */
     #main-content {
@@ -346,37 +440,43 @@ def build_offline_site():
       background: var(--bg-base);
       position: relative;
       -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
     }
 
     /* Top Sticky Bar */
     .topbar {
-      padding: 12px 24px;
+      height: var(--topbar-height);
+      padding: 0 24px;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(9, 13, 22, 0.88);
-      backdrop-filter: blur(18px);
+      background: rgba(6, 9, 17, 0.85);
+      backdrop-filter: blur(20px);
       position: sticky;
       top: 0;
       z-index: 25;
       flex-shrink: 0;
     }
     .topbar-left { display: flex; align-items: center; gap: 12px; overflow: hidden; }
-    .btn-hamburger {
-      display: none;
+    .btn-topbar-icon {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      color: #fff;
+      color: #cbd5e1;
       width: 36px;
       height: 36px;
       border-radius: var(--radius-md);
+      display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1rem;
       flex-shrink: 0;
+      transition: all 0.18s;
     }
+    .btn-topbar-icon:hover { background: var(--bg-card-hover); color: #fff; border-color: var(--border-medium); }
+    .btn-hamburger { display: none; }
+    
     .breadcrumb-nav {
       display: flex;
       align-items: center;
@@ -393,7 +493,7 @@ def build_offline_site():
 
     .topbar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
     .btn {
-      padding: 8px 14px;
+      padding: 7px 13px;
       border-radius: var(--radius-md);
       font-size: 0.8rem;
       font-weight: 600;
@@ -407,72 +507,76 @@ def build_offline_site():
       min-height: 36px;
     }
     .btn-secondary { background: var(--bg-card); border-color: var(--border-subtle); color: var(--text-secondary); }
-    .btn-secondary:hover { background: var(--bg-card-hover); color: #fff; }
+    .btn-secondary:hover { background: var(--bg-card-hover); color: #fff; border-color: var(--border-medium); }
     .btn-primary { background: linear-gradient(135deg, #ff5a00, #ff7e33); color: white; box-shadow: 0 4px 14px var(--accent-brand-glow); }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
     .btn-done { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #34d399; }
+    .btn-done:hover { background: rgba(16, 185, 129, 0.25); }
+    .btn-bookmarked { color: #fbbf24; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.12); }
 
     /* Content Layout Container */
     .content-container {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
       width: 100%;
       padding: 24px 28px 80px 28px;
     }
 
     /* Lesson Hero */
-    .lesson-hero { margin-bottom: 22px; }
+    .lesson-hero { margin-bottom: 24px; }
+    .lesson-hero-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
     .lesson-hero-title {
-      font-size: 1.8rem;
+      font-size: 1.85rem;
       font-weight: 800;
       color: #fff;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-      margin-bottom: 10px;
+      letter-spacing: -0.025em;
+      line-height: 1.25;
     }
-    .hero-tags { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .hero-tags { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
     .hero-tag {
-      padding: 3px 8px;
+      padding: 3px 9px;
       border-radius: var(--radius-sm);
       font-size: 0.72rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
+    .tag-level { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid var(--border-subtle); }
     .tag-duration { background: rgba(255,255,255,0.06); color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
     .tag-video-live { background: rgba(255,90,0,0.15); color: #ff8c4a; border: 1px solid rgba(255,90,0,0.3); }
-    .tag-notes-live { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .tag-notes-live { background: rgba(6, 182, 212, 0.15); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
     .tag-upcoming { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-req { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
 
     /* Upcoming Release Hero Card */
     .upcoming-card {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(15, 23, 42, 0.9));
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      border-radius: var(--radius-lg);
-      padding: 32px 30px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.09) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
       margin-bottom: 28px;
       text-align: center;
+      box-shadow: 0 12px 32px -10px rgba(0,0,0,0.6);
     }
-    .upcoming-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .upcoming-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
-    .upcoming-desc { font-size: 0.9rem; color: #cbd5e1; max-width: 580px; margin: 0 auto 20px auto; line-height: 1.6; }
-    .upcoming-actions { display: flex; justify-content: center; gap: 12px; }
+    .upcoming-icon { font-size: 2.8rem; margin-bottom: 12px; }
+    .upcoming-title { font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .upcoming-desc { font-size: 0.92rem; color: #cbd5e1; max-width: 600px; margin: 0 auto 24px auto; line-height: 1.65; }
+    .upcoming-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
     /* Video Player */
     .video-hero-card {
       background: #000;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       overflow: hidden;
       border: 1px solid var(--border-subtle);
       margin-bottom: 28px;
-      box-shadow: 0 16px 36px -12px rgba(0,0,0,0.8);
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.9);
+      transition: all 0.25s ease;
     }
     .video-hero-card.theater-mode {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       z-index: 1000;
       border-radius: 0;
       margin: 0;
@@ -480,7 +584,7 @@ def build_offline_site():
       flex-direction: column;
     }
     .video-card-topbar {
-      padding: 8px 14px;
+      padding: 10px 16px;
       background: #070a12;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
@@ -488,20 +592,22 @@ def build_offline_site():
       align-items: center;
       font-size: 0.78rem;
     }
-    .video-stream-badge { display: flex; align-items: center; gap: 6px; color: #cbd5e1; font-weight: 600; font-size: 0.75rem; }
-    .stream-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 6px var(--accent-emerald); }
+    .video-stream-badge { display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-weight: 600; font-size: 0.76rem; }
+    .stream-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald); }
     .video-controls-quick { display: flex; gap: 6px; align-items: center; }
-    .speed-btn, .theater-btn {
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-size: 0.7rem;
+    .speed-btn, .theater-btn, .jump-btn {
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.72rem;
       font-weight: 700;
       background: rgba(255,255,255,0.06);
       color: var(--text-secondary);
       border: 1px solid var(--border-subtle);
       cursor: pointer;
+      transition: all 0.15s;
     }
-    .speed-btn.active { background: var(--accent-brand); color: white; border-color: var(--accent-brand); }
+    .speed-btn:hover, .theater-btn:hover, .jump-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .speed-btn.active { background: var(--accent-brand); color: white; border-color: var(--accent-brand); box-shadow: 0 2px 8px var(--accent-brand-glow); }
     .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; width: 100%; background: #000; }
     .video-hero-card.theater-mode .video-wrapper { flex: 1; height: 100%; padding-bottom: 0; }
     .video-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; outline: none; }
@@ -510,72 +616,116 @@ def build_offline_site():
     .notes-section {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 28px 30px;
+      border-radius: var(--radius-xl);
+      padding: 30px 32px;
       margin-bottom: 28px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
     .notes-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .notes-title { font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .notes-title { font-size: 1.1rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
 
-    /* Markdown Body */
-    .markdown-body { line-height: 1.75; font-size: 0.94rem; color: #cbd5e1; word-break: break-word; }
-    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { color: #fff; margin: 26px 0 12px 0; font-weight: 800; }
-    .markdown-body h2 { font-size: 1.3rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; }
-    .markdown-body h3 { font-size: 1.1rem; }
-    .markdown-body p { margin-bottom: 14px; }
-    .markdown-body ul, .markdown-body ol { margin-left: 20px; margin-bottom: 18px; }
-    .markdown-body li { margin-bottom: 5px; }
+    /* Markdown Body with High-End Typography */
+    .markdown-body { line-height: 1.8; font-size: 0.95rem; color: #cbd5e1; word-break: break-word; }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { color: #fff; margin: 28px 0 12px 0; font-weight: 800; letter-spacing: -0.015em; }
+    .markdown-body h2 { font-size: 1.35rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; }
+    .markdown-body h3 { font-size: 1.12rem; color: #e2e8f0; }
+    .markdown-body p { margin-bottom: 16px; }
+    .markdown-body ul, .markdown-body ol { margin-left: 22px; margin-bottom: 20px; }
+    .markdown-body li { margin-bottom: 6px; }
+    
+    /* Script & Callout Cards */
     .markdown-body blockquote {
       border-left: 4px solid var(--accent-brand);
-      padding: 12px 16px;
-      margin: 16px 0;
-      color: #f1f5f9;
-      background: linear-gradient(90deg, rgba(255,90,0,0.08), rgba(255,90,0,0.01));
+      padding: 16px 20px;
+      margin: 20px 0;
+      color: #f8fafc;
+      background: linear-gradient(135deg, rgba(255,90,0,0.1) 0%, rgba(255,90,0,0.02) 100%);
       border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      position: relative;
+      border-top: 1px solid rgba(255,90,0,0.15);
+      border-right: 1px solid rgba(255,90,0,0.15);
+      border-bottom: 1px solid rgba(255,90,0,0.15);
     }
-    .markdown-body table { width: 100%; display: block; overflow-x: auto; border-collapse: collapse; margin: 20px 0; }
+    .script-box-container {
+      position: relative;
+      background: rgba(9, 13, 22, 0.7);
+      border: 1px solid rgba(255, 90, 0, 0.25);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 18px 0;
+    }
+    .script-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed rgba(255,255,255,0.1);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ff9d66;
+    }
+    .btn-copy-snippet {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-copy-snippet:hover { background: var(--accent-brand); color: white; border-color: var(--accent-brand); }
+
+    .markdown-body table { width: 100%; display: block; overflow-x: auto; border-collapse: collapse; margin: 22px 0; }
     .markdown-body th, .markdown-body td { border: 1px solid var(--border-subtle); padding: 10px 14px; text-align: left; }
-    .markdown-body th { background: rgba(9, 13, 22, 0.7); color: #fff; font-weight: 700; }
+    .markdown-body th { background: rgba(6, 9, 17, 0.85); color: #fff; font-weight: 700; }
     .markdown-body code {
       font-family: 'JetBrains Mono', monospace;
-      background: rgba(9, 13, 22, 0.9);
+      background: rgba(6, 9, 17, 0.95);
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 0.84em;
       color: #fb7185;
       border: 1px solid var(--border-subtle);
     }
-    .markdown-body pre { background: #090d16; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; margin: 16px 0; overflow-x: auto; }
+    .markdown-body pre { background: #060911; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin: 18px 0; overflow-x: auto; }
     .markdown-body pre code { background: transparent; padding: 0; border: none; color: #e2e8f0; }
 
     /* Quiz Section */
     .quiz-section {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 28px 30px;
+      border-radius: var(--radius-xl);
+      padding: 30px 32px;
       margin-bottom: 28px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
     .quiz-main-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .quiz-headline { font-size: 1.05rem; font-weight: 700; color: #fff; }
-    .quiz-score-badge { font-size: 0.75rem; font-weight: 700; color: var(--accent-brand); background: rgba(255,90,0,0.12); padding: 3px 8px; border-radius: 999px; }
+    .quiz-headline { font-size: 1.1rem; font-weight: 700; color: #fff; }
+    .quiz-score-badge { font-size: 0.75rem; font-weight: 700; color: #ffa06d; background: rgba(255,90,0,0.14); padding: 3px 9px; border-radius: 999px; }
 
-    .quiz-item-card { background: rgba(9, 13, 22, 0.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; }
-    .quiz-q-title { font-weight: 700; font-size: 0.95rem; color: #fff; margin-bottom: 14px; line-height: 1.45; }
+    .quiz-item-card { background: rgba(6, 9, 17, 0.65); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 16px; }
+    .quiz-q-title { font-weight: 700; font-size: 0.96rem; color: #fff; margin-bottom: 14px; line-height: 1.45; }
     .quiz-options-grid { display: flex; flex-direction: column; gap: 8px; }
     .quiz-opt-btn {
       padding: 11px 14px;
@@ -595,15 +745,15 @@ def build_offline_site():
     }
     .quiz-opt-btn:hover { border-color: rgba(255,255,255,0.25); background: var(--bg-card); color: #fff; }
     .quiz-opt-indicator {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       border: 2px solid var(--text-tertiary);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      font-size: 0.62rem;
+      font-size: 0.64rem;
       font-weight: 700;
     }
     .quiz-opt-btn.correct { background: rgba(16, 185, 129, 0.15); border-color: var(--accent-emerald); color: #34d399; font-weight: 600; }
@@ -611,15 +761,15 @@ def build_offline_site():
     .quiz-opt-btn.wrong { background: rgba(244, 63, 94, 0.15); border-color: var(--accent-rose); color: #fb7185; }
     .quiz-opt-btn.wrong .quiz-opt-indicator { border-color: var(--accent-rose); background: var(--accent-rose); color: #fff; }
     .quiz-feedback-box {
-      margin-top: 12px;
-      padding: 10px 14px;
+      margin-top: 14px;
+      padding: 12px 16px;
       background: rgba(255,255,255,0.03);
       border-left: 3px solid var(--accent-brand);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      font-size: 0.82rem;
-      color: var(--text-secondary);
+      font-size: 0.84rem;
+      color: #e2e8f0;
       display: none;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     /* Bottom Sticky Nav Bar */
@@ -627,73 +777,156 @@ def build_offline_site():
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-top: 28px;
-      padding-top: 20px;
+      gap: 14px;
+      margin-top: 32px;
+      padding-top: 24px;
       border-top: 1px solid var(--border-subtle);
     }
     .nav-btn-card {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
+      gap: 12px;
+      padding: 12px 18px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       color: var(--text-secondary);
       cursor: pointer;
       text-decoration: none;
       transition: all 0.2s;
       flex: 1;
       max-width: 48%;
-      min-height: 48px;
+      min-height: 52px;
     }
-    .nav-btn-card:hover { border-color: var(--accent-brand); background: var(--bg-card-hover); color: #fff; }
-    .nav-btn-label { font-size: 0.68rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700; }
-    .nav-btn-title { font-size: 0.82rem; font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-btn-card:hover { border-color: var(--accent-brand); background: var(--bg-card-hover); color: #fff; transform: translateY(-1px); }
+    .nav-btn-label { font-size: 0.68rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+    .nav-btn-title { font-size: 0.86rem; font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* Keyboard Shortcuts */
+    /* Keyboard Shortcuts Footer */
     .shortcuts-footer {
       display: flex;
       justify-content: center;
-      gap: 16px;
-      margin-top: 28px;
-      font-size: 0.72rem;
+      gap: 18px;
+      margin-top: 32px;
+      font-size: 0.74rem;
       color: var(--text-tertiary);
+      flex-wrap: wrap;
     }
-    .kbd { background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); padding: 1px 5px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); }
+    .kbd { background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: rgba(19, 28, 49, 0.95);
+      border: 1px solid var(--border-medium);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px var(--accent-brand-glow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+    /* Shortcuts Modal */
+    #shortcuts-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #shortcuts-modal.open { display: flex; }
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-xl);
+      max-width: 460px;
+      width: 100%;
+      padding: 24px 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); }
+    .modal-title { font-size: 1.1rem; font-weight: 800; color: #fff; }
+    .modal-close-btn { background: transparent; border: none; color: var(--text-tertiary); font-size: 1.2rem; cursor: pointer; }
+    .shortcut-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.84rem; }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 3000;
+    }
 
     /* Media Queries */
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       :root { --sidebar-width: 320px; }
       #sidebar {
         position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
+        top: 0; bottom: 0; left: 0;
         transform: translateX(-100%);
-        box-shadow: 8px 0 24px rgba(0,0,0,0.6);
+        box-shadow: 8px 0 30px rgba(0,0,0,0.75);
       }
       #sidebar.mobile-open { transform: translateX(0); }
+      #sidebar.focus-hidden { transform: translateX(-100%); }
       .btn-close-sidebar, .btn-hamburger { display: flex; }
-      .content-container { padding: 16px 16px 60px 16px; }
+      #btn-focus-toggle { display: none; }
+      .content-container { padding: 18px 16px 60px 16px; }
       .lesson-hero-title { font-size: 1.45rem; }
-      .topbar { padding: 10px 14px; }
-      .notes-section, .quiz-section { padding: 20px 16px; }
+      .topbar { padding: 0 14px; }
+      .notes-section, .quiz-section { padding: 22px 18px; }
       .shortcuts-footer { display: none; }
       .nav-btn-card { max-width: 50%; }
     }
 
-    @media (max-width: 480px) {
-      :root { --sidebar-width: 85vw; }
+    @media (max-width: 520px) {
+      :root { --sidebar-width: 86vw; }
       .lesson-hero-title { font-size: 1.3rem; }
       .bottom-nav-bar { flex-direction: column; }
       .nav-btn-card { width: 100%; max-width: 100%; }
-      .topbar-actions .btn-done-text { display: none; }
+      .topbar-actions .btn-text-hide { display: none; }
+      .topbar-actions .btn { padding: 7px 10px; }
+      .lesson-hero-header-row { flex-direction: column; gap: 8px; }
     }
   </style>
 </head>
 <body>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div id="toast"></div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div id="shortcuts-modal" onclick="closeShortcutsModal(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">⌨ Keyboard Shortcuts</div>
+        <button class="modal-close-btn" onclick="toggleShortcutsModal()">✕</button>
+      </div>
+      <div class="shortcut-row"><span>Next Lesson</span><span class="kbd">]</span> or <span class="kbd">N</span></div>
+      <div class="shortcut-row"><span>Previous Lesson</span><span class="kbd">[</span> or <span class="kbd">P</span></div>
+      <div class="shortcut-row"><span>Mark Lesson Complete</span><span class="kbd">M</span></div>
+      <div class="shortcut-row"><span>Bookmark Lesson</span><span class="kbd">B</span></div>
+      <div class="shortcut-row"><span>Toggle Focus Mode</span><span class="kbd">F</span></div>
+      <div class="shortcut-row"><span>Toggle Theater Mode</span><span class="kbd">T</span></div>
+      <div class="shortcut-row"><span>Search Lessons</span><span class="kbd">/</span></div>
+      <div class="shortcut-row"><span>Show Shortcuts</span><span class="kbd">?</span></div>
+    </div>
+  </div>
 
   <div id="app-shell">
     <!-- Backdrop Overlay for Mobile -->
@@ -708,6 +941,9 @@ def build_offline_site():
             <h2>Blueprint Business</h2>
             <p>Studio Suite</p>
           </div>
+        </div>
+        <div class="overall-badge" id="overall-progress-badge" title="Overall platform progress">
+          <span>⚡</span><span id="overall-pct-text">0%</span>
         </div>
         <button class="btn-close-sidebar" onclick="closeMobileSidebar()" aria-label="Close sidebar">✕</button>
       </div>
@@ -724,20 +960,26 @@ def build_offline_site():
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="search-input" class="search-input" placeholder="Search 468 lessons, notes..." />
+          <input type="text" id="search-input" class="search-input" placeholder="Search 469 lessons, notes (/)..." />
+          <button class="search-clear-btn" id="search-clear-btn" onclick="clearSearch()">✕</button>
         </div>
         <div class="filter-pills">
-          <button class="filter-pill active" id="filter-all" onclick="setFilter('all')">All (468)</button>
-          <button class="filter-pill" id="filter-ready" onclick="setFilter('ready')">Ready to Study (99)</button>
+          <button class="filter-pill active" id="filter-all" onclick="setFilter('all')">All (469)</button>
+          <button class="filter-pill" id="filter-ready" onclick="setFilter('ready')">⚡ Ready (99)</button>
+          <button class="filter-pill" id="filter-done" onclick="setFilter('done')">✓ Done (<span id="count-done">0</span>)</button>
+          <button class="filter-pill" id="filter-saved" onclick="setFilter('saved')">⭐ Saved (<span id="count-saved">0</span>)</button>
         </div>
       </div>
 
-      <!-- Active Level Progress -->
+      <!-- Active Level Progress & Accordion Actions -->
       <div class="level-meta-bar">
         <span class="level-title-display" id="level-active-title">Level 0: Business Model</span>
-        <div class="level-prog-wrap">
-          <div class="prog-bar-mini"><div class="prog-bar-fill" id="level-prog-fill" style="width: 0%;"></div></div>
-          <span id="level-prog-text">0/79</span>
+        <div class="meta-right-tools">
+          <button class="btn-accordion-toggle" id="btn-toggle-accordions" onclick="toggleAllAccordions()">Collapse All</button>
+          <div class="level-prog-wrap">
+            <div class="prog-bar-mini"><div class="prog-bar-fill" id="level-prog-fill" style="width: 0%;"></div></div>
+            <span id="level-prog-text" style="font-family:'JetBrains Mono',monospace;">0/78</span>
+          </div>
         </div>
       </div>
 
@@ -749,18 +991,23 @@ def build_offline_site():
     <main id="main-content">
       <header class="topbar">
         <div class="topbar-left">
-          <button class="btn-hamburger" onclick="openMobileSidebar()" aria-label="Open lessons menu">☰</button>
+          <button class="btn-topbar-icon btn-hamburger" onclick="openMobileSidebar()" aria-label="Open lessons menu">☰</button>
+          <button class="btn-topbar-icon" id="btn-focus-toggle" onclick="toggleFocusMode()" title="Toggle Focus Mode (F)">⇸</button>
           <div class="breadcrumb-nav" id="breadcrumb">
             <span>Select a lesson</span>
           </div>
         </div>
         <div class="topbar-actions">
-          <button class="btn btn-secondary" onclick="toggleTheaterMode()" title="Theater Mode">
+          <button class="btn btn-secondary" id="btn-bookmark-action" onclick="toggleBookmark()" title="Bookmark Lesson (B)">
+            <span id="bookmark-icon">☆</span> <span class="btn-text-hide">Save</span>
+          </button>
+          <button class="btn btn-secondary" onclick="toggleTheaterMode()" title="Theater Mode (T)">
             <span>⛶</span>
           </button>
-          <button class="btn btn-primary" id="btn-complete-action" onclick="toggleComplete()">
-            <span>✓</span> <span class="btn-done-text">Done</span>
+          <button class="btn btn-primary" id="btn-complete-action" onclick="toggleComplete()" title="Mark Done (M)">
+            <span>✓</span> <span class="btn-done-text btn-text-hide">Mark Done</span>
           </button>
+          <button class="btn-topbar-icon" onclick="toggleShortcutsModal()" title="Keyboard Shortcuts (?)">?</button>
         </div>
       </header>
 
@@ -773,39 +1020,172 @@ def build_offline_site():
     let activeHls = null;
     let currentSpeed = 1;
     let isTheater = false;
+    let isFocusMode = false;
     let activeFilter = 'all';
-
-    function renderMarkdown(md) {
-      if (window.marked) return marked.parse(md || '');
-      return (md || '').replace(/\\n/g, '<br/>');
-    }
+    let allAccordionsCollapsed = false;
 
     const { levels, courses, chapters, modules } = window.BBS_DATA;
     let currentLevel = 0;
     let currentModuleId = null;
     let completedSet = new Set(JSON.parse(localStorage.getItem('bbs_completed') || '[]'));
+    let bookmarkedSet = new Set(JSON.parse(localStorage.getItem('bbs_bookmarked') || '[]'));
+    let collapsedCourses = new Set();
     let collapsedChapters = new Set();
+
+    function renderMarkdown(md) {
+      if (window.marked) {
+        let html = marked.parse(md || '');
+        // Enhance markdown dialogues and sales scripts with copy cards
+        html = html.replace(/<blockquote>([\s\S]*?)<\/blockquote>/gi, function(match, inner) {
+          const rawText = inner.replace(/<[^>]*>/g, '').trim();
+          const cleanText = escapeQuotes(rawText);
+          return `
+            <div class="script-box-container">
+              <div class="script-box-header">
+                <span>💬 Script / Framework</span>
+                <button class="btn-copy-snippet" onclick="copySnippet('${cleanText}')">📋 Copy Script</button>
+              </div>
+              <blockquote>${inner}</blockquote>
+            </div>
+          `;
+        });
+        return html;
+      }
+      return (md || '').replace(/\\n/g, '<br/>');
+    }
 
     function init() {
       renderLevelTabs();
       loadLevel(0);
-      document.getElementById('search-input').addEventListener('input', handleSearch);
+      updateBadgeCounts();
 
-      // Keyboard navigation
+      const searchInput = document.getElementById('search-input');
+      searchInput.addEventListener('input', handleSearch);
+
+      // Global keyboard navigation
       document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        if (e.key === ']' || e.key === 'n') goToNextModule();
-        if (e.key === '[' || e.key === 'p') goToPrevModule();
-        if (e.key === 'm') toggleComplete();
-        if (e.key === 't') toggleTheaterMode();
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+          if (e.key === 'Escape') {
+            e.target.blur();
+            clearSearch();
+          }
+          return;
+        }
+        if (e.key === ']' || e.key === 'n' || e.key === 'N') goToNextModule();
+        if (e.key === '[' || e.key === 'p' || e.key === 'P') goToPrevModule();
+        if (e.key === 'm' || e.key === 'M') toggleComplete();
+        if (e.key === 'b' || e.key === 'B') toggleBookmark();
+        if (e.key === 't' || e.key === 'T') toggleTheaterMode();
+        if (e.key === 'f' || e.key === 'F') toggleFocusMode();
+        if (e.key === '/') {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === '?') toggleShortcutsModal();
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('shortcuts-modal');
+          if (modal.classList.contains('open')) toggleShortcutsModal();
+          if (isTheater) toggleTheaterMode();
+        }
       });
+    }
+
+    function showToast(msg, icon = '✓') {
+      const toast = document.getElementById('toast');
+      toast.innerHTML = `<span style="color:var(--accent-brand); font-size:1.1rem;">${icon}</span><span>${msg}</span>`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#ff5a00', '#10b981', '#38bdf8', '#fbbf24', '#f43f5e', '#a855f7'];
+
+      for (let i = 0; i < 75; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          r: Math.random() * 6 + 3,
+          dx: (Math.random() - 0.5) * 16,
+          dy: (Math.random() - 0.5) * 16 - 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.random() * 10,
+          tiltAngle: 0,
+          tiltAngleInc: (Math.random() * 0.08) + 0.04,
+          life: 90
+        });
+      }
+
+      let animId;
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          if (p.life > 0) {
+            alive = true;
+            p.x += p.dx;
+            p.y += p.dy;
+            p.dy += 0.35; // gravity
+            p.tiltAngle += p.tiltAngleInc;
+            p.life--;
+            ctx.beginPath();
+            ctx.lineWidth = p.r;
+            ctx.strokeStyle = p.color;
+            ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+            ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+            ctx.stroke();
+          }
+        });
+        if (alive) {
+          animId = requestAnimationFrame(render);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cancelAnimationFrame(animId);
+        }
+      }
+      render();
+    }
+
+    function toggleFocusMode() {
+      isFocusMode = !isFocusMode;
+      const sidebar = document.getElementById('sidebar');
+      const btn = document.getElementById('btn-focus-toggle');
+      sidebar.classList.toggle('focus-hidden', isFocusMode);
+      btn.innerText = isFocusMode ? '⇹' : '⇸';
+      btn.title = isFocusMode ? 'Exit Focus Mode (F)' : 'Focus Mode (F)';
+      showToast(isFocusMode ? 'Focus Mode ON' : 'Focus Mode OFF', '👁');
+    }
+
+    function toggleShortcutsModal() {
+      const modal = document.getElementById('shortcuts-modal');
+      modal.classList.toggle('open');
+    }
+
+    function closeShortcutsModal(e) {
+      if (e.target.id === 'shortcuts-modal') toggleShortcutsModal();
     }
 
     function setFilter(filterType) {
       activeFilter = filterType;
-      document.getElementById('filter-all').classList.toggle('active', filterType === 'all');
-      document.getElementById('filter-ready').classList.toggle('active', filterType === 'ready');
+      ['all', 'ready', 'done', 'saved'].forEach(f => {
+        document.getElementById(`filter-${f}`).classList.toggle('active', filterType === f);
+      });
       renderSidebar();
+    }
+
+    function updateBadgeCounts() {
+      document.getElementById('count-done').innerText = completedSet.size;
+      document.getElementById('count-saved').innerText = bookmarkedSet.size;
+
+      const totalModules = modules.length;
+      const totalDone = completedSet.size;
+      const overallPct = Math.round((totalDone / totalModules) * 100) || 0;
+      document.getElementById('overall-pct-text').innerText = `${overallPct}%`;
     }
 
     function openMobileSidebar() {
@@ -820,13 +1200,19 @@ def build_offline_site():
 
     function renderLevelTabs() {
       const container = document.getElementById('level-tabs');
-      container.innerHTML = levels.map(lvl => `
-        <button class="level-tab ${lvl.level_number === currentLevel ? 'active' : ''}" 
-                onclick="loadLevel(${lvl.level_number})">
-          <span>L${lvl.level_number}</span>
-          <span>${lvl.title || 'Level ' + lvl.level_number}</span>
-        </button>
-      `).join('');
+      container.innerHTML = levels.map(lvl => {
+        const lvlMods = modules.filter(m => m.level_number === lvl.level_number);
+        const lvlDone = lvlMods.filter(m => completedSet.has(m.id)).length;
+        const allDone = lvlMods.length > 0 && lvlDone === lvlMods.length;
+        return `
+          <button class="level-tab ${lvl.level_number === currentLevel ? 'active' : ''} ${allDone ? 'all-done' : ''}" 
+                  onclick="loadLevel(${lvl.level_number})" title="Level ${lvl.level_number}: ${lvl.title || ''}">
+            <span class="level-tab-dot"></span>
+            <span>L${lvl.level_number}</span>
+            <span>${lvl.title || 'Level ' + lvl.level_number}</span>
+          </button>
+        `;
+      }).join('');
     }
 
     function loadLevel(lvlNum) {
@@ -838,7 +1224,9 @@ def build_offline_site():
       // Auto-select first lesson in this level (prefer ready lesson if available)
       const lvlMods = modules.filter(m => m.level_number === lvlNum);
       const firstReady = lvlMods.find(m => m.video_url || m.notes) || lvlMods[0];
-      if (firstReady) selectModule(firstReady.id);
+      if (firstReady && (!currentModuleId || !modules.find(m => m.id === currentModuleId && m.level_number === lvlNum))) {
+        selectModule(firstReady.id);
+      }
     }
 
     function updateLevelMeta() {
@@ -847,9 +1235,39 @@ def build_offline_site():
       const doneCount = lvlMods.filter(m => completedSet.has(m.id)).length;
       const pct = Math.round((doneCount / lvlMods.length) * 100) || 0;
 
-      document.getElementById('level-active-title').innerText = `Level ${currentLevel}: ${lvl ? lvl.title : ''}`;
+      document.getElementById('level-active-title').innerText = `Level ${currentLevel}: ${lvl ? (lvl.title || 'Curriculum') : ''}`;
       document.getElementById('level-prog-text').innerText = `${doneCount}/${lvlMods.length}`;
       document.getElementById('level-prog-fill').style.width = `${pct}%`;
+      updateBadgeCounts();
+    }
+
+    function toggleAllAccordions() {
+      allAccordionsCollapsed = !allAccordionsCollapsed;
+      const btn = document.getElementById('btn-toggle-accordions');
+      btn.innerText = allAccordionsCollapsed ? 'Expand All' : 'Collapse All';
+      
+      const lvlCourses = courses.filter(c => c.level_number === currentLevel);
+      lvlCourses.forEach(c => {
+        if (allAccordionsCollapsed) collapsedCourses.add(c.id);
+        else collapsedCourses.delete(c.id);
+      });
+      chapters.forEach(ch => {
+        if (allAccordionsCollapsed) collapsedChapters.add(ch.id);
+        else collapsedChapters.delete(ch.id);
+      });
+      renderSidebar();
+    }
+
+    function toggleCourse(cId) {
+      if (collapsedCourses.has(cId)) collapsedCourses.delete(cId);
+      else collapsedCourses.add(cId);
+      renderSidebar();
+    }
+
+    function toggleChapter(chId) {
+      if (collapsedChapters.has(chId)) collapsedChapters.delete(chId);
+      else collapsedChapters.add(chId);
+      renderSidebar();
     }
 
     function renderSidebar() {
@@ -859,19 +1277,31 @@ def build_offline_site():
       let html = '';
       lvlCourses.forEach(c => {
         let cMods = modules.filter(m => m.course_id === c.id);
+        
         if (activeFilter === 'ready') {
           cMods = cMods.filter(m => m.video_url || m.notes);
           if (cMods.length === 0) return;
+        } else if (activeFilter === 'done') {
+          cMods = cMods.filter(m => completedSet.has(m.id));
+          if (cMods.length === 0) return;
+        } else if (activeFilter === 'saved') {
+          cMods = cMods.filter(m => bookmarkedSet.has(m.id));
+          if (cMods.length === 0) return;
         }
 
+        const isCourseCollapsed = collapsedCourses.has(c.id);
         const releaseDate = c.release_date ? new Date(c.release_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
 
-        html += `<div class="course-group">`;
         html += `
-          <div class="course-header">
-            <span>${c.title}</span>
-            ${releaseDate ? `<span class="course-release-tag">🗓 ${releaseDate}</span>` : ''}
-          </div>
+          <div class="course-group ${isCourseCollapsed ? 'collapsed' : ''}">
+            <div class="course-header" onclick="toggleCourse('${c.id}')">
+              <div class="course-header-left">
+                <span class="course-chevron">▼</span>
+                <span>${c.title}</span>
+              </div>
+              ${releaseDate ? `<span class="course-release-tag">🗓 ${releaseDate}</span>` : ''}
+            </div>
+            <div class="course-body">
         `;
 
         const cChapters = chapters.filter(ch => ch.course_id === c.id);
@@ -880,10 +1310,11 @@ def build_offline_site():
         } else {
           cChapters.forEach(ch => {
             let chMods = modules.filter(m => m.chapter_id === ch.id);
-            if (activeFilter === 'ready') {
-              chMods = chMods.filter(m => m.video_url || m.notes);
-              if (chMods.length === 0) return;
-            }
+            if (activeFilter === 'ready') chMods = chMods.filter(m => m.video_url || m.notes);
+            else if (activeFilter === 'done') chMods = chMods.filter(m => completedSet.has(m.id));
+            else if (activeFilter === 'saved') chMods = chMods.filter(m => bookmarkedSet.has(m.id));
+
+            if (chMods.length === 0 && activeFilter !== 'all') return;
 
             const isCollapsed = collapsedChapters.has(ch.id);
             const chDone = chMods.filter(m => completedSet.has(m.id)).length;
@@ -904,22 +1335,14 @@ def build_offline_site():
             `;
           });
         }
-        html += `</div>`;
+        html += `</div></div>`;
       });
-      nav.innerHTML = html || `<div style="text-align:center;padding:30px 10px;color:var(--text-tertiary);font-size:0.8rem;">No active modules match this filter.</div>`;
-    }
-
-    function toggleChapter(chId) {
-      if (collapsedChapters.has(chId)) {
-        collapsedChapters.delete(chId);
-      } else {
-        collapsedChapters.add(chId);
-      }
-      renderSidebar();
+      nav.innerHTML = html || `<div style="text-align:center;padding:36px 14px;color:var(--text-tertiary);font-size:0.84rem;">No lessons found matching this filter in Level ${currentLevel}.</div>`;
     }
 
     function renderModuleItem(m) {
       const isDone = completedSet.has(m.id);
+      const isSaved = bookmarkedSet.has(m.id);
       const isActive = m.id === currentModuleId;
       const isReady = Boolean(m.video_url || m.notes);
 
@@ -939,9 +1362,10 @@ def build_offline_site():
             <span class="lesson-icon">${m.video_url ? '🎥' : (m.notes ? '📝' : '📄')}</span>
             <span class="lesson-title-text">${m.title || 'Untitled'}</span>
           </div>
-          <div style="display:flex;align-items:center;">
+          <div class="lesson-right-badges">
+            ${isSaved ? '<span class="lesson-bookmark-icon">★</span>' : ''}
             ${badge}
-            ${m.duration_minutes ? `<span class="lesson-duration" style="margin-left:6px;">${m.duration_minutes}m</span>` : ''}
+            ${m.duration_minutes ? `<span class="lesson-duration" style="font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:var(--text-tertiary);margin-left:4px;">${m.duration_minutes}m</span>` : ''}
           </div>
         </div>
       `;
@@ -963,30 +1387,47 @@ def build_offline_site():
       const mod = modules.find(m => m.id === modId);
       if (!mod) return;
 
+      // Auto ensure its chapter is expanded
+      if (mod.chapter_id) collapsedChapters.delete(mod.chapter_id);
+      if (mod.course_id) collapsedCourses.delete(mod.course_id);
+
       renderSidebar();
       updateCompleteButton();
+      updateBookmarkButton();
       updateLevelMeta();
 
-      if (window.innerWidth <= 900) {
+      // Smooth scroll active lesson into view
+      setTimeout(() => {
+        const itemEl = document.getElementById(`mod-item-${modId}`);
+        if (itemEl) itemEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }, 50);
+
+      if (window.innerWidth <= 960) {
         closeMobileSidebar();
       }
 
       const crs = courses.find(c => c.id === mod.course_id);
+      const chp = chapters.find(ch => ch.id === mod.chapter_id);
+      
       document.getElementById('breadcrumb').innerHTML = `
         <span class="breadcrumb-item">L${mod.level_number}</span>
         <span class="breadcrumb-sep">&rsaquo;</span>
         <span class="breadcrumb-item">${crs ? crs.title : ''}</span>
+        ${chp ? `<span class="breadcrumb-sep">&rsaquo;</span><span class="breadcrumb-item">${chp.title}</span>` : ''}
         <span class="breadcrumb-sep">&rsaquo;</span>
         <span class="breadcrumb-current">${mod.title}</span>
       `;
 
-      const isReady = Boolean(mod.video_url || mod.notes);
+      const isReady = Boolean(mod.video_url || m_hasNotes(mod));
       const videoId = extractVideoId(mod.video_url);
 
       let bodyHtml = `
         <div class="lesson-hero">
-          <h1 class="lesson-hero-title">${mod.title}</h1>
+          <div class="lesson-hero-header-row">
+            <h1 class="lesson-hero-title">${mod.title}</h1>
+          </div>
           <div class="hero-tags">
+            <span class="hero-tag tag-level">LEVEL ${mod.level_number}</span>
             ${mod.duration_minutes ? `<span class="hero-tag tag-duration">⏱ ${mod.duration_minutes} MINS</span>` : ''}
             ${mod.video_url ? '<span class="hero-tag tag-video-live">⚡ BUNNY HD STREAM</span>' : ''}
             ${mod.notes ? '<span class="hero-tag tag-notes-live">📝 STUDY NOTES & QUIZ</span>' : ''}
@@ -1003,22 +1444,25 @@ def build_offline_site():
 
         bodyHtml += `
           <div class="upcoming-card">
-            <div class="upcoming-icon">📅</div>
-            <div class="upcoming-title">Content Scheduled for Phased Release</div>
+            <div class="upcoming-icon">🚀</div>
+            <div class="upcoming-title">Lesson In Production</div>
             <div class="upcoming-desc">
-              <strong>${mod.title}</strong> is part of <strong>${crs ? crs.title : 'Level ' + mod.level_number}</strong>.<br/>
-              The syllabus outline is listed on the platform, and the creator is publishing video lessons according to the official timeline (Release: <em>${releaseDate}</em>).
+              <strong>${mod.title}</strong> is an officially registered curriculum topic under <strong>${crs ? crs.title : 'Level ' + mod.level_number}</strong>.<br/>
+              The syllabus has been mapped, and lessons are being published according to the release schedule (Target: <em>${releaseDate}</em>).
             </div>
             <div class="upcoming-actions">
               ${nextReady ? `
                 <button class="btn btn-primary" onclick="selectModule('${nextReady.id}')">
-                  👉 Jump to Next Ready Lesson (${nextReady.title})
+                  👉 Jump to Next Available Lesson (${nextReady.title})
                 </button>
               ` : `
                 <button class="btn btn-primary" onclick="loadLevel(0)">
-                  👉 Go to Level 0 (74 Video Lessons Ready)
+                  👉 Jump to Level 0 (74 Video Lessons Ready)
                 </button>
               `}
+              <button class="btn btn-secondary" onclick="setFilter('ready')">
+                🔍 Filter Ready Lessons Only
+              </button>
             </div>
           </div>
         `;
@@ -1031,14 +1475,16 @@ def build_offline_site():
             <div class="video-card-topbar">
               <div class="video-stream-badge">
                 <span class="stream-dot"></span>
-                <span>Bunny CDN Direct HD</span>
+                <span>Bunny CDN Direct Stream</span>
               </div>
               <div class="video-controls-quick">
+                <button class="jump-btn" onclick="jumpVideo(-10)" title="Rewind 10s">↺ 10s</button>
+                <button class="jump-btn" onclick="jumpVideo(10)" title="Forward 10s">10s ↻</button>
                 <button class="speed-btn ${currentSpeed === 1 ? 'active' : ''}" onclick="setSpeed(1)">1x</button>
                 <button class="speed-btn ${currentSpeed === 1.25 ? 'active' : ''}" onclick="setSpeed(1.25)">1.25x</button>
                 <button class="speed-btn ${currentSpeed === 1.5 ? 'active' : ''}" onclick="setSpeed(1.5)">1.5x</button>
                 <button class="speed-btn ${currentSpeed === 2 ? 'active' : ''}" onclick="setSpeed(2)">2x</button>
-                <button class="theater-btn" onclick="toggleTheaterMode()">⛶</button>
+                <button class="theater-btn" onclick="toggleTheaterMode()" title="Theater Mode (T)">⛶</button>
               </div>
             </div>
             <div class="video-wrapper">
@@ -1049,14 +1495,14 @@ def build_offline_site():
       }
 
       // Notes Section
-      if (mod.notes) {
+      if (m_hasNotes(mod)) {
         bodyHtml += `
           <div class="notes-section">
             <div class="notes-header-row">
               <div class="notes-title">
                 <span>📚 Study Notes & Frameworks</span>
               </div>
-              <button class="btn btn-secondary" style="font-size: 0.72rem; padding: 4px 8px;" onclick="copyNotes()">📋 Copy</button>
+              <button class="btn btn-secondary" style="font-size: 0.74rem; padding: 5px 10px;" onclick="copyAllNotes()">📋 Copy All Notes</button>
             </div>
             <div class="markdown-body" id="notes-content">
               ${renderMarkdown(mod.notes)}
@@ -1104,9 +1550,9 @@ def build_offline_site():
         <div class="bottom-nav-bar">
           ${prevMod ? `
             <div class="nav-btn-card" onclick="selectModule('${prevMod.id}')">
-              <span style="font-size: 1.1rem;">&larr;</span>
+              <span style="font-size: 1.2rem; color: var(--accent-brand);">&larr;</span>
               <div style="overflow: hidden;">
-                <div class="nav-btn-label">Prev</div>
+                <div class="nav-btn-label">Previous</div>
                 <div class="nav-btn-title">${prevMod.title}</div>
               </div>
             </div>
@@ -1114,10 +1560,10 @@ def build_offline_site():
           ${nextMod ? `
             <div class="nav-btn-card" onclick="selectModule('${nextMod.id}')" style="margin-left: auto;">
               <div style="text-align: right; overflow: hidden;">
-                <div class="nav-btn-label">Next</div>
+                <div class="nav-btn-label">Next Lesson</div>
                 <div class="nav-btn-title">${nextMod.title}</div>
               </div>
-              <span style="font-size: 1.1rem;">&rarr;</span>
+              <span style="font-size: 1.2rem; color: var(--accent-brand);">&rarr;</span>
             </div>
           ` : '<div></div>'}
         </div>
@@ -1125,8 +1571,12 @@ def build_offline_site():
         <div class="shortcuts-footer">
           <span><span class="kbd">[</span> / <span class="kbd">P</span> Prev</span>
           <span><span class="kbd">]</span> / <span class="kbd">N</span> Next</span>
-          <span><span class="kbd">M</span> Done</span>
+          <span><span class="kbd">M</span> Complete</span>
+          <span><span class="kbd">B</span> Bookmark</span>
+          <span><span class="kbd">F</span> Focus</span>
           <span><span class="kbd">T</span> Theater</span>
+          <span><span class="kbd">/</span> Search</span>
+          <span><span class="kbd">?</span> Shortcuts</span>
         </div>
       `;
 
@@ -1137,6 +1587,10 @@ def build_offline_site():
       if (videoId) {
         setupVideoPlayer(videoId);
       }
+    }
+
+    function m_hasNotes(mod) {
+      return Boolean(mod.notes && mod.notes.trim().length > 0);
     }
 
     function setupVideoPlayer(videoId) {
@@ -1166,6 +1620,11 @@ def build_offline_site():
       });
     }
 
+    function jumpVideo(sec) {
+      const video = document.getElementById('bbs-video-player');
+      if (video) video.currentTime = Math.max(0, video.currentTime + sec);
+    }
+
     function setSpeed(spd) {
       currentSpeed = spd;
       const video = document.getElementById('bbs-video-player');
@@ -1173,6 +1632,7 @@ def build_offline_site():
       document.querySelectorAll('.speed-btn').forEach(b => {
         b.classList.toggle('active', b.innerText === spd + 'x');
       });
+      showToast(`Playback Speed: ${spd}x`, '⚡');
     }
 
     function toggleTheaterMode() {
@@ -1183,16 +1643,27 @@ def build_offline_site():
       }
     }
 
-    function copyNotes() {
+    function copyAllNotes() {
       const mod = modules.find(m => m.id === currentModuleId);
       if (!mod || !mod.notes) return;
       navigator.clipboard.writeText(mod.notes).then(() => {
-        alert('Notes copied to clipboard!');
+        showToast('All notes copied to clipboard!', '📋');
+      });
+    }
+
+    function copySnippet(text) {
+      const unescaped = text.replace(/\\'/g, "'").replace(/&quot;/g, '"');
+      navigator.clipboard.writeText(unescaped).then(() => {
+        showToast('Script snippet copied!', '📋');
       });
     }
 
     function escapeQuotes(str) {
-      return (str || '').replace(/'/g, "\\\\'").replace(/"/g, '&quot;');
+      return (str || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '&quot;')
+        .replace(/\\n/g, ' ');
     }
 
     function checkAnswer(el, chosen, correct, explain) {
@@ -1202,6 +1673,7 @@ def build_offline_site():
 
       if (chosen === correct) {
         el.classList.add('correct');
+        showToast('Correct answer!', '✨');
       } else {
         el.classList.add('wrong');
         allOpts[correct].classList.add('correct');
@@ -1218,8 +1690,11 @@ def build_offline_site():
       if (!currentModuleId) return;
       if (completedSet.has(currentModuleId)) {
         completedSet.delete(currentModuleId);
+        showToast('Marked as incomplete', '○');
       } else {
         completedSet.add(currentModuleId);
+        triggerConfetti();
+        showToast('Lesson Completed! Great work!', '🎉');
       }
       localStorage.setItem('bbs_completed', JSON.stringify([...completedSet]));
       updateCompleteButton();
@@ -1227,18 +1702,41 @@ def build_offline_site():
       updateLevelMeta();
     }
 
+    function toggleBookmark() {
+      if (!currentModuleId) return;
+      if (bookmarkedSet.has(currentModuleId)) {
+        bookmarkedSet.delete(currentModuleId);
+        showToast('Bookmark removed', '☆');
+      } else {
+        bookmarkedSet.add(currentModuleId);
+        showToast('Lesson bookmarked for quick review!', '★');
+      }
+      localStorage.setItem('bbs_bookmarked', JSON.stringify([...bookmarkedSet]));
+      updateBookmarkButton();
+      renderSidebar();
+      updateBadgeCounts();
+    }
+
     function updateCompleteButton() {
       const btn = document.getElementById('btn-complete-action');
       if (!currentModuleId || !btn) return;
       if (completedSet.has(currentModuleId)) {
-        btn.innerHTML = '<span>✓</span> <span class="btn-done-text">Done</span>';
+        btn.innerHTML = '<span>✓</span> <span class="btn-done-text btn-text-hide">Done</span>';
         btn.classList.add('btn-done');
         btn.classList.remove('btn-primary');
       } else {
-        btn.innerHTML = '<span>✓</span> <span class="btn-done-text">Mark Done</span>';
+        btn.innerHTML = '<span>✓</span> <span class="btn-done-text btn-text-hide">Mark Done</span>';
         btn.classList.remove('btn-done');
         btn.classList.add('btn-primary');
       }
+    }
+
+    function updateBookmarkButton() {
+      const btn = document.getElementById('btn-bookmark-action');
+      if (!currentModuleId || !btn) return;
+      const isSaved = bookmarkedSet.has(currentModuleId);
+      btn.classList.toggle('btn-bookmarked', isSaved);
+      btn.innerHTML = `<span>${isSaved ? '★' : '☆'}</span> <span class="btn-text-hide">${isSaved ? 'Saved' : 'Save'}</span>`;
     }
 
     function goToNextModule() {
@@ -1263,6 +1761,9 @@ def build_offline_site():
 
     function handleSearch(e) {
       const query = e.target.value.toLowerCase().trim();
+      const clearBtn = document.getElementById('search-clear-btn');
+      clearBtn.style.display = query ? 'block' : 'none';
+
       if (!query) {
         renderSidebar();
         return;
@@ -1278,6 +1779,13 @@ def build_offline_site():
       `;
     }
 
+    function clearSearch() {
+      const input = document.getElementById('search-input');
+      input.value = '';
+      document.getElementById('search-clear-btn').style.display = 'none';
+      renderSidebar();
+    }
+
     init();
   </script>
 </body>
@@ -1286,7 +1794,7 @@ def build_offline_site():
     with open("offline_site/index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("Updated BBS web app with badges and upcoming release cards!")
+    print("Updated BBS web app with all UI/UX and aesthetic upgrades!")
 
 if __name__ == "__main__":
     build_offline_site()
