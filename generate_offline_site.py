@@ -45,6 +45,7 @@ def build_offline_site():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="origin-when-cross-origin">
   <title>BBS Studio · Blueprint Business Service</title>
   <script src="marked.min.js"></script>
   <script src="hls.min.js"></script>
@@ -1079,6 +1080,7 @@ def build_offline_site():
     let activeFilter = 'all';
     let allAccordionsCollapsed = false;
     let currentTheme = localStorage.getItem('bbs_theme') || 'dark';
+    let playerMode = localStorage.getItem('bbs_player_mode') || 'hls'; // 'hls' or 'iframe'
 
     const { levels, courses, chapters, modules } = window.BBS_DATA;
     let currentLevel = 0;
@@ -1537,7 +1539,7 @@ def build_offline_site():
             <div class="video-card-topbar">
               <div class="video-stream-badge">
                 <span class="stream-dot"></span>
-                <span>Bunny CDN Direct Stream</span>
+                <span id="player-mode-badge">${playerMode === 'iframe' ? 'Bunny Embed Player' : 'Bunny CDN Direct Stream'}</span>
               </div>
               <div class="video-controls-quick">
                 <button class="jump-btn" onclick="jumpVideo(-10)" title="Rewind 10s">↺ 10s</button>
@@ -1546,10 +1548,11 @@ def build_offline_site():
                 <button class="speed-btn ${currentSpeed === 1.25 ? 'active' : ''}" onclick="setSpeed(1.25)">1.25x</button>
                 <button class="speed-btn ${currentSpeed === 1.5 ? 'active' : ''}" onclick="setSpeed(1.5)">1.5x</button>
                 <button class="speed-btn ${currentSpeed === 2 ? 'active' : ''}" onclick="setSpeed(2)">2x</button>
+                <button class="jump-btn" id="btn-toggle-player" onclick="togglePlayerMode('${videoId}')" title="Switch player mode (Native HLS / Official Embed)">⇄ ${playerMode === 'iframe' ? 'Use HLS' : 'Use Embed'}</button>
                 <button class="theater-btn" onclick="toggleTheaterMode()" title="Theater Mode (T)">⛶</button>
               </div>
             </div>
-            <div class="video-wrapper">
+            <div class="video-wrapper" id="video-wrapper">
               <video id="bbs-video-player" controls playsinline preload="metadata" poster="https://vz-b7e89a3b-a06.b-cdn.net/${videoId}/thumbnail.jpg"></video>
             </div>
           </div>
@@ -1656,11 +1659,49 @@ def build_offline_site():
       return Boolean(mod.notes && mod.notes.trim().length > 0);
     }
 
+    function togglePlayerMode(videoId) {
+      playerMode = playerMode === 'hls' ? 'iframe' : 'hls';
+      localStorage.setItem('bbs_player_mode', playerMode);
+      const btn = document.getElementById('btn-toggle-player');
+      if (btn) btn.innerText = playerMode === 'iframe' ? '⇄ Use HLS' : '⇄ Use Embed';
+      const badge = document.getElementById('player-mode-badge');
+      if (badge) badge.innerText = playerMode === 'iframe' ? 'Bunny Embed Player' : 'Bunny CDN Direct Stream';
+      setupVideoPlayer(videoId);
+      showToast(playerMode === 'iframe' ? 'Switched to Embed Player' : 'Switched to Native HLS Stream', '⚡');
+    }
+
     function setupVideoPlayer(videoId) {
+      const wrapper = document.getElementById('video-wrapper');
+      if (!wrapper) return;
+
+      if (activeHls) {
+        activeHls.destroy();
+        activeHls = null;
+      }
+
+      if (playerMode === 'iframe') {
+        wrapper.innerHTML = `
+          <iframe 
+            src="https://iframe.mediadelivery.net/embed/753332/${videoId}?autoplay=true&preload=true" 
+            loading="lazy" 
+            style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;" 
+            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+            allowfullscreen="true">
+          </iframe>
+        `;
+        return;
+      }
+
+      wrapper.innerHTML = `
+        <video id="bbs-video-player" controls playsinline preload="metadata" poster="https://vz-b7e89a3b-a06.b-cdn.net/${videoId}/thumbnail.jpg"></video>
+      `;
+
       const video = document.getElementById('bbs-video-player');
       if (!video) return;
 
-      const streamUrl = `/video-proxy/${videoId}/playlist.m3u8`;
+      const cdnUrl = `https://vz-b7e89a3b-a06.b-cdn.net/${videoId}/playlist.m3u8`;
+      const localProxyUrl = `/video-proxy/${videoId}/playlist.m3u8`;
+      const streamUrl = cdnUrl;
 
       if (Hls.isSupported()) {
         const hls = new Hls({
@@ -1668,11 +1709,50 @@ def build_offline_site():
           maxMaxBufferLength: 60,
           enableWorker: true
         });
+
+        let hasFallenBack = false;
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal) {
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                if (!hasFallenBack && (location.hostname === '127.0.0.1' || location.hostname === 'localhost')) {
+                  hasFallenBack = true;
+                  console.warn('Network error on direct CDN stream, attempting local video-proxy...');
+                  hls.loadSource(localProxyUrl);
+                  hls.startLoad();
+                } else if (!hasFallenBack) {
+                  hasFallenBack = true;
+                  console.warn('Network error on HLS stream, switching to embed player fallback...');
+                  playerMode = 'iframe';
+                  const btn = document.getElementById('btn-toggle-player');
+                  if (btn) btn.innerText = '⇄ Use HLS';
+                  const badge = document.getElementById('player-mode-badge');
+                  if (badge) badge.innerText = 'Bunny Embed Player';
+                  setupVideoPlayer(videoId);
+                } else {
+                  hls.destroy();
+                }
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                console.warn('HLS media error, attempting recovery...');
+                hls.recoverMediaError();
+                break;
+              default:
+                hls.destroy();
+                break;
+            }
+          }
+        });
+
         hls.loadSource(streamUrl);
         hls.attachMedia(video);
         activeHls = hls;
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = streamUrl;
+        video.onerror = () => {
+          playerMode = 'iframe';
+          setupVideoPlayer(videoId);
+        };
       }
 
       video.playbackRate = currentSpeed;
