@@ -87,6 +87,20 @@
   ],
   "Course": [
     {
+      "release_date": null,
+      "is_published": true,
+      "subtitle": null,
+      "description": null,
+      "level_number": 1,
+      "title": "Test",
+      "order": 4,
+      "id": "6abd007084c82b0646966461",
+      "created_date": "2026-09-30T12:28:32.221000",
+      "updated_date": "2026-09-30T12:28:35.930000",
+      "created_by_id": "6aa797efac44ed6f1b6bc0ff",
+      "is_sample": false
+    },
+    {
       "description": null,
       "level_number": 3,
       "title": "Google Ads",
@@ -1350,6 +1364,32 @@
     }
   ],
   "Module": [
+    {
+      "quiz": [],
+      "course_id": "6abd007084c82b0646966461",
+      "chapter": null,
+      "slide_ids": [],
+      "notes": "",
+      "buttons": [],
+      "slide_visibility": "admin",
+      "description": "",
+      "level_number": 1,
+      "slide_display": "both",
+      "title": "Test 1",
+      "thumbnail_url": null,
+      "slide_show_notes": false,
+      "video_url": "",
+      "duration_minutes": null,
+      "is_required": true,
+      "course": null,
+      "chapter_id": null,
+      "order": 1,
+      "id": "6abd007c60e3a5eacd3e96bd",
+      "created_date": "2026-09-30T12:28:44.327000",
+      "updated_date": "2026-09-30T12:28:44.327000",
+      "created_by_id": "6aa797efac44ed6f1b6bc0ff",
+      "is_sample": false
+    },
     {
       "quiz": [
         {
@@ -14693,6 +14733,5 @@
       "created_by_id": "6aa797efac44ed6f1b6bc0ff",
       "is_sample": false
     }
-  ],
-  "Team": []
+  ]
 }
