@@ -317,6 +317,45 @@ def build_offline_site():
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+    @keyframes slotQuake3DHard {
+      0% {
+        transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+        box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
+      }
+      10% {
+        transform: perspective(900px) translate3d(-8px, -5px, 22px) rotateX(-18deg) rotateY(20deg) rotateZ(-4deg) scale(1.15);
+        box-shadow: -8px 8px 25px rgba(255, 90, 0, 0.45);
+      }
+      22% {
+        transform: perspective(900px) translate3d(9px, 6px, 32px) rotateX(20deg) rotateY(-22deg) rotateZ(5deg) scale(1.22);
+        box-shadow: 8px -8px 30px rgba(255, 90, 0, 0.55);
+      }
+      35% {
+        transform: perspective(900px) translate3d(-10px, 4px, 26px) rotateX(-16deg) rotateY(16deg) rotateZ(-5deg) scale(1.18);
+        box-shadow: -10px -6px 28px rgba(255, 90, 0, 0.5);
+      }
+      48% {
+        transform: perspective(900px) translate3d(8px, -6px, 30px) rotateX(18deg) rotateY(-14deg) rotateZ(4deg) scale(1.19);
+        box-shadow: 10px 6px 30px rgba(255, 90, 0, 0.52);
+      }
+      62% {
+        transform: perspective(900px) translate3d(-6px, 3px, 18px) rotateX(-10deg) rotateY(12deg) rotateZ(-3deg) scale(1.12);
+        box-shadow: -6px 4px 22px rgba(255, 90, 0, 0.38);
+      }
+      75% {
+        transform: perspective(900px) translate3d(5px, -3px, 12px) rotateX(8deg) rotateY(-8deg) rotateZ(2deg) scale(1.07);
+        box-shadow: 5px -3px 18px rgba(255, 90, 0, 0.28);
+      }
+      88% {
+        transform: perspective(900px) translate3d(-3px, 2px, 6px) rotateX(-4deg) rotateY(4deg) rotateZ(-1deg) scale(1.03);
+        box-shadow: -3px 2px 14px rgba(255, 90, 0, 0.2);
+      }
+      100% {
+        transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+        box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
+      }
+    }
+
     .home-hero-slot-headline {
       font-size: clamp(1.45rem, 3.6vw, 2.3rem);
       font-weight: 800;
@@ -330,7 +369,7 @@ def build_offline_site():
       align-items: center;
       flex-wrap: wrap;
       gap: 8px 10px;
-      perspective: 800px;
+      perspective: 900px;
       transition: transform 0.15s ease;
     }
     .home-hero-slot-headline:hover {
@@ -354,16 +393,11 @@ def build_offline_site():
       border: 1.5px solid rgba(255, 90, 0, 0.45);
       box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
       transform-style: preserve-3d;
-      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.22s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       transform-origin: center center;
     }
-    .slot-chip-box.flip-out {
-      transform: rotateX(90deg) scale(0.92);
-      opacity: 0;
-    }
-    .slot-chip-box.flip-in {
-      transform: rotateX(-90deg) scale(0.92);
-      opacity: 0;
+    .slot-chip-box.quake-hard {
+      animation: slotQuake3DHard 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
     .slot-keyword {
       background: linear-gradient(90deg, #ff5a00 0%, #ff8c00 50%, #ffd200 100%);
@@ -1949,7 +1983,12 @@ def build_offline_site():
       const chipEl = document.getElementById('slot-chip-box');
       if (!chipEl) return;
 
-      chipEl.classList.add('flip-out');
+      triggerConfetti();
+
+      chipEl.classList.remove('quake-hard');
+      void chipEl.offsetWidth; // Reflow to re-trigger animation
+      chipEl.classList.add('quake-hard');
+
       setTimeout(() => {
         let nextIndex;
         do {
@@ -1959,18 +1998,12 @@ def build_offline_site():
 
         const item = HERO_SLOGAN_ITEMS[currentSloganIndex];
         chipEl.innerHTML = `<span class="slot-keyword">${item.word}</span> <span class="slot-emojis">${item.emoji}</span>`;
-        chipEl.classList.remove('flip-out');
-        chipEl.classList.add('flip-in');
+        showToast(`Kakngoh - ${item.word} ${item.emoji}`, '💥');
+      }, 160);
 
-        triggerConfetti();
-        showToast(`Kakngoh - ${item.word} ${item.emoji}`, '🎰');
-
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            chipEl.classList.remove('flip-in');
-          }, 30);
-        });
-      }, 220);
+      setTimeout(() => {
+        if (chipEl) chipEl.classList.remove('quake-hard');
+      }, 560);
     }
 
     /* 1. HOME VIEW (`/`) */
@@ -1982,7 +2015,7 @@ def build_offline_site():
       let html = `
         <section class="home-hero">
           <p class="home-hero-eyebrow">Coach Adib · Portal Pembelajaran</p>
-          <div class="home-hero-slot-headline" id="hero-slot-headline" onclick="shuffleHeroSlogan()" title="Klik untuk roll slogan semangat & confetti! 🎉">
+          <div class="home-hero-slot-headline" id="hero-slot-headline" onclick="shuffleHeroSlogan()" title="Klik untuk gegar 3D slogan semangat & confetti! 💥">
             <span class="slot-prefix-text">Kakngoh -</span>
             <div class="slot-chip-box" id="slot-chip-box">
               <span class="slot-keyword">${initialItem.word}</span>
