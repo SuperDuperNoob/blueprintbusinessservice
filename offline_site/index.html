@@ -250,37 +250,75 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    @keyframes sloganQuake {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      15% { transform: translate(-3px, 2px) rotate(-1.2deg) scale(1.03); }
-      30% { transform: translate(3px, -2px) rotate(1.5deg) scale(1.05); }
-      45% { transform: translate(-4px, -1px) rotate(-1.2deg) scale(1.04); }
-      60% { transform: translate(4px, 2px) rotate(1deg) scale(1.02); }
-      75% { transform: translate(-2px, -2px) rotate(-0.5deg) scale(1.01); }
-      90% { transform: translate(2px, 1px) rotate(0.5deg); }
-      100% { transform: translate(0, 0) rotate(0deg) scale(1); }
-    }
-
-    .home-hero-title-quake {
-      font-size: clamp(1.6rem, 3.8vw, 2.4rem);
+    .home-hero-slot-headline {
+      font-size: clamp(1.45rem, 3.6vw, 2.3rem);
       font-weight: 800;
       color: var(--text-primary);
       letter-spacing: -0.03em;
-      margin: 6px 0;
-      line-height: 1.15;
+      margin: 6px 0 10px 0;
+      line-height: 1.25;
       cursor: pointer;
       user-select: none;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      perspective: 800px;
+      transition: transform 0.15s ease;
+    }
+    .home-hero-slot-headline:hover {
+      transform: translateY(-1px);
+    }
+    .home-hero-slot-headline:hover .slot-chip-box {
+      border-color: var(--primary);
+      box-shadow: 0 6px 22px rgba(255, 90, 0, 0.32);
+    }
+    .slot-prefix-text {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+    .slot-chip-box {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
-      transition: transform 0.15s ease;
+      padding: 3px 12px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(255, 90, 0, 0.18) 0%, rgba(255, 140, 0, 0.28) 100%);
+      border: 1.5px solid rgba(255, 90, 0, 0.45);
+      box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
+      transform-style: preserve-3d;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.22s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transform-origin: center center;
     }
-    .home-hero-title-quake:hover {
-      transform: scale(1.02);
+    .slot-chip-box.flip-out {
+      transform: rotateX(90deg) scale(0.92);
+      opacity: 0;
     }
-    .home-hero-title-quake.quaking {
-      animation: sloganQuake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    .slot-chip-box.flip-in {
+      transform: rotateX(-90deg) scale(0.92);
+      opacity: 0;
+    }
+    .slot-keyword {
+      background: linear-gradient(90deg, #ff5a00 0%, #ff8c00 50%, #ffd200 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .slot-emojis {
+      font-style: normal;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+      font-size: 1.05em;
+    }
+    .slot-shuffle-icon {
+      font-size: 0.85rem;
+      opacity: 0.55;
+      transition: transform 0.3s ease, opacity 0.2s ease;
+      margin-left: 2px;
+    }
+    .home-hero-slot-headline:hover .slot-shuffle-icon {
+      opacity: 1;
+      transform: rotate(180deg) scale(1.15);
     }
     .home-hero-subtitle {
       font-size: 0.88rem;
@@ -1827,29 +1865,24 @@
     }
 
     const HERO_SLOGAN_ITEMS = [
-      "Kakngoh - SWITCHH!! 🔥😤🔥",
-      "Kakngoh - SEMANGATT!! 🔥😎🔥",
-      "Kakngoh - BANGKIT!! 🔥🦁🔥",
-      "Kakngoh - MAJUU!! 🔥🤩🔥",
-      "Kakngoh - BINA EMPIRE!! 👑😎🔥",
-      "Kakngoh - CLOSED DEAL!! 💰🤑🔥",
-      "Kakngoh - SCALE UP!! 🚀🥳🔥",
-      "Kakngoh - FOKUS & EXECUTE!! 🎯😤⚡",
-      "Kakngoh - MOMENTUM!! ⚡🦾🔥",
-      "Kakngoh - PAGI!!! 🌅🤩🔥"
+      { word: "SWITCHH!!", emoji: "🔥😤🔥" },
+      { word: "SEMANGATT!!", emoji: "🔥😎🔥" },
+      { word: "BANGKIT!!", emoji: "🔥🦁🔥" },
+      { word: "MAJUU!!", emoji: "🔥🤩🔥" },
+      { word: "BINA EMPIRE!!", emoji: "👑😎🔥" },
+      { word: "CLOSED DEAL!!", emoji: "💰🤑🔥" },
+      { word: "SCALE UP!!", emoji: "🚀🥳🔥" },
+      { word: "FOKUS & EXECUTE!!", emoji: "🎯😤⚡" },
+      { word: "MOMENTUM!!", emoji: "⚡🦾🔥" },
+      { word: "PAGI!!!", emoji: "🌅🤩🔥" }
     ];
     let currentSloganIndex = 0;
 
     function shuffleHeroSlogan() {
-      const titleEl = document.getElementById('hero-quake-title');
-      if (!titleEl) return;
+      const chipEl = document.getElementById('slot-chip-box');
+      if (!chipEl) return;
 
-      triggerConfetti();
-
-      titleEl.classList.remove('quaking');
-      void titleEl.offsetWidth; // Reflow to re-trigger animation
-      titleEl.classList.add('quaking');
-
+      chipEl.classList.add('flip-out');
       setTimeout(() => {
         let nextIndex;
         do {
@@ -1857,27 +1890,39 @@
         } while (nextIndex === currentSloganIndex && HERO_SLOGAN_ITEMS.length > 1);
         currentSloganIndex = nextIndex;
 
-        const text = HERO_SLOGAN_ITEMS[currentSloganIndex];
-        titleEl.textContent = text;
-        showToast(text, '🔥');
-      }, 160);
+        const item = HERO_SLOGAN_ITEMS[currentSloganIndex];
+        chipEl.innerHTML = `<span class="slot-keyword">${item.word}</span> <span class="slot-emojis">${item.emoji}</span>`;
+        chipEl.classList.remove('flip-out');
+        chipEl.classList.add('flip-in');
 
-      setTimeout(() => {
-        if (titleEl) titleEl.classList.remove('quaking');
-      }, 480);
+        triggerConfetti();
+        showToast(`Kakngoh - ${item.word} ${item.emoji}`, '🎰');
+
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            chipEl.classList.remove('flip-in');
+          }, 30);
+        });
+      }, 220);
     }
 
     /* 1. HOME VIEW (`/`) */
     function renderHomeView(container) {
       const doneTotal = completedSet.size;
       const totalLessons = modules.length;
+      const initialItem = HERO_SLOGAN_ITEMS[currentSloganIndex];
 
       let html = `
         <section class="home-hero">
           <p class="home-hero-eyebrow">Coach Adib · Portal Pembelajaran</p>
-          <h1 class="home-hero-title-quake" id="hero-quake-title" onclick="shuffleHeroSlogan()" title="Klik untuk gegar slogan semangat & confetti! 🔥">
-            ${HERO_SLOGAN_ITEMS[currentSloganIndex]}
-          </h1>
+          <div class="home-hero-slot-headline" id="hero-slot-headline" onclick="shuffleHeroSlogan()" title="Klik untuk roll slogan semangat & confetti! 🎉">
+            <span class="slot-prefix-text">Kakngoh -</span>
+            <div class="slot-chip-box" id="slot-chip-box">
+              <span class="slot-keyword">${initialItem.word}</span>
+              <span class="slot-emojis">${initialItem.emoji}</span>
+            </div>
+            <span class="slot-shuffle-icon" title="Klik untuk Shuffle">🎲</span>
+          </div>
           <p class="home-hero-subtitle">${doneTotal}/${totalLessons} video telah disiapkan · 4 program lengkap</p>
         </section>
 
