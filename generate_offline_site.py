@@ -1877,7 +1877,7 @@ def build_offline_site():
       let html = `
         <section class="home-hero">
           <p class="home-hero-eyebrow">Coach Adib · Portal Pembelajaran</p>
-          <h1 class="home-hero-title">Selamat Datang, Pelajar.</h1>
+          <h1 class="home-hero-title">Belajar Ssungguh! Kakngoh.</h1>
           <p class="home-hero-subtitle">${doneTotal}/${totalLessons} video telah disiapkan · 4 program lengkap</p>
         </section>
 
