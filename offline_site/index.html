@@ -946,6 +946,38 @@
       padding-bottom: 8px;
       scroll-snap-type: x mandatory;
     }
+    .playlist-chapter-card {
+      width: 180px;
+      flex-shrink: 0;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #ff5a00 0%, #ff8c00 100%);
+      color: #ffffff;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      scroll-snap-align: start;
+      box-shadow: 0 4px 14px rgba(255, 90, 0, 0.25);
+    }
+    .playlist-chapter-num {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .playlist-chapter-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-top: auto;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     .playlist-item-card {
       width: 200px;
       flex-shrink: 0;
@@ -1734,11 +1766,10 @@
       const isDone = completedSet.has(mod.id);
       const isSaved = bookmarkedSet.has(mod.id);
 
-      // In-course lesson sequence
-      const siblings = modules.filter(m => m.course_id === mod.course_id);
-      const currIdx = siblings.findIndex(m => m.id === mod.id);
-      const prevMod = currIdx > 0 ? siblings[currIdx - 1] : null;
-      const nextMod = currIdx < siblings.length - 1 ? siblings[currIdx + 1] : null;
+      // Exact course structured playlist matching coachadib.com
+      const playlist = getCoursePlaylist(mod);
+      const prevMod = playlist.prev;
+      const nextMod = playlist.next;
 
       let html = `
         <div class="page-nav-header">
@@ -1873,26 +1904,32 @@
           </div>
         ` : ''}
 
-        ${siblings.length > 1 ? `
+        ${playlist.items.length > 1 ? `
           <div class="course-playlist-section">
             <div class="playlist-header">
               <div>
-                <div class="playlist-label">Playlist Kursus</div>
+                <div class="playlist-label">Playlist</div>
                 <div class="playlist-course-title">${crs ? crs.title : 'Senarai Video'}</div>
               </div>
               <div class="playlist-stat">
-                ${siblings.filter(s => completedSet.has(s.id)).length} / ${siblings.length} Selesai · ${Math.round((siblings.filter(s => completedSet.has(s.id)).length / siblings.length) * 100)}%
+                ${playlist.items.filter(s => completedSet.has(s.id)).length} / ${playlist.items.length} Selesai · ${Math.round((playlist.items.filter(s => completedSet.has(s.id)).length / playlist.items.length) * 100)}%
               </div>
             </div>
             <div class="playlist-progress-bar">
-              <div class="playlist-progress-fill" style="width: ${(siblings.filter(s => completedSet.has(s.id)).length / siblings.length) * 100}%"></div>
+              <div class="playlist-progress-fill" style="width: ${(playlist.items.filter(s => completedSet.has(s.id)).length / playlist.items.length) * 100}%"></div>
             </div>
             <div class="playlist-scroll-row" id="playlist-scroll-row">
-              ${siblings.map((sib, sIdx) => {
+              ${playlist.items.map((sib, sIdx) => {
                 const sibDone = completedSet.has(sib.id);
                 const isCurrent = sib.id === mod.id;
                 const sibThumb = sib.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
                 return `
+                  ${sib.is_chapter_start ? `
+                    <div class="playlist-chapter-card">
+                      <p class="playlist-chapter-num">Chapter ${sib.chapter_number}</p>
+                      <p class="playlist-chapter-title">${sib.chapter_title}</p>
+                    </div>
+                  ` : ''}
                   <a href="#/module/${sib.id}" class="playlist-item-card ${isCurrent ? 'active' : ''}" id="${isCurrent ? 'active-playlist-item' : ''}">
                     <div class="playlist-thumb-box">
                       <img src="${sibThumb}" alt="${sib.title}" class="playlist-thumb-img" loading="lazy" />
@@ -1936,6 +1973,33 @@
           scrollRow.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
         }
       }, 100);
+    }
+
+    function getCoursePlaylist(mod) {
+      if (!mod || !mod.course_id) return { items: [], prev: null, next: null };
+      const r = (a, b) => (a.order || 0) - (b.order || 0);
+      const courseChapters = chapters.filter(ch => ch.course_id === mod.course_id).sort(r);
+      const items = [];
+
+      // 1. Direct modules without chapter
+      modules.filter(m => m.course_id === mod.course_id && !m.chapter_id).sort(r).forEach(m => {
+        items.push({ ...m, is_chapter_start: false });
+      });
+
+      // 2. Modules grouped by chapter in order
+      courseChapters.forEach((ch, chIdx) => {
+        const chInfo = { chapter_title: ch.title, chapter_number: chIdx + 1 };
+        modules.filter(m => m.chapter_id === ch.id).sort(r).forEach((m, mIdx) => {
+          items.push({ ...m, ...chInfo, is_chapter_start: mIdx === 0 });
+        });
+      });
+
+      const currIdx = items.findIndex(m => m.id === mod.id);
+      return {
+        items: items,
+        prev: currIdx > 0 ? items[currIdx - 1] : null,
+        next: currIdx >= 0 && currIdx < items.length - 1 ? items[currIdx + 1] : null
+      };
     }
 
     let activeNoteTabIndex = 0;
