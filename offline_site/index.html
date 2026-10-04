@@ -1335,7 +1335,7 @@
     let activeFilter = 'all';
     let allAccordionsCollapsed = false;
     let currentTheme = localStorage.getItem('bbs_theme') || 'dark';
-    let playerMode = localStorage.getItem('bbs_player_mode') || 'hls'; // 'hls' or 'iframe'
+    let playerMode = localStorage.getItem('bbs_player_mode') || 'iframe'; // default 'iframe' for 100% universal reliability
 
     const { programs = [], levels = [], courses = [], chapters = [], modules = [] } = window.BBS_DATA || {};
     const hasPrograms = Boolean(programs && programs.length > 0);
@@ -1797,10 +1797,26 @@
       `;
     }
 
-    function extractVideoId(videoUrl) {
+    function parseVideoInfo(videoUrl) {
       if (!videoUrl) return null;
-      const match = videoUrl.match(/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i);
-      return match ? match[1] : null;
+      const match = videoUrl.match(/(?:iframe\.mediadelivery\.net\/(?:embed|play)|player\.mediadelivery\.net\/play)\/(\d+)\/([\w-]+)/i) ||
+                    videoUrl.match(/([0-9]{5,8})\/([a-f0-9-]{36})/i);
+      if (match) {
+        return {
+          libraryId: match[1],
+          videoId: match[2],
+          embedUrl: `https://iframe.mediadelivery.net/embed/${match[1]}/${match[2]}`
+        };
+      }
+      const rawUuid = videoUrl.match(/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i);
+      if (rawUuid) {
+        return {
+          libraryId: '753332',
+          videoId: rawUuid[1],
+          embedUrl: `https://iframe.mediadelivery.net/embed/753332/${rawUuid[1]}`
+        };
+      }
+      return null;
     }
 
     function selectModule(modId) {
@@ -1855,7 +1871,7 @@
       }
 
       const isReady = Boolean(mod.video_url || m_hasNotes(mod));
-      const videoId = extractVideoId(mod.video_url);
+      const videoInfo = parseVideoInfo(mod.video_url);
 
       let bodyHtml = `
         <div class="lesson-hero">
@@ -1906,7 +1922,7 @@
       }
 
       // Video Player Section
-      if (videoId) {
+      if (videoInfo) {
         bodyHtml += `
           <div class="video-hero-card ${isTheater ? 'theater-mode' : ''}" id="video-card">
             <div class="video-card-topbar">
@@ -1921,7 +1937,7 @@
                 <button class="speed-btn ${currentSpeed === 1.25 ? 'active' : ''}" onclick="setSpeed(1.25)">1.25x</button>
                 <button class="speed-btn ${currentSpeed === 1.5 ? 'active' : ''}" onclick="setSpeed(1.5)">1.5x</button>
                 <button class="speed-btn ${currentSpeed === 2 ? 'active' : ''}" onclick="setSpeed(2)">2x</button>
-                <button class="player-toggle-btn" id="btn-toggle-player" onclick="togglePlayerMode('${videoId}')" title="Switch player mode">
+                <button class="player-toggle-btn" id="btn-toggle-player" onclick="togglePlayerMode('${mod.id}')" title="Switch player mode">
                   ${playerMode === 'iframe' ? '⇄ Use HLS' : '⇄ Use Embed'}
                 </button>
               </div>
@@ -2004,9 +2020,9 @@
       document.getElementById('content-container').innerHTML = bodyHtml;
       document.getElementById('main-content').scrollTop = 0;
 
-      // Initialize HLS video
-      if (videoId) {
-        setupVideoPlayer(videoId);
+      // Initialize video
+      if (videoInfo) {
+        setupVideoPlayer(videoInfo);
       }
     }
 
@@ -2014,30 +2030,34 @@
       return Boolean(mod.notes && mod.notes.trim().length > 0);
     }
 
-    function togglePlayerMode(videoId) {
+    function togglePlayerMode(modId) {
       playerMode = playerMode === 'hls' ? 'iframe' : 'hls';
       localStorage.setItem('bbs_player_mode', playerMode);
       const btn = document.getElementById('btn-toggle-player');
       if (btn) btn.innerText = playerMode === 'iframe' ? '⇄ Use HLS' : '⇄ Use Embed';
       const badge = document.getElementById('player-mode-badge');
       if (badge) badge.innerText = playerMode === 'iframe' ? 'Bunny Embed Player' : 'Bunny CDN Direct Stream';
-      setupVideoPlayer(videoId);
+      const mod = modules.find(m => m.id === modId);
+      if (mod) {
+        const vInfo = parseVideoInfo(mod.video_url);
+        if (vInfo) setupVideoPlayer(vInfo);
+      }
       showToast(playerMode === 'iframe' ? 'Switched to Embed Player' : 'Switched to Native HLS Stream', '⚡');
     }
 
-    function setupVideoPlayer(videoId) {
+    function setupVideoPlayer(videoInfo) {
       const wrapper = document.getElementById('video-wrapper');
-      if (!wrapper) return;
+      if (!wrapper || !videoInfo) return;
 
       if (activeHls) {
         activeHls.destroy();
         activeHls = null;
       }
 
-      if (playerMode === 'iframe') {
+      if (playerMode === 'iframe' || videoInfo.libraryId !== '753332') {
         wrapper.innerHTML = `
           <iframe 
-            src="https://iframe.mediadelivery.net/embed/753332/${videoId}?autoplay=true&preload=true" 
+            src="${videoInfo.embedUrl}?autoplay=true&preload=true&responsive=true" 
             loading="lazy" 
             style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;" 
             allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
@@ -2047,14 +2067,15 @@
         return;
       }
 
+      // HLS mode for library 753332
       wrapper.innerHTML = `
-        <video id="bbs-video-player" controls playsinline preload="metadata" poster="https://vz-b7e89a3b-a06.b-cdn.net/${videoId}/thumbnail.jpg"></video>
+        <video id="bbs-video-player" controls playsinline preload="metadata" poster="https://vz-b7e89a3b-a06.b-cdn.net/${videoInfo.videoId}/thumbnail.jpg"></video>
       `;
 
       const video = document.getElementById('bbs-video-player');
       if (!video) return;
 
-      const cdnUrl = `https://vz-b7e89a3b-a06.b-cdn.net/${videoId}/playlist.m3u8`;
+      const cdnUrl = `https://vz-b7e89a3b-a06.b-cdn.net/${videoInfo.videoId}/playlist.m3u8`;
       const streamUrl = cdnUrl;
 
       if (Hls.isSupported()) {
@@ -2072,22 +2093,19 @@
                 if (!hasFallenBack && (location.hostname === '127.0.0.1' || location.hostname === 'localhost')) {
                   hasFallenBack = true;
                   console.warn('Network error on direct CDN stream, attempting local video-proxy...');
-                  hls.loadSource(`/video-proxy/${videoId}/playlist.m3u8`);
+                  hls.loadSource(`/video-proxy/${videoInfo.videoId}/playlist.m3u8`);
                   hls.startLoad();
                 } else if (!hasFallenBack) {
                   hasFallenBack = true;
                   console.warn('Direct HLS blocked, falling back to embed player...');
                   playerMode = 'iframe';
-                  setupVideoPlayer(videoId);
+                  setupVideoPlayer(videoInfo);
                 }
-                break;
-              case Hls.ErrorTypes.MEDIA_ERROR:
-                hls.recoverMediaError();
                 break;
               default:
                 hls.destroy();
                 playerMode = 'iframe';
-                setupVideoPlayer(videoId);
+                setupVideoPlayer(videoInfo);
                 break;
             }
           }
@@ -2100,7 +2118,7 @@
         video.src = streamUrl;
         video.onerror = () => {
           playerMode = 'iframe';
-          setupVideoPlayer(videoId);
+          setupVideoPlayer(videoInfo);
         };
       }
 
