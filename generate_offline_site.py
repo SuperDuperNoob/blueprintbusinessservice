@@ -2153,6 +2153,106 @@ def build_offline_site():
         textGrad: "linear-gradient(90deg, #f0abfc 0%, #e879f9 50%, #fde047 100%)",
         confetti: ['#d946ef', '#f0abfc', '#fde047', '#ffffff', '#a855f7'],
         toastIcon: "✨"
+      },
+      {
+        word: "BISMILLAH & JALAN!!",
+        emoji: "🚀🤲🔥",
+        rgb: "16, 185, 129",
+        border: "rgba(16, 185, 129, 0.6)",
+        bg: "linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #34d399 0%, #10b981 50%, #6ee7b7 100%)",
+        confetti: ['#10b981', '#34d399', '#6ee7b7', '#ffffff', '#059669'],
+        toastIcon: "🚀"
+      },
+      {
+        word: "USAHA + TAWAKKAL!!",
+        emoji: "🛡️🤲⚡",
+        rgb: "59, 130, 246",
+        border: "rgba(59, 130, 246, 0.6)",
+        bg: "linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(37, 99, 235, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #60a5fa 0%, #3b82f6 50%, #93c5fd 100%)",
+        confetti: ['#3b82f6', '#60a5fa', '#93c5fd', '#ffffff', '#1d4ed8'],
+        toastIcon: "🛡️"
+      },
+      {
+        word: "SOLAT JAGA, REZEKI MARA!!",
+        emoji: "🕌😎🔥",
+        rgb: "20, 184, 166",
+        border: "rgba(20, 184, 166, 0.6)",
+        bg: "linear-gradient(135deg, rgba(20, 184, 166, 0.25) 0%, rgba(13, 148, 136, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #2dd4bf 0%, #14b8a6 50%, #99f6e4 100%)",
+        confetti: ['#14b8a6', '#2dd4bf', '#99f6e4', '#ffffff', '#0d9488'],
+        toastIcon: "🕌"
+      },
+      {
+        word: "IKHLAS & ISTIQOMAH!!",
+        emoji: "💎🤲🔥",
+        rgb: "6, 182, 212",
+        border: "rgba(6, 182, 212, 0.6)",
+        bg: "linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(8, 145, 178, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #22d3ee 0%, #06b6d4 50%, #a5f3fc 100%)",
+        confetti: ['#06b6d4', '#22d3ee', '#a5f3fc', '#ffffff', '#0891b2'],
+        toastIcon: "💎"
+      },
+      {
+        word: "DOA, USAHA, TAWAKKAL!!",
+        emoji: "🤲⚡🦁",
+        rgb: "234, 88, 12",
+        border: "rgba(234, 88, 12, 0.6)",
+        bg: "linear-gradient(135deg, rgba(234, 88, 12, 0.25) 0%, rgba(194, 65, 12, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #fb923c 0%, #ea580c 50%, #fed7aa 100%)",
+        confetti: ['#ea580c', '#fb923c', '#fed7aa', '#ffffff', '#c2410c'],
+        toastIcon: "🦁"
+      },
+      {
+        word: "ALLAH ADA, JALAN TERUS!!",
+        emoji: "🧭🤲🔥",
+        rgb: "239, 68, 68",
+        border: "rgba(239, 68, 68, 0.6)",
+        bg: "linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(220, 38, 38, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #f87171 0%, #ef4444 50%, #fecaca 100%)",
+        confetti: ['#ef4444', '#f87171', '#fecaca', '#ffffff', '#b91c1c'],
+        toastIcon: "🧭"
+      },
+      {
+        word: "TAHAJJUD POWER!!",
+        emoji: "🌙🤲⚡",
+        rgb: "139, 92, 246",
+        border: "rgba(139, 92, 246, 0.6)",
+        bg: "linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(109, 40, 217, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #a78bfa 0%, #8b5cf6 50%, #ddd6fe 100%)",
+        confetti: ['#8b5cf6', '#a78bfa', '#ddd6fe', '#ffffff', '#6d28d9'],
+        toastIcon: "🌙"
+      },
+      {
+        word: "SEDEKAH LUAR BIASA!!",
+        emoji: "💸🤲🤩",
+        rgb: "34, 197, 94",
+        border: "rgba(34, 197, 94, 0.6)",
+        bg: "linear-gradient(135deg, rgba(34, 197, 94, 0.25) 0%, rgba(21, 128, 61, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #4ade80 0%, #22c55e 50%, #bbf7d0 100%)",
+        confetti: ['#22c55e', '#4ade80', '#bbf7d0', '#ffffff', '#15803d'],
+        toastIcon: "💸"
+      },
+      {
+        word: "YAKIN REZEKI ALLAH!!",
+        emoji: "🌾🤲🔥",
+        rgb: "251, 146, 60",
+        border: "rgba(251, 146, 60, 0.6)",
+        bg: "linear-gradient(135deg, rgba(251, 146, 60, 0.25) 0%, rgba(234, 88, 12, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #fb923c 0%, #f97316 50%, #ffedd5 100%)",
+        confetti: ['#fb923c', '#f97316', '#ffedd5', '#ffffff', '#ea580c'],
+        toastIcon: "🌾"
+      },
+      {
+        word: "NIAT KERANA ALLAH!!",
+        emoji: "🤍🤲👑",
+        rgb: "226, 232, 240",
+        border: "rgba(226, 232, 240, 0.7)",
+        bg: "linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(203, 213, 225, 0.32) 100%)",
+        textGrad: "linear-gradient(90deg, #ffffff 0%, #e2e8f0 50%, #ffd700 100%)",
+        confetti: ['#ffffff', '#e2e8f0', '#cbd5e1', '#ffd700', '#f8fafc'],
+        toastIcon: "🤍"
       }
     ];
     let currentSloganIndex = 0;
