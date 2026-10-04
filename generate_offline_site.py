@@ -317,13 +317,37 @@ def build_offline_site():
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    .home-hero-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+    @keyframes sloganQuake {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-3px, 2px) rotate(-1.2deg) scale(1.03); }
+      30% { transform: translate(3px, -2px) rotate(1.5deg) scale(1.05); }
+      45% { transform: translate(-4px, -1px) rotate(-1.2deg) scale(1.04); }
+      60% { transform: translate(4px, 2px) rotate(1deg) scale(1.02); }
+      75% { transform: translate(-2px, -2px) rotate(-0.5deg) scale(1.01); }
+      90% { transform: translate(2px, 1px) rotate(0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    }
+
+    .home-hero-title-quake {
+      font-size: clamp(1.6rem, 3.8vw, 2.4rem);
       font-weight: 800;
       color: var(--text-primary);
       letter-spacing: -0.03em;
       margin: 6px 0;
       line-height: 1.15;
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      transition: transform 0.15s ease;
+    }
+    .home-hero-title-quake:hover {
+      transform: scale(1.02);
+    }
+    .home-hero-title-quake.quaking {
+      animation: sloganQuake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
     .home-hero-subtitle {
       font-size: 0.88rem;
@@ -1869,6 +1893,47 @@ def build_offline_site():
       window.location.hash = '#/';
     }
 
+    const HERO_SLOGAN_ITEMS = [
+      "Kakngoh - SWITCHH!! 🔥😤🔥",
+      "Kakngoh - SEMANGATT!! 🔥😎🔥",
+      "Kakngoh - BANGKIT!! 🔥🦁🔥",
+      "Kakngoh - MAJUU!! 🔥🤩🔥",
+      "Kakngoh - BINA EMPIRE!! 👑😎🔥",
+      "Kakngoh - CLOSED DEAL!! 💰🤑🔥",
+      "Kakngoh - SCALE UP!! 🚀🥳🔥",
+      "Kakngoh - FOKUS & EXECUTE!! 🎯😤⚡",
+      "Kakngoh - MOMENTUM!! ⚡🦾🔥",
+      "Kakngoh - PAGI!!! 🌅🤩🔥"
+    ];
+    let currentSloganIndex = 0;
+
+    function shuffleHeroSlogan() {
+      const titleEl = document.getElementById('hero-quake-title');
+      if (!titleEl) return;
+
+      triggerConfetti();
+
+      titleEl.classList.remove('quaking');
+      void titleEl.offsetWidth; // Reflow to re-trigger animation
+      titleEl.classList.add('quaking');
+
+      setTimeout(() => {
+        let nextIndex;
+        do {
+          nextIndex = Math.floor(Math.random() * HERO_SLOGAN_ITEMS.length);
+        } while (nextIndex === currentSloganIndex && HERO_SLOGAN_ITEMS.length > 1);
+        currentSloganIndex = nextIndex;
+
+        const text = HERO_SLOGAN_ITEMS[currentSloganIndex];
+        titleEl.textContent = text;
+        showToast(text, '🔥');
+      }, 160);
+
+      setTimeout(() => {
+        if (titleEl) titleEl.classList.remove('quaking');
+      }, 480);
+    }
+
     /* 1. HOME VIEW (`/`) */
     function renderHomeView(container) {
       const doneTotal = completedSet.size;
@@ -1877,7 +1942,9 @@ def build_offline_site():
       let html = `
         <section class="home-hero">
           <p class="home-hero-eyebrow">Coach Adib · Portal Pembelajaran</p>
-          <h1 class="home-hero-title">Kakngoh - SWITCHH!! 🔥😤🔥</h1>
+          <h1 class="home-hero-title-quake" id="hero-quake-title" onclick="shuffleHeroSlogan()" title="Klik untuk gegar slogan semangat & confetti! 🔥">
+            ${HERO_SLOGAN_ITEMS[currentSloganIndex]}
+          </h1>
           <p class="home-hero-subtitle">${doneTotal}/${totalLessons} video telah disiapkan · 4 program lengkap</p>
         </section>
 
