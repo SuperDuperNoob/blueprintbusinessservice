@@ -1,29 +1,45 @@
 #!/usr/bin/env python3
 """
-Generate a clean, highly legible, ultra-responsive web application
-for Coach Adib & Blueprint Business Service.
-Supports 4 Core Programs:
-1. Blueprint Business Owner (BBO)
-2. Seni Closing Customer (SCC)
-3. Blueprint Business Service (BBS)
-4. Live Recording (LIVE)
+Generate a clean, modern, ultra-responsive web application for Coach Adib
+matching the official https://coachadib.com/ design & branding.
 
-Features:
-- Clean, user-friendly Inter typography for notes, courses, and scripts
-- Day (Light) and Night (Dark) themes with smooth toggle & persistence
-- Program tab navigation with active status, progress bars, and badges
-- Multi-tier accordion navigation: Program -> Course -> Chapter -> Modules
-- Full Bunny CDN HD video stream + Bunny Embed player toggle with speed controls
-- Distraction-free Focus mode, Theater mode, and custom shortcuts
-- 100% offline pure JS confetti celebration & toast notifications
-- Interactive quizzes with instant explanation reveals
-- Quick keyboard navigation ([, ], N, P, Space, F, M, B, D, T, /, ?)
+Architecture:
+- 4 Core Programs:
+  1. Blueprint Business Owner (BBO) - 7 Courses · 143 Lessons
+  2. Seni Closing Customer (SCC) - 6 Courses · 171 Lessons
+  3. Blueprint Business Service (BBS) - 4 Courses · 81 Lessons
+  4. Live Recording (LIVE) - 1 Course · 13 Lessons
+
+Design Features:
+- Official Coach Adib brand styling, logo, and color system (Obsidian / Slate / Emerald / Amber)
+- Sleek Program Tab Bar with active glowing indicators and live progress tracking
+- Multi-tier Course & Chapter Accordions with lesson duration badges and completion status
+- Universal Bunny HD Video Player (responsive 16:9, speed controls, 10s skip, theater mode)
+- Clean Inter typography for study notes, summaries, and downloadable scripts
+- Interactive Quizzes & Knowledge Checks with instant feedback and key insights
+- Day / Night theme switcher, instant global search, bookmarking, and pure JS celebration confetti
 """
 import json
 import os
+import shutil
+import urllib.request
 
 def build_offline_site():
     os.makedirs("offline_site", exist_ok=True)
+    os.makedirs("offline_site/assets", exist_ok=True)
+
+    # Ensure logo exists in assets
+    logo_dest = "offline_site/assets/logo.png"
+    if not os.path.exists(logo_dest):
+        try:
+            url = "https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/008d7b955_LogoCoachAdib.png"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                with open(logo_dest, "wb") as f:
+                    f.write(resp.read())
+        except Exception as e:
+            print(f"Notice: Could not download remote logo: {e}")
+
     with open("bbs_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -53,68 +69,69 @@ def build_offline_site():
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
   <meta name="referrer" content="origin-when-cross-origin">
-  <title>Coach Adib · Video & Business Knowledge Hub</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <title>Coach Adib · Pusat Video & Sistem Bisnes</title>
   <script src="marked.min.js"></script>
   <script src="hls.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --accent-brand: #ff5a00;
       --accent-brand-hover: #ff7324;
-      --accent-brand-glow: rgba(255, 90, 0, 0.32);
+      --accent-brand-glow: rgba(255, 90, 0, 0.28);
       --accent-emerald: #10b981;
-      --accent-emerald-glow: rgba(16, 185, 129, 0.28);
+      --accent-emerald-glow: rgba(16, 185, 129, 0.24);
       --accent-cyan: #06b6d4;
-      --accent-rose: #f43f5e;
       --accent-amber: #f59e0b;
       --accent-purple: #8b5cf6;
+      --accent-rose: #f43f5e;
       
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
       --radius-xl: 18px;
       --sidebar-width: 390px;
-      --topbar-height: 60px;
+      --topbar-height: 64px;
     }
 
-    /* Dark / Night Theme (Default) */
+    /* Dark Obsidian Theme (Coach Adib Default) */
     html.dark {
-      --bg-base: #060911;
-      --bg-surface: #0c1220;
-      --bg-card: #131c31;
-      --bg-card-hover: #192642;
-      --bg-card-active: #1d2d4f;
-      --bg-elevated: #1e293b;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-medium: rgba(255, 255, 255, 0.14);
-      --border-focus: rgba(255, 90, 0, 0.55);
+      --bg-base: #07090e;
+      --bg-surface: #0d1117;
+      --bg-card: #131924;
+      --bg-card-hover: #1a2332;
+      --bg-card-active: #202b3d;
+      --bg-elevated: #161e2c;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-medium: rgba(255, 255, 255, 0.13);
+      --border-focus: rgba(255, 90, 0, 0.5);
       
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --text-tertiary: #64748b;
       --text-muted: #475569;
 
-      --topbar-bg: rgba(6, 9, 17, 0.85);
-      --sidebar-header-bg: rgba(12, 18, 32, 0.95);
-      --level-tabs-bg: rgba(6, 9, 17, 0.85);
-      --quiz-card-bg: rgba(6, 9, 17, 0.65);
-      --table-th-bg: rgba(6, 9, 17, 0.85);
-      --code-bg: rgba(6, 9, 17, 0.95);
-      --upcoming-bg: linear-gradient(135deg, rgba(245, 158, 11, 0.09) 0%, rgba(15, 23, 42, 0.95) 100%);
+      --topbar-bg: rgba(7, 9, 14, 0.88);
+      --sidebar-header-bg: rgba(13, 17, 23, 0.95);
+      --tabs-bg: rgba(7, 9, 14, 0.9);
+      --quiz-card-bg: rgba(7, 9, 14, 0.65);
+      --table-th-bg: rgba(13, 17, 23, 0.95);
+      --code-bg: rgba(7, 9, 14, 0.95);
+      --upcoming-bg: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(19, 25, 36, 0.95) 100%);
     }
 
-    /* Light / Day Theme */
+    /* Light Theme */
     html.light {
-      --bg-base: #f1f5f9;
+      --bg-base: #f8fafc;
       --bg-surface: #ffffff;
       --bg-card: #ffffff;
-      --bg-card-hover: #f8fafc;
+      --bg-card-hover: #f1f5f9;
       --bg-card-active: #e2e8f0;
       --bg-elevated: #ffffff;
-      --border-subtle: rgba(0, 0, 0, 0.08);
-      --border-medium: rgba(0, 0, 0, 0.15);
+      --border-subtle: rgba(0, 0, 0, 0.07);
+      --border-medium: rgba(0, 0, 0, 0.14);
       --border-focus: rgba(255, 90, 0, 0.6);
       
       --text-primary: #0f172a;
@@ -122,9 +139,9 @@ def build_offline_site():
       --text-tertiary: #64748b;
       --text-muted: #94a3b8;
 
-      --topbar-bg: rgba(255, 255, 255, 0.9);
-      --sidebar-header-bg: rgba(255, 255, 255, 0.96);
-      --level-tabs-bg: rgba(241, 245, 249, 0.9);
+      --topbar-bg: rgba(255, 255, 255, 0.92);
+      --sidebar-header-bg: rgba(255, 255, 255, 0.98);
+      --tabs-bg: rgba(248, 250, 252, 0.92);
       --quiz-card-bg: #f8fafc;
       --table-th-bg: #f1f5f9;
       --code-bg: #e2e8f0;
@@ -133,7 +150,7 @@ def build_offline_site():
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg-base);
       color: var(--text-primary);
       height: 100%;
@@ -143,13 +160,13 @@ def build_offline_site():
       transition: background-color 0.25s ease, color 0.25s ease;
     }
 
-    /* Scrollbars */
+    /* Custom Scrollbars */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(140, 140, 140, 0.2); border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(140, 140, 140, 0.4); }
 
-    /* App Shell */
+    /* Main App Layout */
     #app-shell {
       display: flex;
       height: 100vh;
@@ -159,7 +176,7 @@ def build_offline_site():
       position: relative;
     }
 
-    /* Sidebar */
+    /* Left Sidebar */
     #sidebar {
       width: var(--sidebar-width);
       min-width: var(--sidebar-width);
@@ -178,9 +195,9 @@ def build_offline_site():
       margin-right: calc(-1 * var(--sidebar-width));
     }
 
-    /* Sidebar Header */
+    /* Sidebar Brand Header */
     .sidebar-header {
-      padding: 14px 16px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
@@ -194,40 +211,37 @@ def build_offline_site():
       align-items: center;
       gap: 10px;
     }
-    .brand-logo {
-      width: 34px;
-      height: 34px;
-      background: linear-gradient(135deg, #ff5a00, #ff8c00);
+    .brand-logo-img {
+      width: 38px;
+      height: 38px;
       border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 0.88rem;
-      color: #ffffff;
-      box-shadow: 0 4px 12px var(--accent-brand-glow);
+      object-fit: contain;
+      background: #000;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     .brand-info h2 {
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 0.98rem;
+      font-weight: 800;
       color: var(--text-primary);
       line-height: 1.2;
+      letter-spacing: -0.01em;
     }
     .brand-info p {
       font-size: 0.72rem;
       color: var(--text-tertiary);
-      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
     }
     .overall-badge {
       display: flex;
       align-items: center;
       gap: 5px;
-      padding: 4px 9px;
-      background: rgba(255, 90, 0, 0.12);
+      padding: 4px 10px;
+      background: rgba(255, 90, 0, 0.1);
       border: 1px solid rgba(255, 90, 0, 0.25);
       border-radius: 999px;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--accent-brand);
       font-family: 'JetBrains Mono', monospace;
     }
@@ -243,10 +257,10 @@ def build_offline_site():
       font-size: 1.1rem;
     }
 
-    /* Program / Level Tabs Bar */
+    /* Program Tabs Bar */
     .level-tabs-container {
       overflow-x: auto;
-      background: var(--level-tabs-bg);
+      background: var(--tabs-bg);
       border-bottom: 1px solid var(--border-subtle);
       flex-shrink: 0;
       -webkit-overflow-scrolling: touch;
@@ -258,7 +272,7 @@ def build_offline_site():
       width: max-content;
     }
     .level-tab {
-      padding: 6px 12px;
+      padding: 7px 12px;
       border-radius: var(--radius-md);
       border: 1px solid transparent;
       background: transparent;
@@ -270,14 +284,14 @@ def build_offline_site():
       transition: all 0.18s ease;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
     }
     .level-tab:hover { background: rgba(140, 140, 140, 0.1); color: var(--text-primary); }
     .level-tab.active {
-      background: linear-gradient(135deg, rgba(255,90,0,0.22), rgba(255,90,0,0.08));
+      background: linear-gradient(135deg, rgba(255,90,0,0.22), rgba(255,90,0,0.06));
       color: #ff5a00;
       border-color: rgba(255,90,0,0.4);
-      box-shadow: 0 2px 12px rgba(255,90,0,0.15);
+      box-shadow: 0 2px 12px rgba(255,90,0,0.14);
       font-weight: 700;
     }
     .level-tab-dot {
@@ -311,7 +325,7 @@ def build_offline_site():
     }
     .search-input {
       width: 100%;
-      padding: 7px 30px 7px 32px;
+      padding: 8px 30px 8px 34px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
@@ -327,7 +341,7 @@ def build_offline_site():
     }
     .search-icon {
       position: absolute;
-      left: 10px;
+      left: 11px;
       width: 14px;
       height: 14px;
       color: var(--text-tertiary);
@@ -353,13 +367,13 @@ def build_offline_site():
       padding-bottom: 2px;
     }
     .filter-pill {
-      padding: 4px 8px;
+      padding: 4px 9px;
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
       background: transparent;
       color: var(--text-tertiary);
       font-size: 0.72rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.15s ease;
@@ -372,10 +386,9 @@ def build_offline_site():
       background: var(--bg-card-active);
       color: var(--text-primary);
       border-color: rgba(255, 90, 0, 0.4);
-      font-weight: 600;
     }
 
-    /* Program / Level Meta Bar */
+    /* Program Meta Bar */
     .level-meta-bar {
       padding: 8px 14px;
       background: rgba(140, 140, 140, 0.04);
@@ -405,7 +418,7 @@ def build_offline_site():
       color: var(--text-tertiary);
       font-size: 0.7rem;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
       padding: 2px 4px;
       border-radius: var(--radius-sm);
     }
@@ -418,7 +431,7 @@ def build_offline_site():
       color: var(--text-tertiary);
     }
     .prog-bar-mini {
-      width: 44px;
+      width: 46px;
       height: 5px;
       background: rgba(140, 140, 140, 0.2);
       border-radius: 999px;
@@ -453,14 +466,14 @@ def build_offline_site():
       border-color: var(--border-medium);
     }
     .course-header {
-      padding: 10px 12px;
+      padding: 11px 13px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.83rem;
       color: var(--text-primary);
       background: rgba(140, 140, 140, 0.03);
     }
@@ -508,7 +521,7 @@ def build_offline_site():
       margin-bottom: 4px;
     }
     .chapter-header {
-      padding: 5px 8px;
+      padding: 6px 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -557,7 +570,7 @@ def build_offline_site():
 
     /* Lesson Module Item */
     .lesson-item {
-      padding: 7px 10px;
+      padding: 8px 10px;
       border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
@@ -577,7 +590,7 @@ def build_offline_site():
     .lesson-item.active {
       background: linear-gradient(135deg, rgba(255, 90, 0, 0.18), rgba(255, 90, 0, 0.08));
       color: var(--accent-brand);
-      font-weight: 600;
+      font-weight: 700;
       border-left: 3px solid var(--accent-brand);
     }
     .lesson-item.completed .lesson-title-text {
@@ -596,7 +609,7 @@ def build_offline_site():
     .lesson-icon {
       font-size: 0.8rem;
       flex-shrink: 0;
-      opacity: 0.75;
+      opacity: 0.85;
     }
     .lesson-title-text {
       overflow: hidden;
@@ -611,9 +624,9 @@ def build_offline_site():
     }
     .lesson-badge-pill {
       font-size: 0.65rem;
-      padding: 1px 5px;
+      padding: 2px 6px;
       border-radius: var(--radius-sm);
-      font-weight: 500;
+      font-weight: 600;
     }
     .pill-video {
       background: rgba(16, 185, 129, 0.14);
@@ -651,7 +664,7 @@ def build_offline_site():
     .topbar {
       height: var(--topbar-height);
       min-height: var(--topbar-height);
-      padding: 0 20px;
+      padding: 0 24px;
       border-bottom: 1px solid var(--border-subtle);
       background: var(--topbar-bg);
       backdrop-filter: blur(16px);
@@ -672,8 +685,8 @@ def build_offline_site():
       background: transparent;
       border: 1px solid var(--border-subtle);
       color: var(--text-secondary);
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
@@ -695,7 +708,7 @@ def build_offline_site():
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.82rem;
+      font-size: 0.83rem;
       color: var(--text-tertiary);
       overflow: hidden;
       white-space: nowrap;
@@ -710,7 +723,7 @@ def build_offline_site():
     }
     .breadcrumb-current {
       color: var(--text-primary);
-      font-weight: 600;
+      font-weight: 700;
       text-overflow: ellipsis;
       overflow: hidden;
     }
@@ -723,10 +736,10 @@ def build_offline_site():
     }
 
     .btn {
-      padding: 7px 14px;
+      padding: 8px 15px;
       border-radius: var(--radius-md);
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -765,10 +778,10 @@ def build_offline_site():
 
     /* Content Body Container */
     .content-container {
-      max-width: 1040px;
+      max-width: 1060px;
       width: 100%;
       margin: 0 auto;
-      padding: 24px 24px 80px 24px;
+      padding: 28px 24px 80px 24px;
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -778,12 +791,12 @@ def build_offline_site():
     .lesson-hero {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 22px 26px;
+      border-radius: var(--radius-xl);
+      padding: 24px 28px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      gap: 14px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
     }
     .lesson-hero-header-row {
       display: flex;
@@ -792,11 +805,11 @@ def build_offline_site():
       gap: 16px;
     }
     .lesson-hero-title {
-      font-size: 1.55rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--text-primary);
       line-height: 1.25;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
     }
     .hero-tags {
       display: flex;
@@ -804,10 +817,10 @@ def build_offline_site():
       gap: 8px;
     }
     .hero-tag {
-      padding: 4px 10px;
+      padding: 5px 11px;
       border-radius: var(--radius-sm);
-      font-size: 0.72rem;
-      font-weight: 600;
+      font-size: 0.74rem;
+      font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.02em;
     }
@@ -822,9 +835,9 @@ def build_offline_site():
     .video-hero-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       overflow: hidden;
-      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 36px rgba(0, 0, 0, 0.16);
       transition: all 0.3s ease;
     }
     .video-hero-card.theater-mode {
@@ -833,7 +846,7 @@ def build_offline_site():
       border-radius: var(--radius-md);
     }
     .video-card-topbar {
-      padding: 10px 16px;
+      padding: 11px 18px;
       background: rgba(140, 140, 140, 0.04);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
@@ -843,15 +856,15 @@ def build_offline_site():
     .video-stream-badge {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.74rem;
-      font-weight: 600;
+      gap: 7px;
+      font-size: 0.76rem;
+      font-weight: 700;
       color: var(--accent-emerald);
       font-family: 'JetBrains Mono', monospace;
     }
     .stream-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--accent-emerald);
       box-shadow: 0 0 8px var(--accent-emerald);
@@ -869,15 +882,15 @@ def build_offline_site():
       gap: 6px;
     }
     .speed-btn, .jump-btn, .player-toggle-btn {
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-subtle);
       background: transparent;
       color: var(--text-secondary);
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-family: 'JetBrains Mono', monospace;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
       transition: all 0.15s ease;
     }
     .speed-btn:hover, .jump-btn:hover, .player-toggle-btn:hover {
@@ -911,7 +924,7 @@ def build_offline_site():
       background: var(--upcoming-bg);
       border: 1px solid rgba(245, 158, 11, 0.3);
       border-radius: var(--radius-lg);
-      padding: 32px 24px;
+      padding: 36px 24px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -919,18 +932,18 @@ def build_offline_site():
       gap: 14px;
     }
     .upcoming-icon {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
     .upcoming-title {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 1.3rem;
+      font-weight: 800;
       color: var(--accent-amber);
     }
     .upcoming-desc {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      max-width: 520px;
-      line-height: 1.5;
+      max-width: 540px;
+      line-height: 1.6;
     }
     .upcoming-actions {
       display: flex;
@@ -944,58 +957,58 @@ def build_offline_site():
     .study-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 28px;
+      border-radius: var(--radius-xl);
+      padding: 30px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-      line-height: 1.68;
+      line-height: 1.7;
     }
     .study-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 14px;
-      margin-bottom: 20px;
+      padding-bottom: 16px;
+      margin-bottom: 22px;
     }
     .study-title {
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Clean Markdown Typography (Inter) */
+    /* Markdown Typography (Inter) */
     .markdown-body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: 0.95rem;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 0.96rem;
       color: var(--text-primary);
-      line-height: 1.72;
-      letter-spacing: -0.011em;
+      line-height: 1.74;
+      letter-spacing: -0.01em;
     }
     .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
       color: var(--text-primary);
-      font-weight: 700;
-      margin-top: 1.5em;
+      font-weight: 800;
+      margin-top: 1.6em;
       margin-bottom: 0.6em;
       line-height: 1.3;
     }
-    .markdown-body h1 { font-size: 1.45rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px; }
-    .markdown-body h2 { font-size: 1.22rem; }
-    .markdown-body h3 { font-size: 1.05rem; }
-    .markdown-body p { margin-bottom: 1em; }
+    .markdown-body h1 { font-size: 1.48rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; }
+    .markdown-body h2 { font-size: 1.25rem; }
+    .markdown-body h3 { font-size: 1.08rem; }
+    .markdown-body p { margin-bottom: 1.1em; }
     .markdown-body ul, .markdown-body ol {
-      margin-left: 1.4em;
-      margin-bottom: 1em;
+      margin-left: 1.5em;
+      margin-bottom: 1.1em;
     }
     .markdown-body li {
-      margin-bottom: 0.35em;
+      margin-bottom: 0.4em;
     }
     .markdown-body blockquote {
       border-left: 3px solid var(--accent-brand);
-      padding: 8px 16px;
-      margin: 1.2em 0;
+      padding: 10px 18px;
+      margin: 1.3em 0;
       background: rgba(255, 90, 0, 0.06);
       border-radius: 0 var(--radius-md) var(--radius-md) 0;
       color: var(--text-secondary);
@@ -1003,7 +1016,7 @@ def build_offline_site():
     }
     .markdown-body code {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       padding: 2px 6px;
       background: var(--code-bg);
       border-radius: var(--radius-sm);
@@ -1011,10 +1024,10 @@ def build_offline_site():
     }
     .markdown-body pre {
       background: var(--code-bg);
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-radius: var(--radius-md);
       overflow-x: auto;
-      margin: 1.2em 0;
+      margin: 1.3em 0;
       border: 1px solid var(--border-subtle);
     }
     .markdown-body pre code {
@@ -1025,26 +1038,21 @@ def build_offline_site():
     .markdown-body table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1.2em 0;
-      font-size: 0.88rem;
+      margin: 1.3em 0;
+      font-size: 0.9rem;
     }
     .markdown-body th, .markdown-body td {
       border: 1px solid var(--border-subtle);
-      padding: 9px 13px;
+      padding: 10px 14px;
       text-align: left;
     }
     .markdown-body th {
       background: var(--table-th-bg);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-primary);
     }
     .markdown-body tr:nth-child(even) {
       background: rgba(140, 140, 140, 0.03);
-    }
-    .markdown-body hr {
-      border: none;
-      border-top: 1px solid var(--border-subtle);
-      margin: 2em 0;
     }
 
     /* Interactive Quizzes */
@@ -1052,32 +1060,32 @@ def build_offline_site():
       margin-top: 24px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
     .quiz-item-card {
       background: var(--quiz-card-bg);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px 20px;
+      padding: 18px 22px;
     }
     .quiz-question-title {
-      font-size: 0.92rem;
-      font-weight: 600;
+      font-size: 0.94rem;
+      font-weight: 700;
       color: var(--text-primary);
       margin-bottom: 12px;
     }
     .quiz-options-list {
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 8px;
     }
     .quiz-opt-btn {
-      padding: 9px 14px;
+      padding: 10px 15px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-subtle);
       background: var(--bg-card);
       color: var(--text-secondary);
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       font-family: inherit;
       cursor: pointer;
       text-align: left;
@@ -1095,7 +1103,7 @@ def build_offline_site():
       background: rgba(16, 185, 129, 0.18);
       border-color: var(--accent-emerald);
       color: var(--accent-emerald);
-      font-weight: 600;
+      font-weight: 700;
     }
     .quiz-opt-btn.wrong {
       background: rgba(244, 63, 94, 0.18);
@@ -1104,9 +1112,9 @@ def build_offline_site():
     }
     .quiz-feedback-box {
       margin-top: 10px;
-      padding: 10px 14px;
+      padding: 11px 15px;
       border-radius: var(--radius-sm);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       background: rgba(16, 185, 129, 0.08);
       border: 1px solid rgba(16, 185, 129, 0.25);
       color: var(--text-primary);
@@ -1129,12 +1137,12 @@ def build_offline_site():
       right: 24px;
       background: var(--bg-elevated);
       color: var(--text-primary);
-      padding: 10px 18px;
+      padding: 11px 18px;
       border-radius: var(--radius-md);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       border: 1px solid var(--border-medium);
-      font-size: 0.84rem;
-      font-weight: 500;
+      font-size: 0.85rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -1160,14 +1168,14 @@ def build_offline_site():
       z-index: 999;
     }
 
-    /* Keyboard Shortcuts Modal */
+    /* Shortcuts Modal */
     .modal-backdrop {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -1184,15 +1192,15 @@ def build_offline_site():
     .shortcuts-dialog {
       background: var(--bg-card);
       border: 1px solid var(--border-medium);
-      border-radius: var(--radius-lg);
-      padding: 24px;
+      border-radius: var(--radius-xl);
+      padding: 26px;
       max-width: 480px;
       width: 90%;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
     .shortcuts-dialog h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 800;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
@@ -1202,7 +1210,7 @@ def build_offline_site():
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: 9px 0;
       border-bottom: 1px solid var(--border-subtle);
       font-size: 0.85rem;
     }
@@ -1213,7 +1221,7 @@ def build_offline_site():
       padding: 2px 7px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       box-shadow: 0 2px 0 rgba(0,0,0,0.2);
     }
 
@@ -1225,7 +1233,7 @@ def build_offline_site():
         top: 0;
         height: 100%;
         transform: translateX(-100%);
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.35);
       }
       #sidebar.mobile-open {
         transform: translateX(0);
@@ -1237,7 +1245,7 @@ def build_offline_site():
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.55);
         backdrop-filter: blur(2px);
         z-index: 45;
       }
@@ -1292,7 +1300,7 @@ def build_offline_site():
     <aside id="sidebar">
       <div class="sidebar-header">
         <div class="brand-group">
-          <div class="brand-logo">CA</div>
+          <img src="assets/logo.png" alt="Coach Adib" class="brand-logo-img" onerror="this.style.display='none'" />
           <div class="brand-info">
             <h2>Coach Adib</h2>
             <p>Knowledge Studio</p>
@@ -1327,7 +1335,7 @@ def build_offline_site():
         </div>
       </div>
 
-      <!-- Active Program / Level Progress & Accordion Actions -->
+      <!-- Active Program Progress & Accordion Actions -->
       <div class="level-meta-bar">
         <span class="level-title-display" id="level-active-title">Program Overview</span>
         <div class="meta-right-tools">
@@ -1384,7 +1392,7 @@ def build_offline_site():
     let activeFilter = 'all';
     let allAccordionsCollapsed = false;
     let currentTheme = localStorage.getItem('bbs_theme') || 'dark';
-    let playerMode = localStorage.getItem('bbs_player_mode') || 'iframe'; // default 'iframe' for 100% universal reliability
+    let playerMode = localStorage.getItem('bbs_player_mode') || 'iframe';
 
     const { programs = [], levels = [], courses = [], chapters = [], modules = [] } = window.BBS_DATA || {};
     const hasPrograms = Boolean(programs && programs.length > 0);
@@ -1823,7 +1831,7 @@ def build_offline_site():
 
       let badge = '';
       if (m.video_url) {
-        badge = `<span class="lesson-badge-pill pill-video">🎥 Video</span>`;
+        badge = `<span class="lesson-badge-pill pill-video">▶ Video</span>`;
       } else if (m.notes) {
         badge = `<span class="lesson-badge-pill pill-notes">📝 Notes</span>`;
       } else {
@@ -1834,7 +1842,7 @@ def build_offline_site():
         <div class="lesson-item ${isActive ? 'active' : ''} ${isDone ? 'completed' : ''} ${!isReady ? 'upcoming' : ''}" 
              onclick="selectModule('${m.id}')" id="mod-item-${m.id}">
           <div class="lesson-left">
-            <span class="lesson-icon">${m.video_url ? '🎥' : (m.notes ? '📝' : '📄')}</span>
+            <span class="lesson-icon">${m.video_url ? '▶' : (m.notes ? '📝' : '📄')}</span>
             <span class="lesson-title-text">${m.title || 'Untitled'}</span>
           </div>
           <div class="lesson-right-badges">
@@ -2348,7 +2356,7 @@ def build_offline_site():
     with open("offline_site/index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("✓ Successfully generated Coach Adib offline site with 4 programs & 408 lessons!")
+    print("✓ Successfully built Coach Adib design site!")
 
 if __name__ == "__main__":
     build_offline_site()
