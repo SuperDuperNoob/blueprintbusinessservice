@@ -1978,12 +1978,15 @@ def build_offline_site():
       { word: "PAGI!!!", emoji: "🌅🤩🔥" }
     ];
     let currentSloganIndex = 0;
+    let sloganInterval = null;
 
-    function shuffleHeroSlogan() {
+    function shuffleHeroSlogan(isManual = false) {
       const chipEl = document.getElementById('slot-chip-box');
       if (!chipEl) return;
 
-      triggerConfetti();
+      if (isManual) {
+        triggerConfetti();
+      }
 
       chipEl.classList.remove('quake-hard');
       void chipEl.offsetWidth; // Reflow to re-trigger animation
@@ -1998,12 +2001,25 @@ def build_offline_site():
 
         const item = HERO_SLOGAN_ITEMS[currentSloganIndex];
         chipEl.innerHTML = `<span class="slot-keyword">${item.word}</span> <span class="slot-emojis">${item.emoji}</span>`;
-        showToast(`Kakngoh - ${item.word} ${item.emoji}`, '💥');
+        if (isManual) {
+          showToast(`Kakngoh - ${item.word} ${item.emoji}`, '💥');
+        }
       }, 160);
 
       setTimeout(() => {
         if (chipEl) chipEl.classList.remove('quake-hard');
       }, 560);
+    }
+
+    function startSloganRotation() {
+      clearInterval(sloganInterval);
+      sloganInterval = setInterval(() => {
+        if (!document.getElementById('slot-chip-box')) {
+          clearInterval(sloganInterval);
+          return;
+        }
+        shuffleHeroSlogan(false);
+      }, 3600000); // 1 jam = 3,600,000 ms
     }
 
     /* 1. HOME VIEW (`/`) */
@@ -2015,7 +2031,7 @@ def build_offline_site():
       let html = `
         <section class="home-hero">
           <p class="home-hero-eyebrow">Coach Adib · Portal Pembelajaran</p>
-          <div class="home-hero-slot-headline" id="hero-slot-headline" onclick="shuffleHeroSlogan()" title="Klik untuk gegar 3D slogan semangat & confetti! 💥">
+          <div class="home-hero-slot-headline" id="hero-slot-headline" onclick="shuffleHeroSlogan(true)" title="Klik untuk gegar 3D slogan semangat & confetti! 💥">
             <span class="slot-prefix-text">Kakngoh -</span>
             <div class="slot-chip-box" id="slot-chip-box">
               <span class="slot-keyword">${initialItem.word}</span>
@@ -2061,6 +2077,7 @@ def build_offline_site():
 
       html += `</section>`;
       container.innerHTML = html;
+      startSloganRotation();
     }
 
     /* 2. PROGRAM VIEW (`/program/:id`) */
