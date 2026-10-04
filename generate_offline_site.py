@@ -324,6 +324,11 @@ def build_offline_site():
       letter-spacing: -0.03em;
       margin: 6px 0;
       line-height: 1.15;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .home-hero-title.fade-out {
+      opacity: 0;
+      transform: translateY(-5px);
     }
     .home-hero-subtitle {
       font-size: 0.88rem;
@@ -1869,6 +1874,34 @@ def build_offline_site():
       window.location.hash = '#/';
     }
 
+    const HERO_SLOGANS = [
+      "Kakngoh - SWITCHH!! 🔥😤🔥",
+      "Kakngoh - SEMANGATT!! 🔥😎🔥",
+      "Kakngoh - BANGKIT!! 🔥😤🔥",
+      "Kakngoh - MAJUU!! 🔥🤩🔥"
+    ];
+    let currentSloganIndex = Math.floor(Math.random() * HERO_SLOGANS.length);
+    let sloganInterval = null;
+
+    function startSloganRotation() {
+      clearInterval(sloganInterval);
+      sloganInterval = setInterval(() => {
+        const titleEl = document.getElementById('rotating-hero-title');
+        if (!titleEl) {
+          clearInterval(sloganInterval);
+          return;
+        }
+        currentSloganIndex = (currentSloganIndex + 1) % HERO_SLOGANS.length;
+        titleEl.classList.add('fade-out');
+        setTimeout(() => {
+          if (titleEl) {
+            titleEl.textContent = HERO_SLOGANS[currentSloganIndex];
+            titleEl.classList.remove('fade-out');
+          }
+        }, 320);
+      }, 3500);
+    }
+
     /* 1. HOME VIEW (`/`) */
     function renderHomeView(container) {
       const doneTotal = completedSet.size;
@@ -1877,7 +1910,7 @@ def build_offline_site():
       let html = `
         <section class="home-hero">
           <p class="home-hero-eyebrow">Coach Adib · Portal Pembelajaran</p>
-          <h1 class="home-hero-title">Kakngoh - SWITCHH!! 🔥😤🔥</h1>
+          <h1 class="home-hero-title" id="rotating-hero-title">${HERO_SLOGANS[currentSloganIndex]}</h1>
           <p class="home-hero-subtitle">${doneTotal}/${totalLessons} video telah disiapkan · 4 program lengkap</p>
         </section>
 
@@ -1916,6 +1949,7 @@ def build_offline_site():
 
       html += `</section>`;
       container.innerHTML = html;
+      startSloganRotation();
     }
 
     /* 2. PROGRAM VIEW (`/program/:id`) */
