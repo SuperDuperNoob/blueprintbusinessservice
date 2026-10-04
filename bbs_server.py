@@ -38,8 +38,8 @@ class BBSHandler(http.server.SimpleHTTPRequestHandler):
 
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-            "Referer": "https://blueprintbusinessservice.com/",
-            "Origin": "https://blueprintbusinessservice.com"
+            "Referer": "https://coachadib.com/",
+            "Origin": "https://coachadib.com"
         }
 
         # Forward Range header for video seeking
