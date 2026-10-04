@@ -250,42 +250,50 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+    :root {
+      --slogan-glow-rgb: 255, 90, 0;
+      --slogan-glow-bg: linear-gradient(135deg, rgba(255, 90, 0, 0.2) 0%, rgba(255, 140, 0, 0.28) 100%);
+      --slogan-glow-border: rgba(255, 90, 0, 0.5);
+      --slogan-glow-shadow: 0 4px 16px rgba(255, 90, 0, 0.22);
+      --slogan-text-grad: linear-gradient(90deg, #ff5a00 0%, #ff8c00 50%, #ffd200 100%);
+    }
+
     @keyframes slotQuake3DHard {
       0% {
         transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
-        box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
+        box-shadow: 0 4px 14px rgba(var(--slogan-glow-rgb), 0.2);
       }
       10% {
         transform: perspective(900px) translate3d(-8px, -5px, 22px) rotateX(-18deg) rotateY(20deg) rotateZ(-4deg) scale(1.15);
-        box-shadow: -8px 8px 25px rgba(255, 90, 0, 0.45);
+        box-shadow: -8px 8px 25px rgba(var(--slogan-glow-rgb), 0.55);
       }
       22% {
         transform: perspective(900px) translate3d(9px, 6px, 32px) rotateX(20deg) rotateY(-22deg) rotateZ(5deg) scale(1.22);
-        box-shadow: 8px -8px 30px rgba(255, 90, 0, 0.55);
+        box-shadow: 8px -8px 32px rgba(var(--slogan-glow-rgb), 0.65);
       }
       35% {
         transform: perspective(900px) translate3d(-10px, 4px, 26px) rotateX(-16deg) rotateY(16deg) rotateZ(-5deg) scale(1.18);
-        box-shadow: -10px -6px 28px rgba(255, 90, 0, 0.5);
+        box-shadow: -10px -6px 28px rgba(var(--slogan-glow-rgb), 0.58);
       }
       48% {
         transform: perspective(900px) translate3d(8px, -6px, 30px) rotateX(18deg) rotateY(-14deg) rotateZ(4deg) scale(1.19);
-        box-shadow: 10px 6px 30px rgba(255, 90, 0, 0.52);
+        box-shadow: 10px 6px 30px rgba(var(--slogan-glow-rgb), 0.6);
       }
       62% {
         transform: perspective(900px) translate3d(-6px, 3px, 18px) rotateX(-10deg) rotateY(12deg) rotateZ(-3deg) scale(1.12);
-        box-shadow: -6px 4px 22px rgba(255, 90, 0, 0.38);
+        box-shadow: -6px 4px 22px rgba(var(--slogan-glow-rgb), 0.45);
       }
       75% {
         transform: perspective(900px) translate3d(5px, -3px, 12px) rotateX(8deg) rotateY(-8deg) rotateZ(2deg) scale(1.07);
-        box-shadow: 5px -3px 18px rgba(255, 90, 0, 0.28);
+        box-shadow: 5px -3px 18px rgba(var(--slogan-glow-rgb), 0.35);
       }
       88% {
         transform: perspective(900px) translate3d(-3px, 2px, 6px) rotateX(-4deg) rotateY(4deg) rotateZ(-1deg) scale(1.03);
-        box-shadow: -3px 2px 14px rgba(255, 90, 0, 0.2);
+        box-shadow: -3px 2px 14px rgba(var(--slogan-glow-rgb), 0.25);
       }
       100% {
         transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
-        box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
+        box-shadow: 0 4px 14px rgba(var(--slogan-glow-rgb), 0.2);
       }
     }
 
@@ -309,8 +317,8 @@
       transform: translateY(-1px);
     }
     .home-hero-slot-headline:hover .slot-chip-box {
-      border-color: var(--primary);
-      box-shadow: 0 6px 22px rgba(255, 90, 0, 0.32);
+      border-color: rgba(var(--slogan-glow-rgb), 0.85);
+      box-shadow: 0 6px 24px rgba(var(--slogan-glow-rgb), 0.45);
     }
     .slot-prefix-text {
       color: var(--text-primary);
@@ -322,18 +330,18 @@
       gap: 8px;
       padding: 3px 12px;
       border-radius: var(--radius-md);
-      background: linear-gradient(135deg, rgba(255, 90, 0, 0.18) 0%, rgba(255, 140, 0, 0.28) 100%);
-      border: 1.5px solid rgba(255, 90, 0, 0.45);
-      box-shadow: 0 4px 14px rgba(255, 90, 0, 0.16);
+      background: var(--slogan-glow-bg);
+      border: 1.5px solid var(--slogan-glow-border);
+      box-shadow: var(--slogan-glow-shadow);
       transform-style: preserve-3d;
-      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.15s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
       transform-origin: center center;
     }
     .slot-chip-box.quake-hard {
       animation: slotQuake3DHard 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
     .slot-keyword {
-      background: linear-gradient(90deg, #ff5a00 0%, #ff8c00 50%, #ffd200 100%);
+      background: var(--slogan-text-grad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 900;
@@ -1807,14 +1815,14 @@
       window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
     }
 
-    function triggerConfetti() {
+    function triggerConfetti(customColors = null) {
       const canvas = document.getElementById('confetti-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       const particles = [];
-      const colors = ['#ff5a00', '#10b981', '#06b6d4', '#f59e0b', '#8b5cf6', '#ffffff'];
+      const colors = customColors || ['#ff5a00', '#10b981', '#06b6d4', '#f59e0b', '#8b5cf6', '#ffffff'];
       for (let i = 0; i < 70; i++) {
         particles.push({
           x: canvas.width / 2, y: canvas.height / 2, r: Math.random() * 6 + 3,
@@ -1899,26 +1907,133 @@
     }
 
     const HERO_SLOGAN_ITEMS = [
-      { word: "SWITCHH!!", emoji: "🔥😤🔥" },
-      { word: "SEMANGATT!!", emoji: "🔥😎🔥" },
-      { word: "BANGKIT!!", emoji: "🔥🦁🔥" },
-      { word: "MAJUU!!", emoji: "🔥🤩🔥" },
-      { word: "BINA EMPIRE!!", emoji: "👑😎🔥" },
-      { word: "CLOSED DEAL!!", emoji: "💰🤑🔥" },
-      { word: "SCALE UP!!", emoji: "🚀🥳🔥" },
-      { word: "FOKUS & EXECUTE!!", emoji: "🎯😤⚡" },
-      { word: "MOMENTUM!!", emoji: "⚡🦾🔥" },
-      { word: "PAGI!!!", emoji: "🌅🤩🔥" }
+      {
+        word: "SWITCHH!!",
+        emoji: "🔥😤🔥",
+        rgb: "255, 90, 0",
+        border: "rgba(255, 90, 0, 0.55)",
+        bg: "linear-gradient(135deg, rgba(255, 90, 0, 0.22) 0%, rgba(255, 60, 0, 0.32) 100%)",
+        textGrad: "linear-gradient(90deg, #ff5a00 0%, #ff8c00 50%, #ffd200 100%)",
+        confetti: ['#ff5a00', '#ff8c00', '#ffd200', '#ff2a00', '#ffffff'],
+        toastIcon: "🔥"
+      },
+      {
+        word: "SEMANGATT!!",
+        emoji: "🔥😎🔥",
+        rgb: "255, 140, 0",
+        border: "rgba(255, 140, 0, 0.55)",
+        bg: "linear-gradient(135deg, rgba(255, 140, 0, 0.22) 0%, rgba(255, 180, 0, 0.32) 100%)",
+        textGrad: "linear-gradient(90deg, #ff8c00 0%, #ffa500 50%, #ffe600 100%)",
+        confetti: ['#ff8c00', '#ffa500', '#ffe600', '#ffffff', '#ff5a00'],
+        toastIcon: "😎"
+      },
+      {
+        word: "BANGKIT!!",
+        emoji: "🔥🦁🔥",
+        rgb: "255, 42, 60",
+        border: "rgba(255, 42, 60, 0.55)",
+        bg: "linear-gradient(135deg, rgba(255, 42, 60, 0.22) 0%, rgba(255, 100, 40, 0.32) 100%)",
+        textGrad: "linear-gradient(90deg, #ff2a3c 0%, #ff6b35 50%, #f7c59f 100%)",
+        confetti: ['#ff2a3c', '#ff6b35', '#f7c59f', '#ff9f1c', '#ffffff'],
+        toastIcon: "🦁"
+      },
+      {
+        word: "MAJUU!!",
+        emoji: "🔥🤩🔥",
+        rgb: "255, 0, 128",
+        border: "rgba(255, 0, 128, 0.55)",
+        bg: "linear-gradient(135deg, rgba(255, 0, 128, 0.22) 0%, rgba(255, 80, 160, 0.32) 100%)",
+        textGrad: "linear-gradient(90deg, #ff0080 0%, #ff54b0 50%, #ffd6e8 100%)",
+        confetti: ['#ff0080', '#ff54b0', '#ffd6e8', '#ffffff', '#f43f5e'],
+        toastIcon: "🤩"
+      },
+      {
+        word: "BINA EMPIRE!!",
+        emoji: "👑😎🔥",
+        rgb: "255, 215, 0",
+        border: "rgba(255, 215, 0, 0.6)",
+        bg: "linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(218, 165, 32, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #ffe259 0%, #ffa751 60%, #ffd700 100%)",
+        confetti: ['#ffe259', '#ffa751', '#ffd700', '#ffffff', '#fbbf24'],
+        toastIcon: "👑"
+      },
+      {
+        word: "CLOSED DEAL!!",
+        emoji: "💰🤑🔥",
+        rgb: "16, 185, 129",
+        border: "rgba(16, 185, 129, 0.6)",
+        bg: "linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #00ff87 0%, #60efff 50%, #10b981 100%)",
+        confetti: ['#00ff87', '#10b981', '#60efff', '#ffd700', '#ffffff'],
+        toastIcon: "💰"
+      },
+      {
+        word: "SCALE UP!!",
+        emoji: "🚀🥳🔥",
+        rgb: "168, 85, 247",
+        border: "rgba(168, 85, 247, 0.6)",
+        bg: "linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(192, 132, 252, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #c084fc 0%, #a855f7 50%, #ec4899 100%)",
+        confetti: ['#c084fc', '#a855f7', '#ec4899', '#38bdf8', '#ffffff'],
+        toastIcon: "🚀"
+      },
+      {
+        word: "FOKUS & EXECUTE!!",
+        emoji: "🎯😤⚡",
+        rgb: "239, 68, 68",
+        border: "rgba(239, 68, 68, 0.6)",
+        bg: "linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(249, 115, 22, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #f87171 0%, #fb923c 50%, #fef08a 100%)",
+        confetti: ['#ef4444', '#f97316', '#fef08a', '#ffffff', '#dc2626'],
+        toastIcon: "🎯"
+      },
+      {
+        word: "MOMENTUM!!",
+        emoji: "⚡🦾🔥",
+        rgb: "6, 182, 212",
+        border: "rgba(6, 182, 212, 0.6)",
+        bg: "linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(59, 130, 246, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #22d3ee 0%, #38bdf8 50%, #60a5fa 100%)",
+        confetti: ['#22d3ee', '#38bdf8', '#60a5fa', '#ffffff', '#0ea5e9'],
+        toastIcon: "⚡"
+      },
+      {
+        word: "PAGI!!!",
+        emoji: "🌅🤩🔥",
+        rgb: "251, 146, 60",
+        border: "rgba(251, 146, 60, 0.6)",
+        bg: "linear-gradient(135deg, rgba(251, 146, 60, 0.25) 0%, rgba(244, 63, 94, 0.35) 100%)",
+        textGrad: "linear-gradient(90deg, #fb923c 0%, #f43f5e 50%, #fde047 100%)",
+        confetti: ['#fb923c', '#f43f5e', '#fde047', '#fed7aa', '#ffffff'],
+        toastIcon: "🌅"
+      }
     ];
     let currentSloganIndex = 0;
     let sloganInterval = null;
+
+    function applySloganTheme(item) {
+      if (!item) return;
+      const root = document.documentElement;
+      root.style.setProperty('--slogan-glow-rgb', item.rgb);
+      root.style.setProperty('--slogan-glow-border', item.border);
+      root.style.setProperty('--slogan-glow-bg', item.bg);
+      root.style.setProperty('--slogan-glow-shadow', `0 4px 16px rgba(${item.rgb}, 0.25)`);
+      root.style.setProperty('--slogan-text-grad', item.textGrad);
+    }
 
     function shuffleHeroSlogan(isManual = false) {
       const chipEl = document.getElementById('slot-chip-box');
       if (!chipEl) return;
 
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * HERO_SLOGAN_ITEMS.length);
+      } while (nextIndex === currentSloganIndex && HERO_SLOGAN_ITEMS.length > 1);
+      currentSloganIndex = nextIndex;
+      const nextItem = HERO_SLOGAN_ITEMS[currentSloganIndex];
+
       if (isManual) {
-        triggerConfetti();
+        triggerConfetti(nextItem.confetti);
       }
 
       chipEl.classList.remove('quake-hard');
@@ -1926,16 +2041,10 @@
       chipEl.classList.add('quake-hard');
 
       setTimeout(() => {
-        let nextIndex;
-        do {
-          nextIndex = Math.floor(Math.random() * HERO_SLOGAN_ITEMS.length);
-        } while (nextIndex === currentSloganIndex && HERO_SLOGAN_ITEMS.length > 1);
-        currentSloganIndex = nextIndex;
-
-        const item = HERO_SLOGAN_ITEMS[currentSloganIndex];
-        chipEl.innerHTML = `<span class="slot-keyword">${item.word}</span> <span class="slot-emojis">${item.emoji}</span>`;
+        applySloganTheme(nextItem);
+        chipEl.innerHTML = `<span class="slot-keyword">${nextItem.word}</span> <span class="slot-emojis">${nextItem.emoji}</span>`;
         if (isManual) {
-          showToast(`Kakngoh - ${item.word} ${item.emoji}`, '💥');
+          showToast(`Kakngoh - ${nextItem.word} ${nextItem.emoji}`, nextItem.toastIcon);
         }
       }, 160);
 
@@ -1960,6 +2069,7 @@
       const doneTotal = completedSet.size;
       const totalLessons = modules.length;
       const initialItem = HERO_SLOGAN_ITEMS[currentSloganIndex];
+      applySloganTheme(initialItem);
 
       let html = `
         <section class="home-hero">
