@@ -1366,6 +1366,138 @@
       pointer-events: none;
       z-index: 999;
     }
+
+    /* Mobile Responsive Optimizations */
+    @media (max-width: 640px) {
+      :root {
+        --topbar-height: 60px;
+      }
+      .topbar {
+        padding: 0 14px;
+      }
+      .brand-title {
+        font-size: 0.95rem;
+      }
+      .brand-pill {
+        display: none;
+      }
+      .search-btn-label {
+        display: none;
+      }
+      .search-key {
+        display: none;
+      }
+      .search-btn {
+        padding: 7px 11px;
+      }
+      .main-wrapper {
+        padding: 16px 12px 60px 12px;
+      }
+      .home-hero {
+        padding: 20px 16px;
+        border-radius: var(--radius-lg);
+        min-height: auto;
+      }
+      .home-hero-greeting {
+        font-size: 1.35rem;
+      }
+      .home-hero-sub {
+        font-size: 0.82rem;
+      }
+      .program-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .program-card {
+        padding: 18px;
+        min-height: auto;
+      }
+      .program-code {
+        font-size: 1.6rem;
+      }
+      .breadcrumb-trail {
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.8rem;
+        scrollbar-width: none;
+      }
+      .breadcrumb-trail::-webkit-scrollbar {
+        display: none;
+      }
+      .module-video-card {
+        border-radius: var(--radius-lg);
+        margin-bottom: 16px;
+      }
+      .video-toolbar {
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .video-quick-controls {
+        overflow-x: auto;
+        padding-bottom: 2px;
+        width: 100%;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+      }
+      .module-header-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+      .module-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .btn-action {
+        justify-content: center;
+        padding: 10px 14px;
+      }
+      .module-action-buttons {
+        flex-direction: column;
+      }
+      .btn-module-action {
+        width: 100%;
+        justify-content: center;
+      }
+      .module-footer-nav {
+        flex-direction: column-reverse;
+        gap: 10px;
+      }
+      .btn-nav-step {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+      }
+      .study-notes-box {
+        padding: 18px;
+        border-radius: var(--radius-lg);
+      }
+      .note-tabs-container {
+        padding: 16px;
+      }
+      .course-playlist-section {
+        padding: 16px;
+      }
+      .playlist-item-card {
+        width: 160px;
+      }
+      .playlist-chapter-card {
+        width: 150px;
+        min-height: 120px;
+        padding: 12px;
+      }
+      #toast {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        text-align: center;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1400,7 +1532,8 @@
 
       <div class="topbar-right">
         <button class="search-btn" onclick="toggleSearchModal()">
-          <span>🔍 Cari</span>
+          <span>🔍</span>
+          <span class="search-btn-label">Cari</span>
           <span class="search-key">/</span>
         </button>
         <div class="overall-chip" title="Keseluruhan portal yang siap">
