@@ -826,6 +826,80 @@ def build_offline_site():
       color: var(--amber);
     }
 
+    /* Status Notices & Banners (Matching coachadib.com One/iD component) */
+    .status-notice-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 14px 0 18px 0;
+    }
+    .status-notice-banner.notice-amber {
+      background: rgba(245, 158, 11, 0.12);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .dark .status-notice-banner.notice-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+    .status-notice-banner.notice-emerald {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .dark .status-notice-banner.notice-emerald {
+      background: rgba(16, 185, 129, 0.16);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    .notice-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .notice-text {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .status-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 9999px;
+      padding: 4px 11px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .status-badge-pill.pill-amber {
+      background: rgba(245, 158, 11, 0.12);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .dark .status-badge-pill.pill-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+    .status-badge-pill.pill-emerald {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .dark .status-badge-pill.pill-emerald {
+      background: rgba(16, 185, 129, 0.16);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
     /* Module Action Buttons */
     .module-action-buttons {
       display: flex;
@@ -1627,12 +1701,56 @@ def build_offline_site():
     let currentSpeed = 1;
     let isTheater = false;
 
-    const programMeta = {
-      BBO: { tag: 'Modul lama · Sep 2025', tagType: 'tag-amber' },
-      SCC: { tag: 'Modul lama · Sep 2025', tagType: 'tag-amber' },
-      BBS: { tag: 'Sedang dikemas kini · Okt 2026', tagType: 'tag-emerald' },
-      LIVE: { tag: 'TikTok Live · Jan–Mac 2026', tagType: 'tag-amber' }
+    const PROGRAM_STATUS_MAP = {
+      BBO: {
+        old: true,
+        icon: '⚠️',
+        short: 'Modul lama · Sep 2025',
+        banner: 'Modul lama (shoot September 2025). Mungkin ada yang sudah outdated, tonton dengan berhati-hati.',
+        type: 'amber'
+      },
+      SCC: {
+        old: true,
+        icon: '⚠️',
+        short: 'Modul lama · Sep 2025',
+        banner: 'Modul lama (shoot September 2025). Mungkin ada yang sudah outdated, tonton dengan berhati-hati.',
+        type: 'amber'
+      },
+      LIVE: {
+        old: true,
+        live: true,
+        icon: '🎥',
+        short: 'TikTok Live · Jan–Mac 2026',
+        banner: 'Rakaman TikTok Live sepanjang Januari hingga Mac 2026.',
+        type: 'amber'
+      },
+      BBS: {
+        old: false,
+        icon: '✨',
+        short: 'Sedang reshoot · Okt 2026',
+        banner: 'Sedang dikemas kini: kami tengah reshoot BBS (Oktober 2026) dengan penambahbaikan besar. Sementara itu, boleh tonton BBO dan SCC dulu.',
+        type: 'emerald'
+      }
     };
+
+    function renderStatusNotice(code, variant = 'banner') {
+      const info = PROGRAM_STATUS_MAP[code];
+      if (!info) return '';
+      if (variant === 'pill') {
+        return `
+          <span class="status-badge-pill pill-${info.type}" title="${info.banner}">
+            <span>${info.icon}</span>
+            <span>${info.short}</span>
+          </span>
+        `;
+      }
+      return `
+        <div class="status-notice-banner notice-${info.type}">
+          <span class="notice-icon">${info.icon}</span>
+          <span class="notice-text">${info.banner}</span>
+        </div>
+      `;
+    }
 
     function applyTheme(theme) {
       currentTheme = theme;
@@ -1772,13 +1890,12 @@ def build_offline_site():
         const pMods = modules.filter(m => pCourseIds.has(m.course_id));
         const pDone = pMods.filter(m => completedSet.has(m.id)).length;
         const pct = Math.round((pDone / (pMods.length || 1)) * 100) || 0;
-        const meta = programMeta[p.code] || { tag: 'Modul Lengkap', tagType: 'tag-amber' };
 
         html += `
           <a href="#/program/${p.id}" class="program-card">
             <div class="program-card-header">
               <span class="program-code">${p.code || p.title}</span>
-              <span class="tag-badge ${meta.tagType}">${meta.tag}</span>
+              ${renderStatusNotice(p.code, 'pill')}
             </div>
             <div class="program-card-body">
               <h3 class="program-card-title">${p.title}</h3>
@@ -1810,7 +1927,6 @@ def build_offline_site():
       }
 
       const pCourses = courses.filter(c => c.program_id === prog.id);
-      const meta = programMeta[prog.code] || { tag: 'Modul Lengkap', tagType: 'tag-amber' };
 
       let html = `
         <div class="page-nav-header">
@@ -1824,10 +1940,11 @@ def build_offline_site():
 
         <header class="program-header-hero">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span class="tag-badge ${meta.tagType}">${meta.tag}</span>
+            ${renderStatusNotice(prog.code, 'pill')}
           </div>
           <h1 class="program-header-title">${prog.title}</h1>
           <p class="program-header-desc">${prog.description || ''}</p>
+          ${renderStatusNotice(prog.code, 'banner')}
         </header>
 
         <section class="course-list">
@@ -1886,6 +2003,7 @@ def build_offline_site():
         <header class="program-header-hero">
           <h1 class="program-header-title">${crs.title}</h1>
           ${crs.description ? `<p class="program-header-desc">${crs.description}</p>` : ''}
+          ${prog ? renderStatusNotice(prog.code, 'banner') : ''}
         </header>
       `;
 
@@ -1973,14 +2091,17 @@ def build_offline_site():
 
       let html = `
         <div class="page-nav-header">
-          <a href="${crs ? `#/course/${crs.id}` : (prog ? `#/program/${prog.id}` : '#/')}" class="btn-back" title="Kembali ke Kursus">←</a>
-          <div class="breadcrumb-trail">
-            <a href="#/">Coach Adib</a>
-            <span>›</span>
-            ${prog ? `<a href="#/program/${prog.id}">${prog.code || prog.title}</a><span>›</span>` : ''}
-            ${crs ? `<a href="#/course/${crs.id}">${crs.title}</a><span>›</span>` : ''}
-            <span class="current">${mod.title}</span>
+          <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
+            <a href="${crs ? `#/course/${crs.id}` : (prog ? `#/program/${prog.id}` : '#/')}" class="btn-back" title="Kembali ke Kursus">←</a>
+            <div class="breadcrumb-trail">
+              <a href="#/">Coach Adib</a>
+              <span>›</span>
+              ${prog ? `<a href="#/program/${prog.id}">${prog.code || prog.title}</a><span>›</span>` : ''}
+              ${crs ? `<a href="#/course/${crs.id}">${crs.title}</a><span>›</span>` : ''}
+              <span class="current">${mod.title}</span>
+            </div>
           </div>
+          ${prog ? renderStatusNotice(prog.code, 'pill') : ''}
         </div>
 
         ${videoInfo ? `
@@ -2042,6 +2163,8 @@ def build_offline_site():
             </button>
           </div>
         </div>
+
+        ${prog ? renderStatusNotice(prog.code, 'banner') : ''}
 
         ${mod.description ? `<p style="color:var(--text-secondary);font-size:0.92rem;line-height:1.5;margin-bottom:16px;">${renderMarkdown(mod.description)}</p>` : ''}
 
