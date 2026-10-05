@@ -571,6 +571,119 @@ def build_offline_site():
       line-height: 1.5;
     }
 
+    /* Custom Playlists Overview & Tabs */
+    .playlist-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+    .playlist-overview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+    .playlist-overview-card:hover {
+      border-color: #ffd700;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .playlist-overview-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .playlist-overview-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .playlist-overview-title:hover {
+      color: #ffd700;
+    }
+    .playlist-overview-meta {
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .playlist-thumb-collage {
+      display: flex;
+      gap: 6px;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      height: 60px;
+      margin-bottom: 16px;
+      background: #111;
+    }
+    .playlist-thumb-mini {
+      flex: 1;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .playlist-thumb-mini:hover {
+      opacity: 1;
+    }
+    .playlist-overview-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .home-pl-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+      margin-bottom: 14px;
+    }
+    .home-pl-tab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .home-pl-tab:hover {
+      border-color: #ffd700;
+      color: var(--text-primary);
+    }
+    .home-pl-tab.active {
+      background: rgba(255, 215, 0, 0.18);
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+
     /* Main Container */
     .main-wrapper {
       max-width: var(--max-width);
@@ -2048,6 +2161,25 @@ def build_offline_site():
     </div>
   </div>
 
+  <!-- Save to Playlist Modal (YouTube / Spotify Style) -->
+  <div id="playlist-save-modal" class="search-modal-backdrop" onclick="closePlaylistSaveModal(event)">
+    <div class="search-dialog" onclick="event.stopPropagation()" style="max-width:440px;">
+      <div class="search-dialog-input-row" style="justify-content:space-between;">
+        <div style="font-weight:800;font-size:0.95rem;display:flex;align-items:center;gap:8px;">
+          <span>📑</span>
+          <span>Simpan ke Playlist</span>
+        </div>
+        <button onclick="togglePlaylistSaveModal()" style="background:transparent;border:none;color:var(--text-tertiary);cursor:pointer;font-size:1.1rem;">✕</button>
+      </div>
+      <div id="playlist-save-module-title" style="padding:10px 20px;font-size:0.82rem;color:var(--text-secondary);border-bottom:1px solid var(--border-subtle);background:rgba(255,255,255,0.02);"></div>
+      <div class="search-results-list" id="playlist-modal-items" style="max-height:260px;padding:12px 16px;gap:8px;"></div>
+      <div style="padding:14px 16px;border-top:1px solid var(--border-subtle);display:flex;gap:8px;background:var(--bg-card);">
+        <input type="text" id="new-playlist-input" class="search-dialog-input" style="padding:8px 12px;border:1px solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-surface);font-size:0.85rem;" placeholder="Nama playlist baru..." maxlength="40" onkeydown="if(event.key==='Enter') createPlaylistFromModal()" />
+        <button class="btn-play-all" style="padding:8px 14px;white-space:nowrap;font-size:0.8rem;" onclick="createPlaylistFromModal()">+ Cipta</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Navigation Header -->
   <header class="topbar">
     <div class="topbar-container">
@@ -2060,9 +2192,9 @@ def build_offline_site():
       </a>
 
       <div class="topbar-right">
-        <a href="#/favorites" class="topbar-fav-btn" id="topbar-fav-btn" title="Lihat Senarai Playlist Kegemaran">
-          <span>⭐</span>
-          <span class="fav-btn-label">Kegemaran</span>
+        <a href="#/playlists" class="topbar-fav-btn" id="topbar-fav-btn" title="Lihat Senarai Playlist Anda">
+          <span>📑</span>
+          <span class="fav-btn-label">Playlist</span>
           <span class="fav-badge" id="fav-count-badge">0</span>
         </a>
         <button class="search-btn" onclick="toggleSearchModal()">
@@ -2242,8 +2374,11 @@ def build_offline_site():
 
       if (hash === '#/' || hash === '' || hash === '#') {
         renderHomeView(app);
-      } else if (hash === '#/favorites' || hash.startsWith('#/favorites')) {
-        renderFavoritesView(app);
+      } else if (hash === '#/favorites' || hash.startsWith('#/favorites') || hash === '#/playlists' || hash.startsWith('#/playlists')) {
+        renderPlaylistsView(app);
+      } else if (hash.startsWith('#/playlist/')) {
+        const plId = hash.replace('#/playlist/', '').split('?')[0];
+        renderSinglePlaylistView(app, plId);
       } else if (hash.startsWith('#/program/')) {
         const progId = hash.replace('#/program/', '');
         renderProgramView(app, progId);
@@ -2603,7 +2738,7 @@ def build_offline_site():
       }, 3600000); // 1 jam = 3,600,000 ms
     }
 
-    /* ================= PLAYLIST & FAVORITES HELPERS ================= */
+    /* ================= CUSTOM PLAYLISTS & FAVORITES HELPERS ================= */
 
     const RECOMMENDED_BEST_MODULE_IDS = [
       { id: '6ac1561b6d24de48536870a8', label: '1. Closing Mindset' },
@@ -2614,60 +2749,252 @@ def build_offline_site():
       { id: '6ac033f2c9df5ee2bec8f960', label: '6. 12 Customer Rejection' }
     ];
 
-    function updateFavCountBadge() {
-      const badge = document.getElementById('fav-count-badge');
-      if (badge) {
-        badge.textContent = bookmarkedSet.size;
-        badge.style.display = bookmarkedSet.size > 0 ? 'inline-block' : 'none';
+    function getCustomPlaylists() {
+      try {
+        let stored = localStorage.getItem('ca_custom_playlists');
+        let playlists = stored ? JSON.parse(stored) : null;
+        if (!playlists || !Array.isArray(playlists) || playlists.length === 0) {
+          const defaultFavIds = Array.from(bookmarkedSet);
+          playlists = [
+            {
+              id: 'pl_favorites',
+              name: '⭐ Kegemaran (Favorites)',
+              description: 'Modul kegemaran utama anda',
+              isDefault: true,
+              moduleIds: defaultFavIds,
+              createdAt: Date.now()
+            }
+          ];
+          localStorage.setItem('ca_custom_playlists', JSON.stringify(playlists));
+        }
+        return playlists;
+      } catch (e) {
+        console.error('Error reading playlists:', e);
+        return [];
       }
     }
 
-    function removeFavoriteFromHome(e, modId) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    function saveCustomPlaylists(playlists) {
+      localStorage.setItem('ca_custom_playlists', JSON.stringify(playlists));
+      const defPl = playlists.find(p => p.id === 'pl_favorites');
+      if (defPl) {
+        bookmarkedSet = new Set(defPl.moduleIds || []);
+        localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
       }
-      bookmarkedSet.delete(modId);
-      localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
-      showToast('Dikeluarkan dari playlist kegemaran', '☆');
       updateFavCountBadge();
+    }
+
+    function updateFavCountBadge() {
+      const badge = document.getElementById('fav-count-badge');
+      if (!badge) return;
+      const playlists = getCustomPlaylists();
+      const allSavedIds = new Set();
+      playlists.forEach(p => (p.moduleIds || []).forEach(id => allSavedIds.add(id)));
+      const count = allSavedIds.size;
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+
+    let currentModalModuleId = null;
+
+    function openPlaylistSaveModal(modId) {
+      currentModalModuleId = modId;
+      const mod = modules.find(m => m.id === modId);
+      const modal = document.getElementById('playlist-save-modal');
+      const titleEl = document.getElementById('playlist-save-module-title');
+      if (!modal) return;
+      if (titleEl && mod) {
+        titleEl.innerHTML = `Simpan <strong>"${mod.title}"</strong> ke playlist:`;
+      }
+      renderPlaylistModalItems();
+      modal.classList.add('open');
+      const input = document.getElementById('new-playlist-input');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 80);
+      }
+    }
+
+    function togglePlaylistSaveModal() {
+      const modal = document.getElementById('playlist-save-modal');
+      if (modal) modal.classList.toggle('open');
+    }
+
+    function closePlaylistSaveModal(e) {
+      if (e.target.id === 'playlist-save-modal') togglePlaylistSaveModal();
+    }
+
+    function renderPlaylistModalItems() {
+      const container = document.getElementById('playlist-modal-items');
+      if (!container || !currentModalModuleId) return;
+      const playlists = getCustomPlaylists();
+      
+      container.innerHTML = playlists.map(pl => {
+        const isChecked = (pl.moduleIds || []).includes(currentModalModuleId);
+        const count = (pl.moduleIds || []).length;
+        return `
+          <label style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:var(--radius-md);background:var(--bg-surface);border:1px solid ${isChecked ? '#ffd700' : 'var(--border-subtle)'};cursor:pointer;transition:all 0.15s ease;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleModuleInPlaylist('${pl.id}', '${currentModalModuleId}')" style="width:18px;height:18px;accent-color:#ffd700;cursor:pointer;" />
+              <span style="font-weight:700;font-size:0.88rem;color:var(--text-primary);">${pl.name}</span>
+            </div>
+            <span style="font-size:0.75rem;color:var(--text-tertiary);">${count} video</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function toggleModuleInPlaylist(plId, modId) {
+      const playlists = getCustomPlaylists();
+      const pl = playlists.find(p => p.id === plId);
+      if (!pl) return;
+      pl.moduleIds = pl.moduleIds || [];
+      const idx = pl.moduleIds.indexOf(modId);
+      if (idx >= 0) {
+        pl.moduleIds.splice(idx, 1);
+        showToast(`Dikeluarkan dari "${pl.name}"`, '☆');
+      } else {
+        pl.moduleIds.push(modId);
+        showToast(`Disimpan ke "${pl.name}"!`, '★');
+      }
+      saveCustomPlaylists(playlists);
+      renderPlaylistModalItems();
+      updateModuleSaveButton(modId);
+    }
+
+    function updateModuleSaveButton(modId) {
+      const btn = document.getElementById('btn-save-to-playlist');
+      if (!btn) return;
+      const playlists = getCustomPlaylists();
+      const inAny = playlists.some(p => (p.moduleIds || []).includes(modId));
+      btn.classList.toggle('saved', inAny);
+      btn.innerHTML = `<span>📑</span> <span>${inAny ? 'Disimpan dalam Playlist' : 'Simpan ke Playlist'}</span> <span style="color:#ffd700;">${inAny ? '★' : '☆'}</span>`;
+    }
+
+    function createPlaylistFromModal() {
+      const input = document.getElementById('new-playlist-input');
+      if (!input) return;
+      const name = input.value.trim();
+      if (!name) {
+        showToast('Sila masukkan nama playlist!', '⚠️');
+        return;
+      }
+      const playlists = getCustomPlaylists();
+      const newPl = {
+        id: 'pl_' + Date.now(),
+        name: name,
+        description: '',
+        isDefault: false,
+        moduleIds: currentModalModuleId ? [currentModalModuleId] : [],
+        createdAt: Date.now()
+      };
+      playlists.push(newPl);
+      saveCustomPlaylists(playlists);
+      input.value = '';
+      showToast(`Playlist "${name}" dicipta!`, '🎉');
+      renderPlaylistModalItems();
+      if (currentModalModuleId) {
+        updateModuleSaveButton(currentModalModuleId);
+      }
+    }
+
+    function createNamedPlaylistPrompt() {
+      const name = prompt('Nama playlist baru (contoh: Closing WhatsApp, Popia Cheese, FB Ads):');
+      if (!name || !name.trim()) return;
+      const playlists = getCustomPlaylists();
+      const newPl = {
+        id: 'pl_' + Date.now(),
+        name: name.trim(),
+        description: '',
+        isDefault: false,
+        moduleIds: [],
+        createdAt: Date.now()
+      };
+      playlists.push(newPl);
+      saveCustomPlaylists(playlists);
+      showToast(`Playlist "${newPl.name}" berjaya dicipta!`, '📑');
       router();
     }
 
-    function addRecommendedFavorites() {
+    function renamePlaylist(plId) {
+      const playlists = getCustomPlaylists();
+      const pl = playlists.find(p => p.id === plId);
+      if (!pl) return;
+      const newName = prompt('Nama baru untuk playlist:', pl.name);
+      if (!newName || !newName.trim()) return;
+      pl.name = newName.trim();
+      saveCustomPlaylists(playlists);
+      showToast(`Playlist dinamakan semula ke "${pl.name}"`, '✏️');
+      router();
+    }
+
+    function deletePlaylist(plId) {
+      const playlists = getCustomPlaylists();
+      const pl = playlists.find(p => p.id === plId);
+      if (!pl) return;
+      if (pl.isDefault) {
+        showToast('Playlist Kegemaran utama tidak boleh dipadam.', '⚠️');
+        return;
+      }
+      if (confirm(`Adakah anda pasti mahu memadam playlist "${pl.name}"?`)) {
+        const updated = playlists.filter(p => p.id !== plId);
+        saveCustomPlaylists(updated);
+        showToast(`Playlist "${pl.name}" dipadam`, '🗑');
+        window.location.hash = '#/playlists';
+      }
+    }
+
+    function removeModuleFromPlaylist(e, plId, modId) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      const playlists = getCustomPlaylists();
+      const pl = playlists.find(p => p.id === plId);
+      if (!pl) return;
+      pl.moduleIds = (pl.moduleIds || []).filter(id => id !== modId);
+      saveCustomPlaylists(playlists);
+      showToast('Video dikeluarkan dari playlist', '☆');
+      router();
+    }
+
+    function addRecommendedFavorites(targetPlId = 'pl_favorites') {
+      const playlists = getCustomPlaylists();
+      let pl = playlists.find(p => p.id === targetPlId) || playlists[0];
+      if (!pl) return;
+      pl.moduleIds = pl.moduleIds || [];
       let added = 0;
       RECOMMENDED_BEST_MODULE_IDS.forEach(item => {
         if (modules.some(m => m.id === item.id)) {
-          if (!bookmarkedSet.has(item.id)) {
-            bookmarkedSet.add(item.id);
+          if (!pl.moduleIds.includes(item.id)) {
+            pl.moduleIds.push(item.id);
             added++;
           }
         }
       });
-      localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
-      updateFavCountBadge();
+      saveCustomPlaylists(playlists);
       triggerConfetti();
-      showToast(`${added > 0 ? added : 'Semua'} modul terbaik dimasukkan ke playlist!`, '⭐');
+      showToast(`${added > 0 ? added : 'Semua'} modul terbaik dimasukkan ke "${pl.name}"!`, '⭐');
       router();
     }
 
-    function clearFavorites() {
-      if (confirm('Kosongkan semua modul dari playlist kegemaran anda?')) {
-        bookmarkedSet.clear();
-        localStorage.setItem('ca_bookmarked', JSON.stringify([]));
-        updateFavCountBadge();
-        showToast('Playlist kegemaran dikosongkan', '🗑');
-        router();
+    function quickAddFavoriteAndGo(modId) {
+      const playlists = getCustomPlaylists();
+      let defPl = playlists.find(p => p.id === 'pl_favorites') || playlists[0];
+      if (defPl) {
+        defPl.moduleIds = defPl.moduleIds || [];
+        if (!defPl.moduleIds.includes(modId)) {
+          defPl.moduleIds.push(modId);
+          saveCustomPlaylists(playlists);
+        }
+        window.location.hash = `#/module/${modId}?playlist=custom&plId=${encodeURIComponent(defPl.id)}`;
+      } else {
+        window.location.hash = `#/module/${modId}`;
       }
     }
 
-    function quickAddFavoriteAndGo(modId) {
-      if (!bookmarkedSet.has(modId)) {
-        bookmarkedSet.add(modId);
-        localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
-        updateFavCountBadge();
-      }
-      window.location.hash = `#/module/${modId}?playlist=fav`;
+    let homeActivePlaylistId = null;
+    function setHomeActivePlaylist(plId) {
+      homeActivePlaylistId = plId;
+      const app = document.getElementById('app-root');
+      if (app) renderHomeView(app);
     }
 
     /* 1. HOME VIEW (`/`) */
@@ -2677,84 +3004,93 @@ def build_offline_site():
       const initialItem = HERO_SLOGAN_ITEMS[currentSloganIndex];
       applySloganTheme(initialItem);
 
-      const savedMods = modules.filter(m => bookmarkedSet.has(m.id));
-      let favSectionHtml = '';
+      const playlists = getCustomPlaylists();
+      if (!homeActivePlaylistId || !playlists.some(p => p.id === homeActivePlaylistId)) {
+        homeActivePlaylistId = playlists[0] ? playlists[0].id : 'pl_favorites';
+      }
+      const activePl = playlists.find(p => p.id === homeActivePlaylistId) || playlists[0];
+      const activePlMods = (activePl && activePl.moduleIds)
+        ? activePl.moduleIds.map(id => modules.find(m => m.id === id)).filter(Boolean)
+        : [];
 
-      if (savedMods.length > 0) {
-        const firstSaved = savedMods[0];
-        favSectionHtml = `
-          <section class="home-favorites-section">
-            <div class="home-favorites-header">
-              <div class="home-favorites-title">
-                <span>⭐</span>
-                <span>Playlist Kegemaran Anda (${savedMods.length} Video)</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <a href="#/module/${firstSaved.id}?playlist=fav" class="btn-play-all" title="Mainkan semua video kegemaran secara berturutan">
-                  <span>▶</span> Mainkan Playlist
-                </a>
-                <a href="#/favorites" class="btn-fav-action" title="Urus senarai kegemaran">
-                  Urus Senarai ›
-                </a>
-              </div>
+      let favSectionHtml = `
+        <section class="home-favorites-section">
+          <div class="home-favorites-header">
+            <div class="home-favorites-title">
+              <span>📑</span>
+              <span>Playlist Anda (${playlists.length} Senarai)</span>
             </div>
-            <div class="home-favorites-scroll">
-              ${savedMods.map(m => {
-                const crs = courses.find(c => c.id === m.course_id);
-                const thumb = m.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
-                const isDone = completedSet.has(m.id);
-                return `
-                  <a href="#/module/${m.id}?playlist=fav" class="fav-card-item">
-                    <button class="fav-card-remove" onclick="removeFavoriteFromHome(event, '${m.id}')" title="Keluarkan dari kegemaran">✕</button>
-                    <div class="fav-card-thumb-wrap">
-                      <img src="${thumb}" alt="${m.title}" class="fav-card-thumb" loading="lazy" />
-                      ${m.duration_minutes ? `<span class="fav-card-time">${m.duration_minutes}m</span>` : ''}
-                      ${isDone ? `<span style="position:absolute;top:6px;left:6px;background:rgba(16,185,129,0.9);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;">✓ SELESAI</span>` : ''}
-                    </div>
-                    <div class="fav-card-body">
-                      <div class="fav-card-title" title="${m.title}">${m.title}</div>
-                      <div class="fav-card-meta">
-                        <span>${crs ? crs.title : 'Modul'}</span>
-                        <span style="color:#ffd700;">▶ Tonton</span>
-                      </div>
-                    </div>
-                  </a>
-                `;
-              }).join('')}
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              ${activePlMods.length > 0 ? `
+                <a href="#/module/${activePlMods[0].id}?playlist=custom&plId=${encodeURIComponent(activePl.id)}" class="btn-play-all" title="Mainkan playlist ini secara berturutan">
+                  <span>▶</span> Mainkan "${activePl.name}"
+                </a>
+              ` : ''}
+              <button class="btn-fav-action" onclick="createNamedPlaylistPrompt()" title="Cipta playlist baru">
+                <span>+</span> Playlist Baru
+              </button>
+              <a href="#/playlists" class="btn-fav-action" title="Urus semua playlist">
+                Semua Playlist ›
+              </a>
             </div>
-          </section>
+          </div>
+
+          <!-- Playlist Tabs -->
+          <div class="home-pl-tabs">
+            ${playlists.map(p => `
+              <button class="home-pl-tab ${p.id === activePl.id ? 'active' : ''}" onclick="setHomeActivePlaylist('${p.id}')">
+                <span>${p.isDefault ? '⭐' : '📑'}</span>
+                <span>${p.name}</span>
+                <span style="opacity:0.6;font-size:0.72rem;">(${(p.moduleIds || []).length})</span>
+              </button>
+            `).join('')}
+            <button class="home-pl-tab" onclick="createNamedPlaylistPrompt()" style="border-style:dashed;">
+              <span>+ Cipta Baru</span>
+            </button>
+          </div>
+      `;
+
+      if (activePlMods.length > 0) {
+        favSectionHtml += `
+          <div class="home-favorites-scroll">
+            ${activePlMods.map(m => {
+              const crs = courses.find(c => c.id === m.course_id);
+              const thumb = m.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
+              const isDone = completedSet.has(m.id);
+              return `
+                <a href="#/module/${m.id}?playlist=custom&plId=${encodeURIComponent(activePl.id)}" class="fav-card-item">
+                  <button class="fav-card-remove" onclick="removeModuleFromPlaylist(event, '${activePl.id}', '${m.id}')" title="Keluarkan dari playlist ini">✕</button>
+                  <div class="fav-card-thumb-wrap">
+                    <img src="${thumb}" alt="${m.title}" class="fav-card-thumb" loading="lazy" />
+                    ${m.duration_minutes ? `<span class="fav-card-time">${m.duration_minutes}m</span>` : ''}
+                    ${isDone ? `<span style="position:absolute;top:6px;left:6px;background:rgba(16,185,129,0.9);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;">✓ SELESAI</span>` : ''}
+                  </div>
+                  <div class="fav-card-body">
+                    <div class="fav-card-title" title="${m.title}">${m.title}</div>
+                    <div class="fav-card-meta">
+                      <span>${crs ? crs.title : 'Modul'}</span>
+                      <span style="color:#ffd700;">▶ Tonton</span>
+                    </div>
+                  </div>
+                </a>
+              `;
+            }).join('')}
+          </div>
         `;
       } else {
-        favSectionHtml = `
-          <section class="home-favorites-section">
-            <div class="home-favorites-header">
-              <div class="home-favorites-title">
-                <span>⭐</span>
-                <span>Modul Pilihan Terbaik & Playlist Pemula</span>
-              </div>
-              <button class="btn-play-all" onclick="addRecommendedFavorites()">
-                <span>+</span> Tambah 6 Modul Terbaik Ke Playlist
-              </button>
-            </div>
-            <p style="color:var(--text-tertiary);font-size:0.88rem;margin-bottom:12px;">
-              Pilih dan simpan modul penting ke playlist peribadi anda, atau klik mana-mana topik cadangan di bawah untuk mula belajar:
+        favSectionHtml += `
+          <div style="padding:20px;text-align:center;background:var(--bg-surface);border-radius:var(--radius-md);margin-bottom:12px;">
+            <p style="color:var(--text-tertiary);font-size:0.86rem;margin-bottom:12px;">
+              Playlist "<strong>${activePl.name}</strong>" masih kosong. Buka mana-mana video modul dan klik <strong>📑 Simpan ke Playlist</strong>, atau masukkan modul disyorkan di bawah:
             </p>
-            <div class="fav-rec-chips-row">
-              ${RECOMMENDED_BEST_MODULE_IDS.map(item => {
-                const mod = modules.find(m => m.id === item.id);
-                const title = mod ? mod.title : item.label;
-                return `
-                  <a href="#/module/${item.id}?playlist=fav" class="fav-rec-chip" onclick="quickAddFavoriteAndGo('${item.id}')">
-                    <span>⭐</span>
-                    <span>${title}</span>
-                    <span style="opacity:0.6;font-size:0.75rem;">+ Simpan</span>
-                  </a>
-                `;
-              }).join('')}
-            </div>
-          </section>
+            <button class="btn-play-all" onclick="addRecommendedFavorites('${activePl.id}')">
+              <span>⭐</span> Masukkan 6 Modul Terbaik Ke "${activePl.name}"
+            </button>
+          </div>
         `;
       }
+
+      favSectionHtml += `</section>`;
 
       let html = `
         <section class="home-hero">
@@ -2810,10 +3146,11 @@ def build_offline_site():
       startSloganRotation();
     }
 
-    /* FAVORITES VIEW (`/favorites`) */
-    function renderFavoritesView(container) {
-      const savedMods = modules.filter(m => bookmarkedSet.has(m.id));
-      const firstSaved = savedMods[0];
+    /* PLAYLISTS OVERVIEW (`/playlists` or `/favorites`) */
+    function renderPlaylistsView(container) {
+      const playlists = getCustomPlaylists();
+      const allSavedIds = new Set();
+      playlists.forEach(p => (p.moduleIds || []).forEach(id => allSavedIds.add(id)));
 
       let html = `
         <div class="page-nav-header">
@@ -2821,61 +3158,206 @@ def build_offline_site():
           <div class="breadcrumb-trail">
             <a href="#/">Coach Adib</a>
             <span>›</span>
-            <span class="current">Playlist Kegemaran</span>
+            <span class="current">Koleksi Playlist</span>
           </div>
         </div>
 
         <header class="program-header-hero" style="position:relative;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span class="tag-badge tag-amber">⭐ Playlist Peribadi</span>
-            <span class="tag-badge tag-emerald">${savedMods.length} Video Disimpan</span>
+            <span class="tag-badge tag-amber">📑 Playlist Seperti YouTube / Spotify</span>
+            <span class="tag-badge tag-emerald">${playlists.length} Playlist · ${allSavedIds.size} Video</span>
           </div>
-          <h1 class="program-header-title">Playlist Video Kegemaran</h1>
+          <h1 class="program-header-title">Koleksi Playlist Peribadi</h1>
           <p class="program-header-desc">
-            Koleksi video yang anda tanda sebagai kegemaran atau rujukan pantas. Tonton secara bersiri mengikut giliran peribadi anda tanpa gangguan.
+            Cipta dan simpan senarai video tersendiri mengikut topik (cth: Closing Jualan, Popia Cheese, Marketing FB). Tonton mengikut giliran tanpa gangguan.
           </p>
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
-            ${savedMods.length > 0 ? `
-              <a href="#/module/${firstSaved.id}?playlist=fav" class="btn-play-all" style="padding:10px 18px;font-size:0.9rem;">
-                <span>▶</span> Mainkan Semua Dari Mula
+            <button class="btn-play-all" onclick="createNamedPlaylistPrompt()" style="padding:10px 18px;font-size:0.9rem;">
+              <span>+</span> Cipta Playlist Baru
+            </button>
+            <button class="btn-fav-action" onclick="addRecommendedFavorites('pl_favorites')">
+              <span>⭐</span> Tambah 6 Modul Terbaik Ke Kegemaran
+            </button>
+          </div>
+        </header>
+
+        <div class="playlist-overview-grid">
+      `;
+
+      playlists.forEach(pl => {
+        const plMods = (pl.moduleIds || []).map(id => modules.find(m => m.id === id)).filter(Boolean);
+        const totalDuration = plMods.reduce((acc, cur) => acc + (cur.duration_minutes || 0), 0);
+        const firstMod = plMods[0];
+
+        html += `
+          <div class="playlist-overview-card">
+            <div>
+              <div class="playlist-overview-header">
+                <a href="#/playlist/${pl.id}" class="playlist-overview-title">
+                  <span>${pl.isDefault ? '⭐' : '📑'}</span>
+                  <span>${pl.name}</span>
+                </a>
+                ${pl.isDefault ? `<span style="font-size:0.7rem;background:rgba(255,215,0,0.15);color:#ffd700;padding:2px 8px;border-radius:10px;font-weight:700;">DEFAULT</span>` : ''}
+              </div>
+
+              <div class="playlist-overview-meta">
+                <span>📹 ${plMods.length} video</span>
+                <span>⏱ ~${totalDuration} minit</span>
+              </div>
+
+              <div class="playlist-thumb-collage">
+                ${plMods.slice(0, 4).map(m => {
+                  const thumb = m.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
+                  return `<img src="${thumb}" alt="${m.title}" class="playlist-thumb-mini" loading="lazy" />`;
+                }).join('')}
+                ${plMods.length === 0 ? `<div style="display:flex;align-items:center;justify-content:center;width:100%;color:var(--text-tertiary);font-size:0.8rem;">(Playlist Masih Kosong)</div>` : ''}
+              </div>
+            </div>
+
+            <div class="playlist-overview-actions">
+              <div style="display:flex;gap:8px;">
+                ${firstMod ? `
+                  <a href="#/module/${firstMod.id}?playlist=custom&plId=${encodeURIComponent(pl.id)}" class="btn-play-all" style="padding:6px 12px;font-size:0.78rem;">
+                    ▶ Mainkan
+                  </a>
+                ` : `
+                  <button class="btn-fav-action" style="padding:6px 12px;font-size:0.78rem;" onclick="addRecommendedFavorites('${pl.id}')">
+                    + Tambah Video
+                  </button>
+                `}
+                <a href="#/playlist/${pl.id}" class="btn-fav-action" style="padding:6px 12px;font-size:0.78rem;">
+                  👁 Buka Senarai
+                </a>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button class="btn-fav-action" style="padding:6px 8px;font-size:0.75rem;" onclick="renamePlaylist('${pl.id}')" title="Namakan semula">
+                  ✏️
+                </button>
+                ${!pl.isDefault ? `
+                  <button class="btn-fav-action btn-fav-clear" style="padding:6px 8px;font-size:0.75rem;" onclick="deletePlaylist('${pl.id}')" title="Padam playlist">
+                    🗑
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+
+      // Recommended starter modules section at bottom
+      html += `
+        <section class="home-favorites-section" style="margin-top:40px;">
+          <div class="home-favorites-header">
+            <div class="home-favorites-title">
+              <span>💡</span>
+              <span>Cadangan Modul Penting (Best Recommended)</span>
+            </div>
+          </div>
+          <p style="color:var(--text-tertiary);font-size:0.86rem;margin-bottom:12px;">
+            Klik mana-mana topik disyorkan di bawah untuk tontonan segera atau menyimpannya ke dalam playlist anda:
+          </p>
+          <div class="fav-rec-chips-row">
+            ${RECOMMENDED_BEST_MODULE_IDS.map(item => {
+              const mod = modules.find(m => m.id === item.id);
+              const title = mod ? mod.title : item.label;
+              return `
+                <a href="#/module/${item.id}" class="fav-rec-chip" onclick="openPlaylistSaveModal('${item.id}')">
+                  <span>⭐</span>
+                  <span>${title}</span>
+                  <span style="opacity:0.6;font-size:0.75rem;">+ Simpan</span>
+                </a>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    /* SINGLE PLAYLIST DETAIL VIEW (`/playlist/:id`) */
+    function renderSinglePlaylistView(container, plId) {
+      const playlists = getCustomPlaylists();
+      const pl = playlists.find(p => p.id === plId);
+      if (!pl) {
+        container.innerHTML = `<p style="padding:40px;text-align:center;">Playlist tidak dijumpai. <a href="#/playlists">Kembali ke Senarai Playlist</a></p>`;
+        return;
+      }
+
+      const plMods = (pl.moduleIds || []).map(id => modules.find(m => m.id === id)).filter(Boolean);
+      const totalDuration = plMods.reduce((acc, cur) => acc + (cur.duration_minutes || 0), 0);
+      const firstMod = plMods[0];
+
+      let html = `
+        <div class="page-nav-header">
+          <a href="#/playlists" class="btn-back" title="Kembali ke Semua Playlist">←</a>
+          <div class="breadcrumb-trail">
+            <a href="#/">Coach Adib</a>
+            <span>›</span>
+            <a href="#/playlists">Playlist</a>
+            <span>›</span>
+            <span class="current">${pl.name}</span>
+          </div>
+        </div>
+
+        <header class="program-header-hero" style="position:relative;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span class="tag-badge tag-amber">${pl.isDefault ? '⭐ Playlist Utama' : '📑 Custom Playlist'}</span>
+            <span class="tag-badge tag-emerald">${plMods.length} Video · ~${totalDuration} Minit</span>
+          </div>
+          <h1 class="program-header-title">${pl.name}</h1>
+          <p class="program-header-desc">${pl.description || 'Tonton video-video ini secara bersiri berterusan.'}</p>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+            ${firstMod ? `
+              <a href="#/module/${firstMod.id}?playlist=custom&plId=${encodeURIComponent(pl.id)}" class="btn-play-all" style="padding:10px 18px;font-size:0.9rem;">
+                <span>▶</span> Mainkan Dari Mula
               </a>
-              <button class="btn-fav-action btn-fav-clear" onclick="clearFavorites()">
-                <span>🗑</span> Kosongkan Senarai
+            ` : `
+              <button class="btn-play-all" onclick="addRecommendedFavorites('${pl.id}')" style="padding:10px 18px;font-size:0.9rem;">
+                <span>⭐</span> Muatkan 6 Modul Disyorkan
+              </button>
+            `}
+            <button class="btn-fav-action" onclick="renamePlaylist('${pl.id}')">
+              <span>✏️</span> Namakan Semula
+            </button>
+            ${!pl.isDefault ? `
+              <button class="btn-fav-action btn-fav-clear" onclick="deletePlaylist('${pl.id}')">
+                <span>🗑</span> Padam Playlist
               </button>
             ` : ''}
-            <button class="btn-fav-action" onclick="addRecommendedFavorites()">
-              <span>⭐</span> + Tambah 6 Modul Disyorkan
-            </button>
           </div>
         </header>
       `;
 
-      if (savedMods.length === 0) {
+      if (plMods.length === 0) {
         html += `
           <div class="fav-empty-state">
-            <div class="fav-empty-icon">⭐</div>
-            <h3 class="fav-empty-title">Tiada modul dalam playlist kegemaran</h3>
+            <div class="fav-empty-icon">📑</div>
+            <h3 class="fav-empty-title">Playlist ini masih kosong</h3>
             <p class="fav-empty-desc">
-              Anda belum menanda sebarang modul. Simpan mana-mana video dengan menekan butang <strong>★ Simpan</strong> semasa menonton, atau klik butang di bawah untuk memasukkan 6 modul jualan & closing terbaik.
+              Buka mana-mana video modul dan klik <strong>📑 Simpan ke Playlist</strong> untuk memasukkan video ke sini, atau klik butang di bawah untuk memasukkan 6 modul pilihan asas & closing.
             </p>
-            <button class="btn-play-all" onclick="addRecommendedFavorites()" style="padding:10px 20px;font-size:0.95rem;">
-              <span>⭐</span> Muatkan 6 Modul Pilihan Terbaik Sekarang
+            <button class="btn-play-all" onclick="addRecommendedFavorites('${pl.id}')" style="padding:10px 20px;font-size:0.95rem;">
+              <span>⭐</span> Masukkan 6 Modul Disyorkan Sekarang
             </button>
           </div>
         `;
       } else {
         html += `
           <div class="fav-page-grid">
-            ${savedMods.map((m, idx) => {
+            ${plMods.map((m, idx) => {
               const crs = courses.find(c => c.id === m.course_id);
               const prog = crs ? programs.find(p => p.id === crs.program_id) : null;
               const thumb = m.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
               const isDone = completedSet.has(m.id);
               return `
                 <div class="fav-card-item" style="flex:auto;">
-                  <button class="fav-card-remove" onclick="removeFavoriteFromHome(event, '${m.id}')" title="Keluarkan dari senarai">✕</button>
-                  <a href="#/module/${m.id}?playlist=fav" class="fav-card-thumb-wrap">
+                  <button class="fav-card-remove" onclick="removeModuleFromPlaylist(event, '${pl.id}', '${m.id}')" title="Keluarkan dari playlist ini">✕</button>
+                  <a href="#/module/${m.id}?playlist=custom&plId=${encodeURIComponent(pl.id)}" class="fav-card-thumb-wrap">
                     <img src="${thumb}" alt="${m.title}" class="fav-card-thumb" loading="lazy" />
                     ${m.duration_minutes ? `<span class="fav-card-time">${m.duration_minutes}m</span>` : ''}
                     <span style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);color:#ffd700;font-size:0.75rem;font-weight:800;padding:2px 8px;border-radius:4px;">#${idx + 1}</span>
@@ -2883,10 +3365,10 @@ def build_offline_site():
                   <div class="fav-card-body">
                     <div>
                       <div style="font-size:0.72rem;color:var(--text-tertiary);margin-bottom:4px;">${prog ? prog.title : ''} ${crs ? `› ${crs.title}` : ''}</div>
-                      <a href="#/module/${m.id}?playlist=fav" class="fav-card-title" style="text-decoration:none;" title="${m.title}">${m.title}</a>
+                      <a href="#/module/${m.id}?playlist=custom&plId=${encodeURIComponent(pl.id)}" class="fav-card-title" style="text-decoration:none;" title="${m.title}">${m.title}</a>
                     </div>
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px;">
-                      <a href="#/module/${m.id}?playlist=fav" class="btn-play-all" style="padding:5px 10px;font-size:0.75rem;">
+                      <a href="#/module/${m.id}?playlist=custom&plId=${encodeURIComponent(pl.id)}" class="btn-play-all" style="padding:5px 10px;font-size:0.75rem;">
                         ▶ Tonton
                       </a>
                       <button class="btn-fav-action" style="padding:5px 10px;font-size:0.75rem;" onclick="toggleDone('${m.id}')">
@@ -2900,35 +3382,6 @@ def build_offline_site():
           </div>
         `;
       }
-
-      // Recommended best modules section at bottom
-      html += `
-        <section class="home-favorites-section" style="margin-top:40px;">
-          <div class="home-favorites-header">
-            <div class="home-favorites-title">
-              <span>💡</span>
-              <span>Cadangan Modul Penting (Best Recommended)</span>
-            </div>
-          </div>
-          <p style="color:var(--text-tertiary);font-size:0.86rem;margin-bottom:12px;">
-            Modul-modul ini sangat disyorkan oleh Coach Adib untuk membina asas closing, skrip jualan WhatsApp, dan pemahaman customer:
-          </p>
-          <div class="fav-rec-chips-row">
-            ${RECOMMENDED_BEST_MODULE_IDS.map(item => {
-              const mod = modules.find(m => m.id === item.id);
-              const title = mod ? mod.title : item.label;
-              const isAlreadyIn = bookmarkedSet.has(item.id);
-              return `
-                <a href="#/module/${item.id}?playlist=fav" class="fav-rec-chip" onclick="quickAddFavoriteAndGo('${item.id}')">
-                  <span>${isAlreadyIn ? '✓' : '⭐'}</span>
-                  <span>${title}</span>
-                  <span style="opacity:0.6;font-size:0.75rem;">${isAlreadyIn ? 'Tonton' : '+ Tambah'}</span>
-                </a>
-              `;
-            }).join('')}
-          </div>
-        </section>
-      `;
 
       container.innerHTML = html;
     }
@@ -3097,7 +3550,7 @@ def build_offline_site():
       const prog = crs ? programs.find(p => p.id === crs.program_id) : null;
       const videoInfo = parseVideoInfo(mod.video_url);
       const isDone = completedSet.has(mod.id);
-      const isSaved = bookmarkedSet.has(mod.id);
+      const isSaved = getCustomPlaylists().some(p => (p.moduleIds || []).includes(mod.id));
 
       // Exact course structured playlist matching coachadib.com
       const playlist = getCoursePlaylist(mod);
@@ -3176,8 +3629,9 @@ def build_offline_site():
             <button class="btn-action ${isDone ? 'btn-done-active' : 'btn-mark-done'}" onclick="toggleDone('${mod.id}')">
               <span>✓</span> <span>${isDone ? 'Telah Selesai' : 'Tanda Selesai'}</span>
             </button>
-            <button class="btn-action btn-bookmark ${isSaved ? 'saved' : ''}" onclick="toggleBookmark('${mod.id}')">
-              <span>${isSaved ? '★' : '☆'}</span> <span>${isSaved ? 'Disimpan' : 'Simpan'}</span>
+            <button class="btn-action btn-bookmark ${isSaved ? 'saved' : ''}" id="btn-save-to-playlist" onclick="openPlaylistSaveModal('${mod.id}')" title="Simpan ke mana-mana Playlist anda">
+              <span>📑</span> <span>${isSaved ? 'Disimpan dalam Playlist' : 'Simpan ke Playlist'}</span>
+              <span style="color:#ffd700;">${isSaved ? '★' : '☆'}</span>
             </button>
           </div>
         </div>
@@ -3249,8 +3703,8 @@ def build_offline_site():
           <div class="course-playlist-section">
             <div class="playlist-header">
               <div>
-                <div class="playlist-label">${playlist.isFavPlaylist ? '⭐ Playlist Kegemaran' : 'Playlist'}</div>
-                <div class="playlist-course-title">${playlist.isFavPlaylist ? 'Senarai Video Pilihan Anda' : (crs ? crs.title : 'Senarai Video')}</div>
+                <div class="playlist-label">${playlist.isCustomPlaylist ? `📑 ${playlist.playlistName}` : 'Playlist'}</div>
+                <div class="playlist-course-title">${playlist.isCustomPlaylist ? 'Senarai Video Pilihan Anda' : (crs ? crs.title : 'Senarai Video')}</div>
               </div>
               <div class="playlist-stat">
                 ${playlist.items.filter(s => completedSet.has(s.id)).length} / ${playlist.items.length} Selesai · ${Math.round((playlist.items.filter(s => completedSet.has(s.id)).length / playlist.items.length) * 100)}%
@@ -3264,7 +3718,7 @@ def build_offline_site():
                 const sibDone = completedSet.has(sib.id);
                 const isCurrent = sib.id === mod.id;
                 const sibThumb = sib.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
-                const queryParam = playlist.isFavPlaylist ? '?playlist=fav' : '';
+                const queryParam = playlist.queryParam || '';
                 return `
                   ${sib.is_chapter_start ? `
                     <div class="playlist-chapter-card">
@@ -3292,12 +3746,12 @@ def build_offline_site():
 
         <div class="module-footer-nav">
           ${prevMod ? `
-            <a href="#/module/${prevMod.id}${playlist.isFavPlaylist ? '?playlist=fav' : ''}" class="btn-nav-step">
+            <a href="#/module/${prevMod.id}${playlist.queryParam || ''}" class="btn-nav-step">
               ← Video Sebelum (${prevMod.title})
             </a>
           ` : `<div></div>`}
           ${nextMod ? `
-            <a href="#/module/${nextMod.id}${playlist.isFavPlaylist ? '?playlist=fav' : ''}" class="btn-nav-step primary">
+            <a href="#/module/${nextMod.id}${playlist.queryParam || ''}" class="btn-nav-step primary">
               Video Seterusnya (${nextMod.title}) →
             </a>
           ` : `<div></div>`}
@@ -3321,34 +3775,54 @@ def build_offline_site():
     function getCoursePlaylist(mod) {
       if (!mod) return { items: [], prev: null, next: null };
 
-      const isFavPlaylist = window.location.hash.includes('playlist=fav');
-      if (isFavPlaylist && bookmarkedSet.size > 0) {
-        const savedMods = modules.filter(m => bookmarkedSet.has(m.id));
-        const currIdx = savedMods.findIndex(m => m.id === mod.id);
+      // 1. Check for custom playlist: ?playlist=custom&plId=... or ?playlist=fav
+      const hash = window.location.hash || '';
+      const isFav = hash.includes('playlist=fav');
+      let targetPlaylist = null;
+      
+      const plMatch = hash.match(/[?&]plId=([^&]+)/);
+      const playlists = getCustomPlaylists();
+      if (plMatch && plMatch[1]) {
+        const decodedId = decodeURIComponent(plMatch[1]);
+        targetPlaylist = playlists.find(p => p.id === decodedId);
+      } else if (isFav) {
+        targetPlaylist = playlists.find(p => p.id === 'pl_favorites') || playlists[0];
+      }
+
+      if (targetPlaylist && targetPlaylist.moduleIds && targetPlaylist.moduleIds.length > 0) {
+        const plMods = targetPlaylist.moduleIds
+          .map(id => modules.find(m => m.id === id))
+          .filter(Boolean);
+
+        const currIdx = plMods.findIndex(m => m.id === mod.id);
+        const queryParam = `?playlist=custom&plId=${encodeURIComponent(targetPlaylist.id)}`;
         return {
-          items: savedMods.map((m, idx) => ({
+          items: plMods.map((m, idx) => ({
             ...m,
-            chapter_title: 'Playlist Kegemaran',
+            chapter_title: targetPlaylist.name,
             chapter_number: 1,
             is_chapter_start: idx === 0
           })),
-          prev: currIdx > 0 ? savedMods[currIdx - 1] : null,
-          next: currIdx >= 0 && currIdx < savedMods.length - 1 ? savedMods[currIdx + 1] : null,
-          isFavPlaylist: true
+          prev: currIdx > 0 ? plMods[currIdx - 1] : null,
+          next: currIdx >= 0 && currIdx < plMods.length - 1 ? plMods[currIdx + 1] : null,
+          isCustomPlaylist: true,
+          playlistName: targetPlaylist.name,
+          playlistId: targetPlaylist.id,
+          queryParam: queryParam
         };
       }
 
-      if (!mod.course_id) return { items: [], prev: null, next: null };
+      if (!mod.course_id) return { items: [], prev: null, next: null, queryParam: '' };
       const r = (a, b) => (a.order || 0) - (b.order || 0);
       const courseChapters = chapters.filter(ch => ch.course_id === mod.course_id).sort(r);
       const items = [];
 
-      // 1. Direct modules without chapter
+      // Direct modules without chapter
       modules.filter(m => m.course_id === mod.course_id && !m.chapter_id).sort(r).forEach(m => {
         items.push({ ...m, is_chapter_start: false });
       });
 
-      // 2. Modules grouped by chapter in order
+      // Modules grouped by chapter in order
       courseChapters.forEach((ch, chIdx) => {
         const chInfo = { chapter_title: ch.title, chapter_number: chIdx + 1 };
         modules.filter(m => m.chapter_id === ch.id).sort(r).forEach((m, mIdx) => {
@@ -3361,7 +3835,8 @@ def build_offline_site():
         items: items,
         prev: currIdx > 0 ? items[currIdx - 1] : null,
         next: currIdx >= 0 && currIdx < items.length - 1 ? items[currIdx + 1] : null,
-        isFavPlaylist: false
+        isCustomPlaylist: false,
+        queryParam: ''
       };
     }
 
@@ -3663,7 +4138,7 @@ def build_offline_site():
         // [: Previous Lesson
         if (e.key === '[') {
           if (activePlaylistContext && activePlaylistContext.prev) {
-            const q = activePlaylistContext.isFavPlaylist ? '?playlist=fav' : '';
+            const q = activePlaylistContext.queryParam || '';
             window.location.hash = `#/module/${activePlaylistContext.prev.id}${q}`;
           }
         }
@@ -3671,7 +4146,7 @@ def build_offline_site():
         // ]: Next Lesson
         if (e.key === ']') {
           if (activePlaylistContext && activePlaylistContext.next) {
-            const q = activePlaylistContext.isFavPlaylist ? '?playlist=fav' : '';
+            const q = activePlaylistContext.queryParam || '';
             window.location.hash = `#/module/${activePlaylistContext.next.id}${q}`;
           }
         }
