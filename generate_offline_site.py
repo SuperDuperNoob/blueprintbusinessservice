@@ -42,6 +42,18 @@ def build_offline_site():
         except Exception as e:
             print(f"Notice: Could not download remote logo: {e}")
 
+    # Ensure playerjs.min.js is present
+    pjs_dest = "offline_site/playerjs.min.js"
+    if not os.path.exists(pjs_dest):
+        try:
+            url = "https://assets.mediadelivery.net/playerjs/playerjs-latest.min.js"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                with open(pjs_dest, "wb") as f:
+                    f.write(resp.read())
+        except Exception as e:
+            print(f"Notice: Could not download playerjs: {e}")
+
     with open("bbs_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -75,6 +87,7 @@ def build_offline_site():
   <title>Coach Adib · Portal Video & Sistem Bisnes</title>
   <script src="marked.min.js"></script>
   <script src="hls.min.js"></script>
+  <script src="playerjs.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -2538,6 +2551,7 @@ def build_offline_site():
 
       // Exact course structured playlist matching coachadib.com
       const playlist = getCoursePlaylist(mod);
+      activePlaylistContext = playlist;
       const prevMod = playlist.prev;
       const nextMod = playlist.next;
 
@@ -2564,17 +2578,19 @@ def build_offline_site():
                 <span>Bunny HD Video Player</span>
               </div>
               <div class="video-quick-controls">
-                <button class="ctrl-btn" onclick="jumpVideo(-10)">↺ 10s</button>
-                <button class="ctrl-btn" onclick="jumpVideo(10)">10s ↻</button>
+                <button class="ctrl-btn" onclick="jumpVideo(-10)" title="Undur 10 saat (← / J)">↺ 10s</button>
+                <button class="ctrl-btn" onclick="togglePlayPause()" id="play-pause-btn" title="Main / Jeda Video (Space / K)">⏸ Jeda</button>
+                <button class="ctrl-btn" onclick="jumpVideo(10)" title="Maju 10 saat (→ / L)">10s ↻</button>
                 <button class="ctrl-btn ${currentSpeed === 1 ? 'active' : ''}" onclick="setSpeed(1)">1x</button>
                 <button class="ctrl-btn ${currentSpeed === 1.25 ? 'active' : ''}" onclick="setSpeed(1.25)">1.25x</button>
                 <button class="ctrl-btn ${currentSpeed === 1.5 ? 'active' : ''}" onclick="setSpeed(1.5)">1.5x</button>
                 <button class="ctrl-btn ${currentSpeed === 2 ? 'active' : ''}" onclick="setSpeed(2)">2x</button>
-                <button class="ctrl-btn" onclick="toggleTheater()">⛶ Theater</button>
+                <button class="ctrl-btn" onclick="toggleTheater()" title="Mod Teater (T)">⛶ Theater</button>
               </div>
             </div>
             <div class="video-player-frame">
               <iframe 
+                id="active-video-player"
                 src="${videoInfo.embedUrl}?autoplay=true&preload=true&responsive=true" 
                 loading="lazy" 
                 allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
@@ -2738,6 +2754,7 @@ def build_offline_site():
       `;
 
       container.innerHTML = html;
+      initVideoPlayer();
 
       // Scroll playlist to active card
       setTimeout(() => {
@@ -2850,6 +2867,81 @@ def build_offline_site():
       }
     }
 
+    let activePlayer = null;
+    let isVideoPlaying = true;
+    let activePlaylistContext = null;
+
+    function initVideoPlayer() {
+      const iframe = document.getElementById('active-video-player');
+      if (!iframe) {
+        activePlayer = null;
+        return;
+      }
+
+      if (typeof playerjs !== 'undefined') {
+        try {
+          activePlayer = new playerjs.Player(iframe);
+          isVideoPlaying = true;
+
+          activePlayer.on('ready', () => {
+            if (currentSpeed && currentSpeed !== 1) {
+              try { activePlayer.setPlaybackRate(currentSpeed); } catch (e) {}
+            }
+          });
+
+          activePlayer.on('play', () => {
+            isVideoPlaying = true;
+            const btn = document.getElementById('play-pause-btn');
+            if (btn) btn.innerHTML = '⏸ Jeda';
+          });
+
+          activePlayer.on('pause', () => {
+            isVideoPlaying = false;
+            const btn = document.getElementById('play-pause-btn');
+            if (btn) btn.innerHTML = '▶ Main';
+          });
+        } catch (e) {
+          console.warn('PlayerJS init error:', e);
+        }
+      }
+    }
+
+    function togglePlayPause() {
+      const iframe = document.getElementById('active-video-player');
+      if (!iframe) return;
+
+      if (activePlayer && typeof activePlayer.getPaused === 'function') {
+        activePlayer.getPaused((isPaused) => {
+          if (isPaused) {
+            activePlayer.play();
+            isVideoPlaying = true;
+            showToast('Video Dimainkan', '▶');
+          } else {
+            activePlayer.pause();
+            isVideoPlaying = false;
+            showToast('Video Dijeda', '⏸');
+          }
+          const btn = document.getElementById('play-pause-btn');
+          if (btn) btn.innerHTML = isVideoPlaying ? '⏸ Jeda' : '▶ Main';
+        });
+      } else {
+        // Fallback postMessage protocol for Bunny Stream iframe
+        if (iframe.contentWindow) {
+          if (isVideoPlaying) {
+            iframe.contentWindow.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', event: 'command', method: 'pause' }), '*');
+            isVideoPlaying = false;
+            showToast('Video Dijeda', '⏸');
+          } else {
+            iframe.contentWindow.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', event: 'command', method: 'play' }), '*');
+            isVideoPlaying = true;
+            showToast('Video Dimainkan', '▶');
+          }
+          const btn = document.getElementById('play-pause-btn');
+          if (btn) btn.innerHTML = isVideoPlaying ? '⏸ Jeda' : '▶ Main';
+        }
+      }
+    }
+
     function toggleTheater() {
       isTheater = !isTheater;
       const card = document.getElementById('video-card');
@@ -2858,7 +2950,12 @@ def build_offline_site():
 
     function setSpeed(spd) {
       currentSpeed = spd;
-      const iframe = document.querySelector('.video-player-frame iframe');
+      const iframe = document.getElementById('active-video-player');
+      if (activePlayer && typeof activePlayer.setPlaybackRate === 'function') {
+        try { activePlayer.setPlaybackRate(spd); } catch (e) {}
+      } else if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', event: 'command', method: 'setPlaybackRate', value: spd }), '*');
+      }
       document.querySelectorAll('.ctrl-btn').forEach(b => {
         if (b.innerText.includes('x')) b.classList.toggle('active', b.innerText === `${spd}x`);
       });
@@ -2866,7 +2963,19 @@ def build_offline_site():
     }
 
     function jumpVideo(sec) {
-      showToast(`Lompat ${sec > 0 ? '+' : ''}${sec} saat`, '⏩');
+      const iframe = document.getElementById('active-video-player');
+      if (!iframe) return;
+
+      if (activePlayer && typeof activePlayer.getCurrentTime === 'function') {
+        activePlayer.getCurrentTime((currTime) => {
+          const newTime = Math.max(0, (currTime || 0) + sec);
+          activePlayer.setCurrentTime(newTime);
+          showToast(`Lompat ${sec > 0 ? '+' : ''}${sec}s`, sec > 0 ? '⏩' : '⏪');
+        });
+      } else if (iframe.contentWindow) {
+        iframe.contentWindow.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', event: 'command', method: 'setCurrentTime', value: sec }), '*');
+        showToast(`Lompat ${sec > 0 ? '+' : ''}${sec} saat`, '⏩');
+      }
     }
 
     /* Global Search */
@@ -2890,7 +2999,7 @@ def build_offline_site():
       if (!resContainer) return;
       const q = (query || '').toLowerCase().trim();
       if (!q) {
-        resContainer.innerHTML = `<p style="padding:20px;text-align:center;color:var(--text-tertiary);font-size:0.85rem;">Taip untuk mencari dari 408 video lessons...</p>`;
+        resContainer.innerHTML = `<p style="padding:20px;text-align:center;color:var(--text-tertiary);font-size:0.85rem;">Taip untuk mencari dari 416 video lessons...</p>`;
         return;
       }
       const matched = modules.filter(m => 
@@ -2928,14 +3037,78 @@ def build_offline_site():
       }
 
       document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
           if (e.key === 'Escape') toggleSearchModal();
           return;
         }
+
+        // Spacebar or K: Toggle Play/Pause
+        if (e.code === 'Space' || e.key === ' ' || e.key === 'k' || e.key === 'K' || e.keyCode === 32) {
+          const videoCard = document.getElementById('video-card');
+          if (videoCard) {
+            e.preventDefault();
+            togglePlayPause();
+            return;
+          }
+        }
+
+        // Left Arrow or J: Jump back 10s
+        if ((e.key === 'ArrowLeft' || e.key === 'j' || e.key === 'J') && !e.altKey && !e.ctrlKey && !e.metaKey) {
+          const videoCard = document.getElementById('video-card');
+          if (videoCard) {
+            e.preventDefault();
+            jumpVideo(-10);
+            return;
+          }
+        }
+
+        // Right Arrow or L: Jump forward 10s
+        if ((e.key === 'ArrowRight' || e.key === 'l' || e.key === 'L') && !e.altKey && !e.ctrlKey && !e.metaKey) {
+          const videoCard = document.getElementById('video-card');
+          if (videoCard) {
+            e.preventDefault();
+            jumpVideo(10);
+            return;
+          }
+        }
+
+        // M: Mute / Unmute
+        if (e.key === 'm' || e.key === 'M') {
+          if (activePlayer && typeof activePlayer.getMuted === 'function') {
+            activePlayer.getMuted((isMuted) => {
+              activePlayer.setMuted(!isMuted);
+              showToast(!isMuted ? 'Audio Dimatikan' : 'Audio Dihidupkan', !isMuted ? '🔇' : '🔊');
+            });
+          }
+        }
+
+        // T: Theater Mode
+        if (e.key === 't' || e.key === 'T') {
+          const videoCard = document.getElementById('video-card');
+          if (videoCard) toggleTheater();
+        }
+
+        // [: Previous Lesson
+        if (e.key === '[') {
+          if (activePlaylistContext && activePlaylistContext.prev) {
+            window.location.hash = `#/module/${activePlaylistContext.prev.id}`;
+          }
+        }
+
+        // ]: Next Lesson
+        if (e.key === ']') {
+          if (activePlaylistContext && activePlaylistContext.next) {
+            window.location.hash = `#/module/${activePlaylistContext.next.id}`;
+          }
+        }
+
+        // /: Search Modal
         if (e.key === '/') {
           e.preventDefault();
           toggleSearchModal();
         }
+
+        // D: Theme toggle
         if (e.key === 'd' || e.key === 'D') toggleTheme();
       });
     });
