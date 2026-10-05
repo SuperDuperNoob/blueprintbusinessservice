@@ -300,6 +300,277 @@ def build_offline_site():
       font-family: 'JetBrains Mono', monospace;
     }
 
+    .topbar-fav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      color: #ffd700;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .topbar-fav-btn:hover {
+      background: rgba(255, 215, 0, 0.22);
+      border-color: #ffd700;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(255, 215, 0, 0.2);
+    }
+    .fav-badge {
+      background: #ffd700;
+      color: #0b0f17;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 10px;
+      line-height: 1.2;
+    }
+
+    /* Home Favorites Section */
+    .home-favorites-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 22px 24px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .home-favorites-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .home-favorites-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .home-favorites-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+    .fav-card-item {
+      flex: 0 0 240px;
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .fav-card-item:hover {
+      transform: translateY(-3px);
+      border-color: #ffd700;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+    .fav-card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      height: 125px;
+      background: #111;
+      overflow: hidden;
+    }
+    .fav-card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .fav-card-item:hover .fav-card-thumb {
+      transform: scale(1.04);
+    }
+    .fav-card-time {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .fav-card-remove {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      border: none;
+      color: #ffd700;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+      z-index: 2;
+    }
+    .fav-card-remove:hover {
+      background: rgba(239, 68, 68, 0.85);
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .fav-card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+    .fav-card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .fav-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+    .fav-rec-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .fav-rec-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .fav-rec-chip:hover {
+      border-color: #ffd700;
+      color: #ffd700;
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-1px);
+    }
+    .btn-play-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+      color: #0b0f17;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 12px rgba(255, 215, 0, 0.25);
+    }
+    .btn-play-all:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 18px rgba(255, 215, 0, 0.4);
+    }
+    .btn-fav-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+    }
+    .btn-fav-action:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+    .btn-fav-clear {
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.08);
+    }
+    .btn-fav-clear:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      color: #fff;
+    }
+    .fav-page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .fav-empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-xl);
+      margin-top: 20px;
+    }
+    .fav-empty-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+    .fav-empty-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .fav-empty-desc {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      max-width: 480px;
+      margin: 0 auto 20px auto;
+      line-height: 1.5;
+    }
+
     /* Main Container */
     .main-wrapper {
       max-width: var(--max-width);
@@ -1789,6 +2060,11 @@ def build_offline_site():
       </a>
 
       <div class="topbar-right">
+        <a href="#/favorites" class="topbar-fav-btn" id="topbar-fav-btn" title="Lihat Senarai Playlist Kegemaran">
+          <span>⭐</span>
+          <span class="fav-btn-label">Kegemaran</span>
+          <span class="fav-badge" id="fav-count-badge">0</span>
+        </a>
         <button class="search-btn" onclick="toggleSearchModal()">
           <span>🔍</span>
           <span class="search-btn-label">Cari</span>
@@ -1966,6 +2242,8 @@ def build_offline_site():
 
       if (hash === '#/' || hash === '' || hash === '#') {
         renderHomeView(app);
+      } else if (hash === '#/favorites' || hash.startsWith('#/favorites')) {
+        renderFavoritesView(app);
       } else if (hash.startsWith('#/program/')) {
         const progId = hash.replace('#/program/', '');
         renderProgramView(app, progId);
@@ -1973,12 +2251,13 @@ def build_offline_site():
         const courseId = hash.replace('#/course/', '');
         renderCourseView(app, courseId);
       } else if (hash.startsWith('#/module/')) {
-        const modId = hash.replace('#/module/', '');
+        const modId = hash.replace('#/module/', '').split('?')[0];
         renderModuleView(app, modId);
       } else {
         renderHomeView(app);
       }
       updateOverallProgress();
+      updateFavCountBadge();
     }
 
     function navigateHome(e) {
@@ -2324,12 +2603,158 @@ def build_offline_site():
       }, 3600000); // 1 jam = 3,600,000 ms
     }
 
+    /* ================= PLAYLIST & FAVORITES HELPERS ================= */
+
+    const RECOMMENDED_BEST_MODULE_IDS = [
+      { id: '6ac1561b6d24de48536870a8', label: '1. Closing Mindset' },
+      { id: '6ac15633a85c68c82310ded4', label: '2. 5 Sebab Customer Tak Membeli' },
+      { id: '6ac237a305db22ff2ccb3318', label: '3. 4 Fasa Closing ITOU' },
+      { id: '6ac2a4a56357b8ac8f73021e', label: '4. Product Knowledge' },
+      { id: '6ac2a72fdcd4c27c9ce33578', label: '5. Setup Closing Script' },
+      { id: '6ac033f2c9df5ee2bec8f960', label: '6. 12 Customer Rejection' }
+    ];
+
+    function updateFavCountBadge() {
+      const badge = document.getElementById('fav-count-badge');
+      if (badge) {
+        badge.textContent = bookmarkedSet.size;
+        badge.style.display = bookmarkedSet.size > 0 ? 'inline-block' : 'none';
+      }
+    }
+
+    function removeFavoriteFromHome(e, modId) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      bookmarkedSet.delete(modId);
+      localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
+      showToast('Dikeluarkan dari playlist kegemaran', '☆');
+      updateFavCountBadge();
+      router();
+    }
+
+    function addRecommendedFavorites() {
+      let added = 0;
+      RECOMMENDED_BEST_MODULE_IDS.forEach(item => {
+        if (modules.some(m => m.id === item.id)) {
+          if (!bookmarkedSet.has(item.id)) {
+            bookmarkedSet.add(item.id);
+            added++;
+          }
+        }
+      });
+      localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
+      updateFavCountBadge();
+      triggerConfetti();
+      showToast(`${added > 0 ? added : 'Semua'} modul terbaik dimasukkan ke playlist!`, '⭐');
+      router();
+    }
+
+    function clearFavorites() {
+      if (confirm('Kosongkan semua modul dari playlist kegemaran anda?')) {
+        bookmarkedSet.clear();
+        localStorage.setItem('ca_bookmarked', JSON.stringify([]));
+        updateFavCountBadge();
+        showToast('Playlist kegemaran dikosongkan', '🗑');
+        router();
+      }
+    }
+
+    function quickAddFavoriteAndGo(modId) {
+      if (!bookmarkedSet.has(modId)) {
+        bookmarkedSet.add(modId);
+        localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
+        updateFavCountBadge();
+      }
+      window.location.hash = `#/module/${modId}?playlist=fav`;
+    }
+
     /* 1. HOME VIEW (`/`) */
     function renderHomeView(container) {
       const doneTotal = completedSet.size;
       const totalLessons = modules.length;
       const initialItem = HERO_SLOGAN_ITEMS[currentSloganIndex];
       applySloganTheme(initialItem);
+
+      const savedMods = modules.filter(m => bookmarkedSet.has(m.id));
+      let favSectionHtml = '';
+
+      if (savedMods.length > 0) {
+        const firstSaved = savedMods[0];
+        favSectionHtml = `
+          <section class="home-favorites-section">
+            <div class="home-favorites-header">
+              <div class="home-favorites-title">
+                <span>⭐</span>
+                <span>Playlist Kegemaran Anda (${savedMods.length} Video)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <a href="#/module/${firstSaved.id}?playlist=fav" class="btn-play-all" title="Mainkan semua video kegemaran secara berturutan">
+                  <span>▶</span> Mainkan Playlist
+                </a>
+                <a href="#/favorites" class="btn-fav-action" title="Urus senarai kegemaran">
+                  Urus Senarai ›
+                </a>
+              </div>
+            </div>
+            <div class="home-favorites-scroll">
+              ${savedMods.map(m => {
+                const crs = courses.find(c => c.id === m.course_id);
+                const thumb = m.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
+                const isDone = completedSet.has(m.id);
+                return `
+                  <a href="#/module/${m.id}?playlist=fav" class="fav-card-item">
+                    <button class="fav-card-remove" onclick="removeFavoriteFromHome(event, '${m.id}')" title="Keluarkan dari kegemaran">✕</button>
+                    <div class="fav-card-thumb-wrap">
+                      <img src="${thumb}" alt="${m.title}" class="fav-card-thumb" loading="lazy" />
+                      ${m.duration_minutes ? `<span class="fav-card-time">${m.duration_minutes}m</span>` : ''}
+                      ${isDone ? `<span style="position:absolute;top:6px;left:6px;background:rgba(16,185,129,0.9);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;">✓ SELESAI</span>` : ''}
+                    </div>
+                    <div class="fav-card-body">
+                      <div class="fav-card-title" title="${m.title}">${m.title}</div>
+                      <div class="fav-card-meta">
+                        <span>${crs ? crs.title : 'Modul'}</span>
+                        <span style="color:#ffd700;">▶ Tonton</span>
+                      </div>
+                    </div>
+                  </a>
+                `;
+              }).join('')}
+            </div>
+          </section>
+        `;
+      } else {
+        favSectionHtml = `
+          <section class="home-favorites-section">
+            <div class="home-favorites-header">
+              <div class="home-favorites-title">
+                <span>⭐</span>
+                <span>Modul Pilihan Terbaik & Playlist Pemula</span>
+              </div>
+              <button class="btn-play-all" onclick="addRecommendedFavorites()">
+                <span>+</span> Tambah 6 Modul Terbaik Ke Playlist
+              </button>
+            </div>
+            <p style="color:var(--text-tertiary);font-size:0.88rem;margin-bottom:12px;">
+              Pilih dan simpan modul penting ke playlist peribadi anda, atau klik mana-mana topik cadangan di bawah untuk mula belajar:
+            </p>
+            <div class="fav-rec-chips-row">
+              ${RECOMMENDED_BEST_MODULE_IDS.map(item => {
+                const mod = modules.find(m => m.id === item.id);
+                const title = mod ? mod.title : item.label;
+                return `
+                  <a href="#/module/${item.id}?playlist=fav" class="fav-rec-chip" onclick="quickAddFavoriteAndGo('${item.id}')">
+                    <span>⭐</span>
+                    <span>${title}</span>
+                    <span style="opacity:0.6;font-size:0.75rem;">+ Simpan</span>
+                  </a>
+                `;
+              }).join('')}
+            </div>
+          </section>
+        `;
+      }
 
       let html = `
         <section class="home-hero">
@@ -2344,6 +2769,8 @@ def build_offline_site():
           </div>
           <p class="home-hero-subtitle">${doneTotal}/${totalLessons} video telah disiapkan · 4 program lengkap</p>
         </section>
+
+        ${favSectionHtml}
 
         <section class="program-grid">
       `;
@@ -2381,6 +2808,129 @@ def build_offline_site():
       html += `</section>`;
       container.innerHTML = html;
       startSloganRotation();
+    }
+
+    /* FAVORITES VIEW (`/favorites`) */
+    function renderFavoritesView(container) {
+      const savedMods = modules.filter(m => bookmarkedSet.has(m.id));
+      const firstSaved = savedMods[0];
+
+      let html = `
+        <div class="page-nav-header">
+          <a href="#/" class="btn-back" title="Kembali ke Dashboard">←</a>
+          <div class="breadcrumb-trail">
+            <a href="#/">Coach Adib</a>
+            <span>›</span>
+            <span class="current">Playlist Kegemaran</span>
+          </div>
+        </div>
+
+        <header class="program-header-hero" style="position:relative;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span class="tag-badge tag-amber">⭐ Playlist Peribadi</span>
+            <span class="tag-badge tag-emerald">${savedMods.length} Video Disimpan</span>
+          </div>
+          <h1 class="program-header-title">Playlist Video Kegemaran</h1>
+          <p class="program-header-desc">
+            Koleksi video yang anda tanda sebagai kegemaran atau rujukan pantas. Tonton secara bersiri mengikut giliran peribadi anda tanpa gangguan.
+          </p>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+            ${savedMods.length > 0 ? `
+              <a href="#/module/${firstSaved.id}?playlist=fav" class="btn-play-all" style="padding:10px 18px;font-size:0.9rem;">
+                <span>▶</span> Mainkan Semua Dari Mula
+              </a>
+              <button class="btn-fav-action btn-fav-clear" onclick="clearFavorites()">
+                <span>🗑</span> Kosongkan Senarai
+              </button>
+            ` : ''}
+            <button class="btn-fav-action" onclick="addRecommendedFavorites()">
+              <span>⭐</span> + Tambah 6 Modul Disyorkan
+            </button>
+          </div>
+        </header>
+      `;
+
+      if (savedMods.length === 0) {
+        html += `
+          <div class="fav-empty-state">
+            <div class="fav-empty-icon">⭐</div>
+            <h3 class="fav-empty-title">Tiada modul dalam playlist kegemaran</h3>
+            <p class="fav-empty-desc">
+              Anda belum menanda sebarang modul. Simpan mana-mana video dengan menekan butang <strong>★ Simpan</strong> semasa menonton, atau klik butang di bawah untuk memasukkan 6 modul jualan & closing terbaik.
+            </p>
+            <button class="btn-play-all" onclick="addRecommendedFavorites()" style="padding:10px 20px;font-size:0.95rem;">
+              <span>⭐</span> Muatkan 6 Modul Pilihan Terbaik Sekarang
+            </button>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="fav-page-grid">
+            ${savedMods.map((m, idx) => {
+              const crs = courses.find(c => c.id === m.course_id);
+              const prog = crs ? programs.find(p => p.id === crs.program_id) : null;
+              const thumb = m.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
+              const isDone = completedSet.has(m.id);
+              return `
+                <div class="fav-card-item" style="flex:auto;">
+                  <button class="fav-card-remove" onclick="removeFavoriteFromHome(event, '${m.id}')" title="Keluarkan dari senarai">✕</button>
+                  <a href="#/module/${m.id}?playlist=fav" class="fav-card-thumb-wrap">
+                    <img src="${thumb}" alt="${m.title}" class="fav-card-thumb" loading="lazy" />
+                    ${m.duration_minutes ? `<span class="fav-card-time">${m.duration_minutes}m</span>` : ''}
+                    <span style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);color:#ffd700;font-size:0.75rem;font-weight:800;padding:2px 8px;border-radius:4px;">#${idx + 1}</span>
+                  </a>
+                  <div class="fav-card-body">
+                    <div>
+                      <div style="font-size:0.72rem;color:var(--text-tertiary);margin-bottom:4px;">${prog ? prog.title : ''} ${crs ? `› ${crs.title}` : ''}</div>
+                      <a href="#/module/${m.id}?playlist=fav" class="fav-card-title" style="text-decoration:none;" title="${m.title}">${m.title}</a>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px;">
+                      <a href="#/module/${m.id}?playlist=fav" class="btn-play-all" style="padding:5px 10px;font-size:0.75rem;">
+                        ▶ Tonton
+                      </a>
+                      <button class="btn-fav-action" style="padding:5px 10px;font-size:0.75rem;" onclick="toggleDone('${m.id}')">
+                        ${isDone ? '✓ Selesai' : '○ Tanda Selesai'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // Recommended best modules section at bottom
+      html += `
+        <section class="home-favorites-section" style="margin-top:40px;">
+          <div class="home-favorites-header">
+            <div class="home-favorites-title">
+              <span>💡</span>
+              <span>Cadangan Modul Penting (Best Recommended)</span>
+            </div>
+          </div>
+          <p style="color:var(--text-tertiary);font-size:0.86rem;margin-bottom:12px;">
+            Modul-modul ini sangat disyorkan oleh Coach Adib untuk membina asas closing, skrip jualan WhatsApp, dan pemahaman customer:
+          </p>
+          <div class="fav-rec-chips-row">
+            ${RECOMMENDED_BEST_MODULE_IDS.map(item => {
+              const mod = modules.find(m => m.id === item.id);
+              const title = mod ? mod.title : item.label;
+              const isAlreadyIn = bookmarkedSet.has(item.id);
+              return `
+                <a href="#/module/${item.id}?playlist=fav" class="fav-rec-chip" onclick="quickAddFavoriteAndGo('${item.id}')">
+                  <span>${isAlreadyIn ? '✓' : '⭐'}</span>
+                  <span>${title}</span>
+                  <span style="opacity:0.6;font-size:0.75rem;">${isAlreadyIn ? 'Tonton' : '+ Tambah'}</span>
+                </a>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `;
+
+      container.innerHTML = html;
     }
 
     /* 2. PROGRAM VIEW (`/program/:id`) */
@@ -2699,8 +3249,8 @@ def build_offline_site():
           <div class="course-playlist-section">
             <div class="playlist-header">
               <div>
-                <div class="playlist-label">Playlist</div>
-                <div class="playlist-course-title">${crs ? crs.title : 'Senarai Video'}</div>
+                <div class="playlist-label">${playlist.isFavPlaylist ? '⭐ Playlist Kegemaran' : 'Playlist'}</div>
+                <div class="playlist-course-title">${playlist.isFavPlaylist ? 'Senarai Video Pilihan Anda' : (crs ? crs.title : 'Senarai Video')}</div>
               </div>
               <div class="playlist-stat">
                 ${playlist.items.filter(s => completedSet.has(s.id)).length} / ${playlist.items.length} Selesai · ${Math.round((playlist.items.filter(s => completedSet.has(s.id)).length / playlist.items.length) * 100)}%
@@ -2714,6 +3264,7 @@ def build_offline_site():
                 const sibDone = completedSet.has(sib.id);
                 const isCurrent = sib.id === mod.id;
                 const sibThumb = sib.thumbnail_url || 'https://media.base44.com/images/public/6ac023b2ca93856d6db5ad7c/21bcae3f8_logo.png';
+                const queryParam = playlist.isFavPlaylist ? '?playlist=fav' : '';
                 return `
                   ${sib.is_chapter_start ? `
                     <div class="playlist-chapter-card">
@@ -2721,7 +3272,7 @@ def build_offline_site():
                       <p class="playlist-chapter-title">${sib.chapter_title}</p>
                     </div>
                   ` : ''}
-                  <a href="#/module/${sib.id}" class="playlist-item-card ${isCurrent ? 'active' : ''}" id="${isCurrent ? 'active-playlist-item' : ''}">
+                  <a href="#/module/${sib.id}${queryParam}" class="playlist-item-card ${isCurrent ? 'active' : ''}" id="${isCurrent ? 'active-playlist-item' : ''}">
                     <div class="playlist-thumb-box">
                       <img src="${sibThumb}" alt="${sib.title}" class="playlist-thumb-img" loading="lazy" />
                       ${sibDone ? `<span class="playlist-done-badge">✓</span>` : ''}
@@ -2741,12 +3292,12 @@ def build_offline_site():
 
         <div class="module-footer-nav">
           ${prevMod ? `
-            <a href="#/module/${prevMod.id}" class="btn-nav-step">
+            <a href="#/module/${prevMod.id}${playlist.isFavPlaylist ? '?playlist=fav' : ''}" class="btn-nav-step">
               ← Video Sebelum (${prevMod.title})
             </a>
           ` : `<div></div>`}
           ${nextMod ? `
-            <a href="#/module/${nextMod.id}" class="btn-nav-step primary">
+            <a href="#/module/${nextMod.id}${playlist.isFavPlaylist ? '?playlist=fav' : ''}" class="btn-nav-step primary">
               Video Seterusnya (${nextMod.title}) →
             </a>
           ` : `<div></div>`}
@@ -2768,7 +3319,26 @@ def build_offline_site():
     }
 
     function getCoursePlaylist(mod) {
-      if (!mod || !mod.course_id) return { items: [], prev: null, next: null };
+      if (!mod) return { items: [], prev: null, next: null };
+
+      const isFavPlaylist = window.location.hash.includes('playlist=fav');
+      if (isFavPlaylist && bookmarkedSet.size > 0) {
+        const savedMods = modules.filter(m => bookmarkedSet.has(m.id));
+        const currIdx = savedMods.findIndex(m => m.id === mod.id);
+        return {
+          items: savedMods.map((m, idx) => ({
+            ...m,
+            chapter_title: 'Playlist Kegemaran',
+            chapter_number: 1,
+            is_chapter_start: idx === 0
+          })),
+          prev: currIdx > 0 ? savedMods[currIdx - 1] : null,
+          next: currIdx >= 0 && currIdx < savedMods.length - 1 ? savedMods[currIdx + 1] : null,
+          isFavPlaylist: true
+        };
+      }
+
+      if (!mod.course_id) return { items: [], prev: null, next: null };
       const r = (a, b) => (a.order || 0) - (b.order || 0);
       const courseChapters = chapters.filter(ch => ch.course_id === mod.course_id).sort(r);
       const items = [];
@@ -2790,7 +3360,8 @@ def build_offline_site():
       return {
         items: items,
         prev: currIdx > 0 ? items[currIdx - 1] : null,
-        next: currIdx >= 0 && currIdx < items.length - 1 ? items[currIdx + 1] : null
+        next: currIdx >= 0 && currIdx < items.length - 1 ? items[currIdx + 1] : null,
+        isFavPlaylist: false
       };
     }
 
@@ -2839,6 +3410,7 @@ def build_offline_site():
         showToast('Modul disimpan ke senarai', '★');
       }
       localStorage.setItem('ca_bookmarked', JSON.stringify([...bookmarkedSet]));
+      updateFavCountBadge();
       router();
     }
 
@@ -3091,14 +3663,16 @@ def build_offline_site():
         // [: Previous Lesson
         if (e.key === '[') {
           if (activePlaylistContext && activePlaylistContext.prev) {
-            window.location.hash = `#/module/${activePlaylistContext.prev.id}`;
+            const q = activePlaylistContext.isFavPlaylist ? '?playlist=fav' : '';
+            window.location.hash = `#/module/${activePlaylistContext.prev.id}${q}`;
           }
         }
 
         // ]: Next Lesson
         if (e.key === ']') {
           if (activePlaylistContext && activePlaylistContext.next) {
-            window.location.hash = `#/module/${activePlaylistContext.next.id}`;
+            const q = activePlaylistContext.isFavPlaylist ? '?playlist=fav' : '';
+            window.location.hash = `#/module/${activePlaylistContext.next.id}${q}`;
           }
         }
 
