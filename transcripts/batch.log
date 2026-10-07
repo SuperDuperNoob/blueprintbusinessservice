@@ -220,3 +220,383 @@ rate-limited, sleeping 60s
 rate-limited, sleeping 60s
 [158/433] FAIL groq PCB ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
 rate-limited, sleeping 60s
+[159/433] FAIL groq Exit 10K Income ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[160/433] OK (2787ch) Full Department
+[161/433] FAIL groq Cash Reserve ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[162/433] FAIL groq Don't Overexpand ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[163/433] FAIL groq Boring Business ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[164/433] FAIL groq Exit 20K Income ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[165/433] FAIL groq Career Growth ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[166/433] OK (3060ch) BOD
+[167/433] FAIL groq Shareholder ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[168/433] FAIL groq Quarterly Dividend ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[169/433] FAIL groq Compounding Effect ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[170/433] FAIL groq Churn Rate ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[171/433] FAIL groq ON OS OB ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[172/433] FAIL groq Productize Your Service ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[173/433] FAIL groq Subscription Magic Number ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[174/433] FAIL groq Man Power Ceiling ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[175/433] OK (4348ch) Introduction Business Model
+[176/433] FAIL groq Winning Service ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[177/433] FAIL groq Minat VS Pengalaman ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[178/433] FAIL groq Red Ocean VS Blue Ocean ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[179/433] FAIL groq Validate Demand ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[180/433] FAIL groq Specialise ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[181/433] FAIL groq Five Price Level ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[182/433] FAIL groq Price Is Subjective ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[183/433] FAIL groq COGS ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[184/433] FAIL groq Healthy Profit Ratio ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[185/433] FAIL groq How To Increase Price ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[186/433] FAIL groq Brand Positioning ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[187/433] FAIL groq Brand USP ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[188/433] FAIL groq Brand Name ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[189/433] FAIL groq Product Name ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[190/433] FAIL groq Brand Identity ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[191/433] FAIL groq Magic Number SOOSOA OPEX ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[192/433] FAIL groq Introduction The Art Of Partnership ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[193/433] OK (10073ch) Partnership Lifecycle
+[https @ 0x55825fdd1980] Error reading HTTP response: End of file
+[194/433] FAIL groq Sleeping Partner Strategy ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[195/433] FAIL groq Dilution, Loan & Equity Option ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[196/433] FAIL groq Dividend Timeline ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[197/433] FAIL groq Exit By Company Valuation ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[198/433] FAIL groq Bookkeeping & Transaction ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[199/433] OK (6180ch) Target Cash Reserve
+[200/433] FAIL groq Return On Investment (ROI) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[201/433] FAIL groq Backup Tax Money ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[202/433] FAIL groq Tax Rate & Benefit ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[203/433] FAIL groq Syarikat Enterprise ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[204/433] FAIL groq Syarikat Sdn Bhd ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[205/433] OK (1583ch) Introduction Cashflow Strategy
+[206/433] FAIL groq 3 Type Funnel ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[207/433] FAIL groq Split Test Strategy ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[208/433] FAIL groq Content Moment HMOUA ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[209/433] FAIL groq Formula Hook 3H3C ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[210/433] FAIL groq Hybrid Content FYP ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[211/433] FAIL groq 3 Positioning USP ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[212/433] FAIL groq 4 Positioning Quadrant ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[213/433] OK (6686ch) 3 Type Product
+[214/433] FAIL groq 5 Level Price ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[215/433] FAIL groq Leads Commission ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[216/433] OK (1941ch) Appointment Commission
+[217/433] FAIL groq Whatsapp Commission Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[218/433] OK (1441ch) Whatsapp Commission Part 2
+[219/433] FAIL groq Website Commission ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[220/433] FAIL groq Task Commission ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[221/433] FAIL groq Job Finish Commission ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[222/433] FAIL groq Over Riding Commission ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[223/433] FAIL groq Asas Gaji Basic & Komisen ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[224/433] FAIL groq Basic & Komisyen ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[225/433] FAIL groq 3 Level Gaji Basic ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[226/433] FAIL groq 5 Level Komisen = KPI ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[227/433] FAIL groq Calculator Commision V4 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[228/433] OK (2139ch) Max Profit After Target Commission
+[229/433] FAIL groq Due Date Commission ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[230/433] FAIL groq Introduction 3 Level Komisen ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[231/433] FAIL groq Chapter 1 Wajib Ke Bagi Komisen? ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[232/433] FAIL groq Chapter 1 Profit VS Komisen ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[233/433] FAIL groq Chapter 2 Basic Salary (Experience) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[234/433] FAIL groq Chapter 2 Basic Salary (Skill) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[235/433] OK (3128ch) Chapter 3 Ideal Commission (Exprience)
+[236/433] FAIL groq Chapter 3 Ideal Commission (Job Scope) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[237/433] FAIL groq Chapter 4 3 Level Komisen (Reward & Risk) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[238/433] FAIL groq Chapter 5 Other Reward (Bonus) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[239/433] FAIL groq Chapter 5 Other Reward (Yearly Increment) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[240/433] FAIL groq Chapter 6 Other Alternative (Reward Without Money) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[241/433] FAIL groq Chapter 6 Other Alternative (Type Of Freedom) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[242/433] OK (1568ch) Introduction Of 7 Ceiling Sales 10k To 10M
+[243/433] FAIL groq Chapter 1 7 Level Ceiling Sales (Sales & Skill) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[244/433] FAIL groq Chapter 2 Level 1 First RM10K (Demand & Supply Clo ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[245/433] FAIL groq Chapter 3 Level 2 & 3 (Part Time Vs Fulltime Skill ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[246/433] OK (3197ch) Chapter 4 Level 4 & Level 5 (Leadership & System
+[247/433] FAIL groq Chapter 5 Level 6 & Level 7 (Strategy Partner Fran ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[248/433] FAIL groq Chapter 6 5 Learning Curve (Timeline) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[249/433] FAIL groq Chapter 6 Learning Curve (Intensive Consistentcy) ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[250/433] FAIL groq Introduction NP30k ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[251/433] FAIL groq 3 Level Profit COGS ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[252/433] FAIL groq SOOSOA OPEX ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[253/433] FAIL groq Introduction Profit Magic Number ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[254/433] FAIL groq Profit Magic Number ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[255/433] FAIL groq Chapter 1 Sales VS Profit ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[256/433] FAIL groq Chapter 2 OPEX ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[257/433] FAIL groq Chapter 3 COGS ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[258/433] FAIL groq Chapter 4 AOV ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[259/433] FAIL groq Chapter 5 Magic Number Simulation ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[260/433] OK (6577ch) Chapter 6 Winning Funnel
+[261/433] FAIL groq Weekly Rhythm ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[262/433] FAIL groq 14 Days Sprint ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[263/433] FAIL groq Physical Identity ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[264/433] OK (1775ch) Online Identity
+[265/433] FAIL groq Office ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[266/433] FAIL groq Team ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[267/433] FAIL groq Customer ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[268/433] FAIL groq Feedback ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[269/433] FAIL groq Timing ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[270/433] OK (2334ch) Cost
+[271/433] FAIL groq Rebranding ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[272/433] FAIL groq Repositioning ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[273/433] FAIL groq Closing Direct Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[274/433] FAIL groq Closing Direct Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[275/433] FAIL groq Closing Direct Part 3 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[276/433] FAIL groq Example Closing Direct Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[277/433] OK (2899ch) Example Closing Direct Part 2
+[278/433] FAIL groq Example Closing Direct Part 3 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[279/433] FAIL groq Introduction ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[280/433] FAIL groq Chapter 1 Introduction ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[281/433] FAIL groq Chapter 2 Simulation Ads Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[282/433] FAIL groq Chapter 3 Whatsapp Ads Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[283/433] OK (2393ch) Chapter 2 Simulation Ads Part 2
+[284/433] FAIL groq Chapter 3 Whatsapp Ads Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[285/433] FAIL groq Chapter 4 Website Ads Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[286/433] FAIL groq Chapter 4 Website Ads Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[287/433] FAIL groq Chapter 5 Local Store Ads ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[288/433] FAIL groq Chapter 6 Snowball Strategy ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[289/433] FAIL groq Consultion Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[290/433] FAIL groq Consultion Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[291/433] FAIL groq Consultion Part 3 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[292/433] FAIL groq Example Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[293/433] FAIL groq Example Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[294/433] FAIL groq Example Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[295/433] FAIL groq Closing Hybrid Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[296/433] OK (6150ch) Closing Hybrid Part 2
+[297/433] FAIL groq Closing Hybrid Part 3 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[298/433] FAIL groq Example Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[299/433] FAIL groq Example Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[300/433] FAIL groq Example Part 3 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[301/433] FAIL groq Sales Script Call Part 1 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[302/433] FAIL groq Sales Script Call Part 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[303/433] FAIL groq Sales Script Call Part 3 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[304/433] FAIL groq Sales Script Call Example ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[305/433] OK (3435ch) 5 Top Rejection
+[306/433] OK (1159ch) 12 Customer Rejection
+[307/433] FAIL groq Jangan Lawan Ego Customer ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[308/433] FAIL groq Price Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[309/433] OK (3738ch) Need Counter Rejection
+[310/433] FAIL groq Time Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[311/433] FAIL groq Trust Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[312/433] FAIL groq Compasion Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[313/433] OK (4522ch) Past Experience
+[314/433] FAIL groq Information Overloaded ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[315/433] FAIL groq Budget Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[316/433] FAIL groq Urgency Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[317/433] FAIL groq Comiment Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[318/433] FAIL groq Feartures Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[319/433] FAIL groq Non Decission Maker Counter Rejection ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[320/433] FAIL groq Limit Closing ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[321/433] FAIL groq Blueprint Sales 100K ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[322/433] FAIL groq Magic Number ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[323/433] OK (2817ch) Pengenalan Formula Meta Ads
+[324/433] FAIL groq Master Template ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[325/433] FAIL groq Magic Number Sales 100K ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[326/433] FAIL groq Magic Number Winning Ads ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[327/433] OK (5038ch) Formula REETA
+[328/433] FAIL groq Fasa Split Test ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[329/433] FAIL groq ⁠Fasa Scale Up : Scale Down ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[330/433] FAIL groq Value Vs Equation ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[331/433] FAIL groq 3 Tugas Utama Iklan ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[332/433] FAIL groq Benchmark Winning Ads ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[333/433] FAIL groq Teknik Editing Canva ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[334/433] FAIL groq 11 Jenis Iklan Gambar ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[335/433] FAIL groq 11 Jenis Iklan Video ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[336/433] FAIL groq Strategy Content Hybrid ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[337/433] TIMEOUT Pattern Copywritting
+[338/433] OK (6319ch) Split Test Hook
+[339/433] FAIL groq Facebook Page ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[340/433] FAIL groq Setup Acc + Payment Method ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[341/433] FAIL groq Install WhatsApp Business + Meta Ads ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[342/433] FAIL groq Setup Campaign ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[343/433] FAIL groq Setup Campaign Method 2 ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[344/433] FAIL groq Policy Meta Ads ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[345/433] OK (2312ch) 70% Follow Up 30% Tak Follow Up
+[346/433] OK (3041ch) Awkward
+[347/433] FAIL groq Mencegah Dan Merawat ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[348/433] OK (1862ch) Pantang Larang
+[349/433] FAIL groq 5 Format Tanya Soalan ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[350/433] FAIL groq Types Of Quentions ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[351/433] OK (1483ch) Follow Up PDF
+[352/433] FAIL groq Follow Up Berantai ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[353/433] FAIL groq Follow Up VS Database ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[354/433] FAIL groq Elakkan Kena Banned ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[355/433] FAIL groq Pengenalan Sales Page ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[356/433] FAIL groq Funnel Sales Page ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[357/433] FAIL groq Magic Number ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[358/433] FAIL groq Element Sales Page ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[359/433] FAIL groq Asas Website Onpay ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[360/433] FAIL groq 3 Type Of Product ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[361/433] FAIL groq 3 Type Of Funnel ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[362/433] FAIL groq 4 Jenis Template ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
+[363/433] FAIL groq Copywriting Sales Page ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
+rate-limited, sleeping 60s
