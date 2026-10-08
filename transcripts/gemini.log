@@ -90,3 +90,280 @@ both keys limited, sleeping 120s
 [120/441] SKIP too big Magic Number EP008 2
 [121/441] FAIL gemini Winning Funnel EP009 :: HTTP Error 429: Too Many Requests
 both keys limited, sleeping 120s
+[122/441] SKIP too big 7 Ceiling Sales Part 1
+[123/441] SKIP too big 7 Ceiling Sales Part 2
+[124/441] TIMEOUT 7 Ceiling Sales Part 3
+[152/441] FAIL gemini Survival Income :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[154/441] OK (2113ch) Luxury Income
+[155/441] FAIL gemini Common Lifestyle :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[157/441] OK (2693ch) Exit 2K Income
+[158/441] FAIL gemini Leader Eat First :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[159/441] FAIL gemini OPEX :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[160/441] FAIL gemini COGS :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[161/441] FAIL gemini PBT :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[163/441] FAIL gemini Salary Timing :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[164/441] FAIL gemini Team Structure :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[165/441] FAIL gemini Income Tax :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[166/441] FAIL gemini PCB :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[167/441] FAIL gemini Exit 10K Income :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[169/441] FAIL gemini Cash Reserve :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[170/441] FAIL gemini Don't Overexpand :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[171/441] FAIL gemini Boring Business :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[172/441] FAIL gemini Exit 20K Income :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[173/441] FAIL gemini Career Growth :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[175/441] FAIL gemini Shareholder :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[176/441] OK (4094ch) Quarterly Dividend
+[177/441] FAIL gemini Compounding Effect :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[178/441] FAIL gemini Churn Rate :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[179/441] FAIL gemini ON OS OB :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[180/441] FAIL gemini Productize Your Service :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[181/441] FAIL gemini Subscription Magic Number :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[182/441] FAIL gemini Man Power Ceiling :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[184/441] FAIL gemini Winning Service :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[185/441] FAIL gemini Minat VS Pengalaman :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[186/441] FAIL gemini Red Ocean VS Blue Ocean :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[187/441] FAIL gemini Validate Demand :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[188/441] FAIL gemini Specialise :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[189/441] FAIL gemini Five Price Level :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[190/441] FAIL gemini Price Is Subjective :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[191/441] FAIL gemini COGS :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[192/441] FAIL gemini Healthy Profit Ratio :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[193/441] FAIL gemini How To Increase Price :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[194/441] FAIL gemini Brand Positioning :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[195/441] FAIL gemini Brand USP :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[196/441] FAIL gemini Brand Name :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[197/441] FAIL gemini Product Name :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[198/441] FAIL gemini Brand Identity :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[199/441] FAIL gemini Magic Number SOOSOA OPEX :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[200/441] FAIL gemini Introduction The Art Of Partnership :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[202/441] FAIL gemini Sleeping Partner Strategy :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[203/441] FAIL gemini Dilution, Loan & Equity Option :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[204/441] FAIL gemini Dividend Timeline :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[205/441] FAIL gemini Exit By Company Valuation :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[206/441] FAIL gemini Bookkeeping & Transaction :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[208/441] FAIL gemini Return On Investment (ROI) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[209/441] FAIL gemini Backup Tax Money :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[210/441] FAIL gemini Tax Rate & Benefit :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[211/441] FAIL gemini Syarikat Enterprise :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[212/441] FAIL gemini Syarikat Sdn Bhd :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[214/441] FAIL gemini 3 Type Funnel :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[215/441] FAIL gemini Split Test Strategy :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[216/441] FAIL gemini Content Moment HMOUA :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[217/441] FAIL gemini Formula Hook 3H3C :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[218/441] FAIL gemini Hybrid Content FYP :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[219/441] FAIL gemini 3 Positioning USP :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[220/441] FAIL gemini 4 Positioning Quadrant :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[222/441] FAIL gemini 5 Level Price :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[223/441] FAIL gemini Leads Commission :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[225/441] FAIL gemini Whatsapp Commission Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[227/441] FAIL gemini Website Commission :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[228/441] FAIL gemini Task Commission :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[229/441] FAIL gemini Job Finish Commission :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[230/441] FAIL gemini Over Riding Commission :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[231/441] FAIL gemini Asas Gaji Basic & Komisen :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[232/441] FAIL gemini Basic & Komisyen :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[233/441] FAIL gemini 3 Level Gaji Basic :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[234/441] FAIL gemini 5 Level Komisen = KPI :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[235/441] FAIL gemini Calculator Commision V4 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[237/441] FAIL gemini Due Date Commission :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[238/441] FAIL gemini Introduction 3 Level Komisen :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[239/441] FAIL gemini Chapter 1 Wajib Ke Bagi Komisen? :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[240/441] FAIL gemini Chapter 1 Profit VS Komisen :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[241/441] FAIL gemini Chapter 2 Basic Salary (Experience) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[242/441] FAIL gemini Chapter 2 Basic Salary (Skill) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[244/441] FAIL gemini Chapter 3 Ideal Commission (Job Scope) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[245/441] FAIL gemini Chapter 4 3 Level Komisen (Reward & Risk) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[246/441] FAIL gemini Chapter 5 Other Reward (Bonus) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[247/441] FAIL gemini Chapter 5 Other Reward (Yearly Increment) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[248/441] FAIL gemini Chapter 6 Other Alternative (Reward Without Money) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[249/441] FAIL gemini Chapter 6 Other Alternative (Type Of Freedom) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[251/441] OK (7170ch) Chapter 1 7 Level Ceiling Sales (Sales & Skill)
+[252/441] FAIL gemini Chapter 2 Level 1 First RM10K (Demand & Supply Clo :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[253/441] FAIL gemini Chapter 3 Level 2 & 3 (Part Time Vs Fulltime Skill :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[255/441] FAIL gemini Chapter 5 Level 6 & Level 7 (Strategy Partner Fran :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[256/441] FAIL gemini Chapter 6 5 Learning Curve (Timeline) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[257/441] FAIL gemini Chapter 6 Learning Curve (Intensive Consistentcy) :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[258/441] FAIL gemini Introduction NP30k :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[259/441] FAIL gemini 3 Level Profit COGS :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[260/441] FAIL gemini SOOSOA OPEX :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[261/441] FAIL gemini Introduction Profit Magic Number :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[262/441] FAIL gemini Profit Magic Number :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[263/441] FAIL gemini Chapter 1 Sales VS Profit :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[264/441] FAIL gemini Chapter 2 OPEX :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[265/441] FAIL gemini Chapter 3 COGS :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[266/441] FAIL gemini Chapter 4 AOV :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[267/441] FAIL gemini Chapter 5 Magic Number Simulation :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[269/441] FAIL gemini Weekly Rhythm :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[270/441] FAIL gemini 14 Days Sprint :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[271/441] FAIL gemini Physical Identity :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[273/441] FAIL gemini Office :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[274/441] FAIL gemini Team :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[275/441] FAIL gemini Customer :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[276/441] FAIL gemini Feedback :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[277/441] FAIL gemini Timing :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[279/441] FAIL gemini Rebranding :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[280/441] FAIL gemini Repositioning :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[281/441] FAIL gemini Closing Direct Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[282/441] FAIL gemini Closing Direct Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[283/441] FAIL gemini Closing Direct Part 3 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[284/441] FAIL gemini Example Closing Direct Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[286/441] FAIL gemini Example Closing Direct Part 3 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[287/441] FAIL gemini Introduction :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[288/441] FAIL gemini Chapter 1 Introduction :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[289/441] FAIL gemini Chapter 2 Simulation Ads Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[290/441] FAIL gemini Chapter 3 Whatsapp Ads Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[292/441] FAIL gemini Chapter 3 Whatsapp Ads Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[293/441] FAIL gemini Chapter 4 Website Ads Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[294/441] FAIL gemini Chapter 4 Website Ads Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[295/441] FAIL gemini Chapter 5 Local Store Ads :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[296/441] FAIL gemini Chapter 6 Snowball Strategy :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[297/441] FAIL gemini Consultion Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[298/441] FAIL gemini Consultion Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[299/441] FAIL gemini Consultion Part 3 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[300/441] FAIL gemini Example Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[301/441] FAIL gemini Example Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[302/441] FAIL gemini Example Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[303/441] FAIL gemini Closing Hybrid Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[305/441] FAIL gemini Closing Hybrid Part 3 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[306/441] FAIL gemini Example Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[307/441] FAIL gemini Example Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[308/441] FAIL gemini Example Part 3 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[309/441] FAIL gemini Sales Script Call Part 1 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[310/441] FAIL gemini Sales Script Call Part 2 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[311/441] FAIL gemini Sales Script Call Part 3 :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
+[312/441] FAIL gemini Sales Script Call Example :: HTTP Error 429: Too Many Requests
+both keys limited, sleeping 120s
