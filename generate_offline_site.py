@@ -63,6 +63,25 @@ def build_offline_site():
     chapters = sorted(data.get("Chapter", []), key=lambda x: x.get("order", 0))
     modules = sorted(data.get("Module", []), key=lambda x: (x.get("order", 0), x.get("level_number", 0)))
 
+    # Merge transcripts/ into modules (resume-safe: only modules with .txt get transcript)
+    import glob as _glob
+    _tcount = 0
+    for _tp in _glob.glob("transcripts/*.txt"):
+        try:
+            with open(_tp, "r", encoding="utf-8") as _tf:
+                _first = _tf.readline()
+                _text = _tf.read().strip()
+            _meta = json.loads(_first)
+            _mid = _meta.get("id") or os.path.splitext(os.path.basename(_tp))[0]
+            for _m in modules:
+                if _m.get("id") == _mid and _text:
+                    _m["transcript"] = _text
+                    _tcount += 1
+                    break
+        except Exception:
+            pass
+    print(f"  merged {_tcount} transcripts into modules")
+
     # Save CNAME
     with open("offline_site/CNAME", "w", encoding="utf-8") as f:
         f.write("bbs.archxry.space\n")
@@ -3675,6 +3694,21 @@ def build_offline_site():
           </div>
         ` : ''}
 
+        ${mod.transcript ? `
+          <div class="study-notes-box">
+            <div class="study-notes-header" style="cursor:pointer;" onclick="toggleTranscript(this)">
+              <div class="study-notes-title">
+                <span>📝 Transkrip Video</span>
+                <span class="transcript-toggle-icon">▼</span>
+              </div>
+              <button class="ctrl-btn" onclick="event.stopPropagation();copyTranscript('${mod.id}')">📋 Salin Transkrip</button>
+            </div>
+            <div class="markdown-body transcript-body" style="display:none;white-space:pre-wrap;">
+              ${escapeHtml(mod.transcript)}
+            </div>
+          </div>
+        ` : ''}
+
         ${mod.quiz && Array.isArray(mod.quiz) && mod.quiz.length > 0 ? `
           <div class="study-notes-box">
             <div class="study-notes-header">
@@ -3894,6 +3928,26 @@ def build_offline_site():
       if (mod && mod.notes) {
         navigator.clipboard.writeText(mod.notes).then(() => showToast('Nota berjaya disalin!', '📋'));
       }
+    }
+
+    function toggleTranscript(headerEl) {
+      const body = headerEl.parentElement.querySelector('.transcript-body');
+      const icon = headerEl.querySelector('.transcript-toggle-icon');
+      if (!body) return;
+      const open = body.style.display !== 'none';
+      body.style.display = open ? 'none' : 'block';
+      if (icon) icon.textContent = open ? '▼' : '▲';
+    }
+
+    function copyTranscript(modId) {
+      const mod = modules.find(m => m.id === modId);
+      if (mod && mod.transcript) {
+        navigator.clipboard.writeText(mod.transcript).then(() => showToast('Transkrip berjaya disalin!', '📋'));
+      }
+    }
+
+    function escapeHtml(s) {
+      return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     function checkQuiz(btn, chosen, correct, explain) {
