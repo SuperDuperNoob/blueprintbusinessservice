@@ -725,3 +725,4 @@ rate-limited, sleeping 60s
 [433/433] FAIL groq Average Closing Rate ::  {"error":{"message":"Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01ky
 rate-limited, sleeping 60s
 DONE new=126 skipped=1 failed=306
+[https @ 0x56041039de40] Error reading HTTP response: End of file
