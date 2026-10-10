@@ -67,6 +67,7 @@ mods = [m for m in d['Module'] if m.get('video_url') and m.get('thumbnail_url')]
 print(f'total with video: {len(mods)}')
 
 done = skip = fail = 0
+consec_rl = 0  # circuit breaker: abort run when both keys are dead
 todo = mods[:limit] if limit else mods
 for i, m in enumerate(todo):
     mid = m['id']
@@ -108,6 +109,10 @@ for i, m in enumerate(todo):
             print(f'[{i+1}/{len(todo)}] FAIL gemini {m["title"][:50]} :: {err[:100]}', flush=True)
             fail += 1
             if '429' in err or 'EXHAUSTED' in err:
+                consec_rl += 1
+                if consec_rl >= 5:
+                    print(f'both keys dead ({consec_rl} consecutive 429), aborting run — will retry next cron', flush=True)
+                    break
                 print('both keys limited, sleeping 120s', flush=True)
                 time.sleep(120)
             else:
@@ -117,6 +122,7 @@ for i, m in enumerate(todo):
         with open(out, 'w', encoding='utf-8') as f:
             f.write(json.dumps(meta, ensure_ascii=False) + '\n' + text)
         done += 1
+        consec_rl = 0
         print(f'[{i+1}/{len(todo)}] OK ({len(text)}ch) {m["title"][:50]}', flush=True)
     except subprocess.TimeoutExpired:
         print(f'[{i+1}/{len(todo)}] TIMEOUT {m["title"][:50]}', flush=True)

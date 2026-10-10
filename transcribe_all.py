@@ -30,6 +30,7 @@ print(f'total with video: {len(mods)}')
 done = 0
 skip = 0
 fail = 0
+consec_rl = 0  # circuit breaker: abort run when API quota is dead
 todo = mods[:limit] if limit else mods
 for i, m in enumerate(todo):
     mid = m['id']
@@ -83,6 +84,10 @@ for i, m in enumerate(todo):
             print(f'[{i+1}/{len(todo)}] FAIL groq {m["title"][:50]} :: {r.stderr[:100]} {r.stdout[:100]}')
             fail += 1
             if 'rate' in (r.stdout + r.stderr).lower() or '429' in (r.stdout + r.stderr):
+                consec_rl += 1
+                if consec_rl >= 5:
+                    print(f'quota dead ({consec_rl} consecutive rate-limits), aborting run — will retry next cron')
+                    break
                 print('rate-limited, sleeping 60s')
                 time.sleep(60)
             else:
@@ -98,6 +103,7 @@ for i, m in enumerate(todo):
         with open(out, 'w', encoding='utf-8') as f:
             f.write(json.dumps(meta, ensure_ascii=False) + '\n' + text)
         done += 1
+        consec_rl = 0
         print(f'[{i+1}/{len(todo)}] OK ({len(text)}ch) {m["title"][:50]}')
     except subprocess.TimeoutExpired:
         print(f'[{i+1}/{len(todo)}] TIMEOUT {m["title"][:50]}')
