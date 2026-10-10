@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Batch transcribe BBS modules via Gemini (free tier, separate quota from Groq).
 Same resume-safe .txt format as transcribe_all.py (JSON meta first line).
-Rotates between 2 API keys on 429. Inline base64 audio (files are small 16k/32k mp3).
+Rotates across every GEMINI_API_KEY[_N] key on 429. Inline base64 audio (files are small 16k/32k mp3).
 Usage: python3 transcribe_gemini.py [--limit N] [--sleep S]
 """
-import json, os, sys, time, subprocess, base64, urllib.request
+import json, os, sys, time, subprocess, base64, urllib.request, tempfile, glob, shutil
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(BASE, 'bbs_data.json')
@@ -12,14 +12,25 @@ OUTDIR = os.path.join(BASE, 'transcripts')
 os.makedirs(OUTDIR, exist_ok=True)
 
 def get_keys():
-    keys = []
+    """All GEMINI_API_KEY / GEMINI_API_KEY_<n> entries, deduped, ordered by suffix."""
+    found = {}
     for line in open('/root/.hermes/.env', encoding='utf-8', errors='ignore'):
         line = line.strip()
-        if line.startswith('GEMINI_API_KEY_2='):
-            keys.append(line.split('=', 1)[1])
-        elif line.startswith('GEMINI_API_KEY='):
-            keys.insert(0, line.split('=', 1)[1])
-    return [k for k in keys if k]
+        if not line.startswith('GEMINI_API_KEY'):
+            continue
+        name, _, val = line.partition('=')
+        val = val.strip()
+        if not val:
+            continue
+        sfx = name[len('GEMINI_API_KEY'):]
+        n = int(sfx[1:]) if sfx.startswith('_') and sfx[1:].isdigit() else 1
+        found[n] = val
+    keys, seen = [], set()
+    for n in sorted(found):
+        if found[n] not in seen:
+            seen.add(found[n])
+            keys.append(found[n])
+    return keys
 
 KEYS = get_keys()
 if not KEYS:
@@ -59,6 +70,34 @@ def gemini_transcribe(mp3_path):
             return '', last_err
     return '', last_err or 'all keys 429'
 
+def gemini_transcribe_any(mp3_path):
+    """Under the inline limit -> single request. Over it -> split into ~30 min
+    segments (well under the limit at 32 kbps mono), transcribe each, join."""
+    LIMIT = 19000000
+    if os.path.getsize(mp3_path) <= LIMIT:
+        return gemini_transcribe(mp3_path)
+    tmpdir = tempfile.mkdtemp(prefix='bbschunk_')
+    try:
+        r = subprocess.run(
+            ['ffmpeg', '-y', '-loglevel', 'error', '-i', mp3_path,
+             '-f', 'segment', '-segment_time', '1800', '-c', 'copy',
+             os.path.join(tmpdir, 'part_%03d.mp3')],
+            timeout=900)
+        parts = [p for p in sorted(glob.glob(os.path.join(tmpdir, 'part_*.mp3')))
+                 if os.path.getsize(p) > 1000]  # segment muxer can emit a 0-byte tail
+        if r.returncode != 0 or not parts:
+            return '', 'chunk split produced nothing'
+        chunks = []
+        for p in parts:
+            t, e = gemini_transcribe(p)
+            if not t:
+                return '', f'{os.path.basename(p)}: {e}'
+            chunks.append(t)
+        return ' '.join(chunks), ''
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+
 limit = int(sys.argv[sys.argv.index('--limit') + 1]) if '--limit' in sys.argv else 0
 sleep_s = float(sys.argv[sys.argv.index('--sleep') + 1]) if '--sleep' in sys.argv else 5
 
@@ -97,12 +136,8 @@ for i, m in enumerate(todo):
                 fail += 1
                 continue
         if os.path.getsize(mp3) > 19000000:
-            print(f'[{i+1}/{len(todo)}] SKIP too big {m["title"][:50]}', flush=True)
-            fail += 1
-            try: os.remove(mp3)
-            except Exception: pass
-            continue
-        text, err = gemini_transcribe(mp3)
+            print(f'[{i+1}/{len(todo)}] CHUNK >19MB {m["title"][:50]}', flush=True)
+        text, err = gemini_transcribe_any(mp3)
         try: os.remove(mp3)
         except Exception: pass
         if not text or len(text) < 5:
@@ -111,9 +146,9 @@ for i, m in enumerate(todo):
             if '429' in err or 'EXHAUSTED' in err:
                 consec_rl += 1
                 if consec_rl >= 5:
-                    print(f'both keys dead ({consec_rl} consecutive 429), aborting run — will retry next cron', flush=True)
+                    print(f'all {len(KEYS)} keys dead ({consec_rl} consecutive 429 sweeps), aborting run — retry next cron', flush=True)
                     break
-                print('both keys limited, sleeping 120s', flush=True)
+                print(f'all {len(KEYS)} keys limited, sleeping 120s', flush=True)
                 time.sleep(120)
             else:
                 time.sleep(sleep_s)

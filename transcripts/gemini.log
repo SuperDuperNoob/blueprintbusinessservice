@@ -575,3 +575,11 @@ DONE new=45 skipped=129 failed=267
 total with video: 441
 [113/441] SKIP too big 7 Ceiling Sales Part 1
 [114/441] SKIP too big Time Management EP005
+5 gemini keys loaded
+total with video: 441
+[114/441] CHUNK >19MB Time Management EP005
+[114/441] FAIL gemini Time Management EP005 :: part_002.mp3: HTTP Error 404: Not Found
+[115/441] FAIL gemini Brand Positioning Pt1 EP006 :: HTTP Error 404: Not Found
+[116/441] CHUNK >19MB 7 Ceiling Sales Part 2
+[116/441] FAIL gemini 7 Ceiling Sales Part 2 :: part_000.mp3: HTTP Error 404: Not Found
+[117/441] OK (121333ch) Pricing Strategy EP008 1
