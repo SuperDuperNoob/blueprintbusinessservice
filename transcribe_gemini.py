@@ -37,7 +37,11 @@ if not KEYS:
     print('no GEMINI keys'); sys.exit(1)
 print(f'{len(KEYS)} gemini keys loaded')
 
-MODEL = 'gemini-2.5-flash'
+# Tried in order per key. Newer Google projects lost access to gemini-2.5-flash
+# ("no longer available to new users"), so 3.x is first and 2.5 is the legacy fallback.
+# 503 = overloaded, 404 = retired/not entitled -> fall through to the next model.
+MODELS = ['gemini-3-flash-preview', 'gemini-3.5-flash', 'gemini-2.5-flash']
+MODEL = MODELS[0]
 ki = 0  # rotating key index
 
 def gemini_transcribe(mp3_path):
@@ -50,25 +54,36 @@ def gemini_transcribe(mp3_path):
             {'inline_data': {'mime_type': 'audio/mp3', 'data': b64}},
         ]}],
     }).encode()
-    last_err = ''
+    last_err, saw_429 = '', False
     for _ in range(len(KEYS)):
         key = KEYS[ki % len(KEYS)]
         ki += 1
-        try:
-            req = urllib.request.Request(
-                f'https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={key}',
-                data=payload, headers={'Content-Type': 'application/json'})
-            with urllib.request.urlopen(req, timeout=300) as r:
-                res = json.load(r)
-            parts = res.get('candidates', [{}])[0].get('content', {}).get('parts', [])
-            text = ''.join(p.get('text', '') for p in parts).strip()
-            return text, ''
-        except Exception as e:
-            last_err = str(e)[:150]
-            if '429' in last_err or 'RESOURCE_EXHAUSTED' in last_err:
-                continue  # try next key
-            return '', last_err
-    return '', last_err or 'all keys 429'
+        for model in MODELS:
+            try:
+                req = urllib.request.Request(
+                    f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}',
+                    data=payload, headers={'Content-Type': 'application/json'})
+                with urllib.request.urlopen(req, timeout=300) as r:
+                    res = json.load(r)
+                parts = res.get('candidates', [{}])[0].get('content', {}).get('parts', [])
+                text = ''.join(p.get('text', '') for p in parts).strip()
+                if text:
+                    return text, ''
+                last_err = f'{model}: empty response'
+                continue
+            except urllib.error.HTTPError as e:
+                detail = e.read().decode('utf-8', 'ignore')[:120]
+                last_err = f'{model}: {e.code} {detail}'
+                if e.code == 429 or 'RESOURCE_EXHAUSTED' in detail:
+                    saw_429 = True
+                    break          # key is spent -> rotate to the next key
+                continue           # 404 retired / 503 overloaded -> next model, same key
+            except Exception as e:
+                last_err = f'{model}: {type(e).__name__} {str(e)[:80]}'
+                continue
+    if saw_429:
+        return '', f'429 all {len(KEYS)} keys exhausted (last: {last_err})'
+    return '', (last_err or 'all keys 429')
 
 def gemini_transcribe_any(mp3_path):
     """Under the inline limit -> single request. Over it -> split into ~30 min
