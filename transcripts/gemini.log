@@ -571,3 +571,7 @@ both keys limited, sleeping 120s
 [441/441] FAIL gemini Average Closing Rate :: HTTP Error 429: Too Many Requests
 both keys limited, sleeping 120s
 DONE new=45 skipped=129 failed=267
+2 gemini keys loaded
+total with video: 441
+[113/441] SKIP too big 7 Ceiling Sales Part 1
+[114/441] SKIP too big Time Management EP005
