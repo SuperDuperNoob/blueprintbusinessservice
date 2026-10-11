@@ -583,3 +583,10 @@ total with video: 441
 [116/441] CHUNK >19MB 7 Ceiling Sales Part 2
 [116/441] FAIL gemini 7 Ceiling Sales Part 2 :: part_000.mp3: HTTP Error 404: Not Found
 [117/441] OK (121333ch) Pricing Strategy EP008 1
+5 gemini keys loaded
+total with video: 441
+[114/441] CHUNK >19MB Time Management EP005
+[114/441] OK (101937ch) Time Management EP005
+[115/441] OK (64588ch) Brand Positioning Pt1 EP006
+[120/441] OK (63726ch) 3 Level Income Bisnes Owner EP004
+[121/441] TIMEOUT 7 Ceiling Sales Part 3
